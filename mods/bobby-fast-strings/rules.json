@@ -1,69 +1,803 @@
 {
-  "_comment": "Rules for `pmmod strings fasttext`. Each rule matches text in the client's own dumps; every match is replaced with an escaped newline so the box advances immediately. Keep rules narrow: silencing a prompt still shows its Yes/No box, but silencing quest directions loses information you may need.",
+  "_comment": "Rules for `pmmod strings fasttext`. Each rule matches text in the client's own dumps by regex, by explicit id, or both. A match is replaced with `replace`: \"skip\" writes {09}, an argument slot the client never fills anywhere in its 30,341-entry corpus, so the message resolves to nothing and its box is skipped outright; \"blank\" writes an escaped newline pair, which still renders a box you have to dismiss. Default is skip. Keep rules narrow: silencing a prompt still shows its Yes/No box, but silencing quest directions loses information you may need.",
+  "_replace_comment": "\"skip\" writes {09}, \"blank\" writes an escaped newline pair, \"none\" writes an empty override, and the default is skip. Which one removes a box -- or whether any of them can -- is a property of the call site, and it is not visible in the dumps. Settled on hardware 2026-08-30: at table 8, the field moves, {09} removes the box outright. At the battle tables 14/15/157/172 nothing removes it. {09} leaves an empty box that still costs a tap and drags the battle out; an empty override is read as no override at all and the vanilla text comes back. The four battle-flow rules are disabled for that reason. Do not re-enable them expecting a different token to help; the only non-argument codes in the whole corpus are DELAY_0F/14/3C/5A/64.",
   "rules": [
+    {
+      "name": "field-moves-ds",
+      "note": "Overworld move use in the live client -- Teleport, Sweet Scent, every HM",
+      "_note2": "The client draws this from the Unova NDS archive, not from the GBA tables the `field-moves` rule below covers. There is one generic `{00} used\\n{01}!` and a second copy of it, and that pair is every field move in the game. SupersSpeedStrings silences exactly these two with {09}, in this archive, which is the proof that the skip token works here.",
+      "archives": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ds_ids": [
+        [
+          8,
+          52
+        ],
+        [
+          8,
+          53
+        ]
+      ]
+    },
+    {
+      "name": "exp-gained-ds",
+      "note": "EXP gained at the end of a battle, live client",
+      "_note2": "Blank, not {09}, and the difference is the whole point. {09} is an argument placeholder the battle engine never resolves: on hardware it left a box that sat there and dragged the end of the fight out. An escaped newline pair is a well-formed empty message and the engine moves through it. SupersSpeedStrings writes exactly this at exactly these two addresses and is run by thousands of people; that is the evidence, and it beats reasoning from the dumps, which is how 1.3 through 1.6 got this wrong.",
+      "archives": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ds_ids": [
+        [
+          15,
+          42
+        ],
+        [
+          15,
+          43
+        ]
+      ],
+      "replace": "blank"
+    },
+    {
+      "name": "move-learn-result-ds",
+      "note": "Move learned / forgotten / not learned at the end of a battle, live client",
+      "_note2": "Same token and same reasoning as exp-gained-ds, and the same three addresses SupersSpeedStrings blanks. 157/40 is the `1, 2, and... Ta-da!` forget animation, which is four delays and a line of dots.",
+      "_note3": "157/32 (`{00} wants to learn the move {01}. However ... Should a move be deleted and replaced?`) is deliberately NOT here, and this is the one place this mod diverges from the reference. Supers blanks it; blanking it leaves an unlabelled Yes/No on a choice that costs you a move. Add [157, 32] to this list for exact parity.",
+      "archives": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ds_ids": [
+        [
+          157,
+          38
+        ],
+        [
+          157,
+          40
+        ],
+        [
+          157,
+          41
+        ]
+      ],
+      "replace": "blank"
+    },
+    {
+      "name": "battle-end-ds",
+      "note": "The end-of-battle run in the live client: faint, EXP, level-up, result, capture",
+      "_note2": "Table 15 is the battle-results table and table 14 entries 0-2 are the faint lines. The GBA `battle-end` rule below addresses the same messages in tables the live client never reads; it is kept because the dumps still carry them and a future client may.",
+      "_note3": "The move-learn prompts are deliberately absent: 157/32 (wants to learn), 157/35 (give up?) and 157/39 (which move) all choose between outcomes, so an unlabelled box is not enough. SupersSpeedStrings blanks 157/32; this mod does not.",
+      "archives": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ds_ids": [
+        [
+          14,
+          0
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          14,
+          2
+        ],
+        [
+          15,
+          42
+        ],
+        [
+          15,
+          43
+        ],
+        [
+          15,
+          44
+        ],
+        [
+          15,
+          45
+        ],
+        [
+          15,
+          46
+        ],
+        [
+          15,
+          47
+        ],
+        [
+          15,
+          48
+        ],
+        [
+          15,
+          49
+        ],
+        [
+          15,
+          50
+        ],
+        [
+          15,
+          65
+        ]
+      ],
+      "replace": "skip",
+      "_note4": "15/60, the level-up line, is deliberately absent too. The box cannot be removed at this call site whatever token goes in it, so the only question is whether it carries information. `{00} grew to Lv. {01}!` does; `{00} gained {01} Exp. Points!` does not. Asked for on hardware 2026-08-30.",
+      "enabled": false,
+      "_disabled_why": "DISABLED 2026-08-30 after three hardware tests. The box at these call sites cannot be removed by any means the strings side has: {09} leaves it empty, an empty override is read as no override and the client's own text returns, and there is no close or skip control code in the corpus. An empty box costs the same tap as a full one, tells you nothing, and measurably drags the end of a battle out. Leaving the client's text alone is strictly better. Kept here, disabled, so the addresses stay recorded and nobody spends another evening rediscovering them."
+    },
+    {
+      "name": "move-learned-ds",
+      "note": "Move learned, forgotten and not-learned on level-up in the live client",
+      "_note2": "157/40 is the `1, 2, and... Ta-da!` forget animation, which is four delays and a line of dots.",
+      "archives": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ds_ids": [
+        [
+          157,
+          38
+        ],
+        [
+          157,
+          40
+        ],
+        [
+          157,
+          41
+        ]
+      ],
+      "replace": "skip",
+      "enabled": false,
+      "_disabled_why": "DISABLED 2026-08-30 after three hardware tests. The box at these call sites cannot be removed by any means the strings side has: {09} leaves it empty, an empty override is read as no override and the client's own text returns, and there is no close or skip control code in the corpus. An empty box costs the same tap as a full one, tells you nothing, and measurably drags the end of a battle out. Leaving the client's text alone is strictly better. Kept here, disabled, so the addresses stay recorded and nobody spends another evening rediscovering them."
+    },
+    {
+      "name": "evolution-ds",
+      "note": "Evolution start, cancel and finish in the live client",
+      "archives": [
+        [
+          0,
+          2
+        ]
+      ],
+      "ds_ids": [
+        [
+          172,
+          0
+        ],
+        [
+          172,
+          1
+        ],
+        [
+          172,
+          2
+        ]
+      ],
+      "replace": "skip",
+      "enabled": false,
+      "_disabled_why": "DISABLED 2026-08-30 after three hardware tests. The box at these call sites cannot be removed by any means the strings side has: {09} leaves it empty, an empty override is read as no override and the client's own text returns, and there is no close or skip control code in the corpus. An empty box costs the same tap as a full one, tells you nothing, and measurably drags the end of a battle out. Leaving the client's text alone is strictly better. Kept here, disabled, so the addresses stay recorded and nobody spends another evening rediscovering them."
+    },
+    {
+      "name": "status-battle-ds",
+      "note": "Per-turn battle status chatter in the live client",
+      "_note2": "Table 14 is the Unova archive's in-battle message table -- the same role the 200xxx/205xxx ids play on GBA. It is scoped to the archive as well as the table because the identical pattern otherwise reaches `There is already a saved game file.` in tables 36/39/46 and two move descriptions in table 202.",
+      "archives": [
+        [
+          0,
+          2
+        ]
+      ],
+      "tables": [
+        14
+      ],
+      "match": "fainted!|is paralyzed|was burned|was frozen solid|fell asleep|became\\\\nconfused|is fast\\\\nasleep|snapped\\\\nout of|flinched!|regained\\\\nhealth|restored health|is hurt\\\\nby|was poisoned|is hurt\\\\nby poison|was hurt by|is hurt by|hurt by the|was seeded|is buffeted|is pelted|took damage|is confused!|woke up!|is already",
+      "replace": "skip",
+      "enabled": false,
+      "_disabled_why": "DISABLED 2026-08-30 after three hardware tests. The box at these call sites cannot be removed by any means the strings side has: {09} leaves it empty, an empty override is read as no override and the client's own text returns, and there is no close or skip control code in the corpus. An empty box costs the same tap as a full one, tells you nothing, and measurably drags the end of a battle out. Leaving the client's text alone is strictly better. Kept here, disabled, so the addresses stay recorded and nobody spends another evening rediscovering them."
+    },
+    {
+      "name": "hm-prompts-ds-sinnoh",
+      "note": "Sinnoh archive: every HM obstacle prompt and the `used <move>` line that follows",
+      "_note2": "Table 381 is the Sinnoh archive's field-move table. All eighteen entries are the same six obstacles in three shapes -- the question, the refusal, and the confirmation -- and SupersSpeedStrings silences the identical set with {09}.",
+      "archives": [
+        [
+          0,
+          3
+        ]
+      ],
+      "ds_ids": [
+        [
+          381,
+          0
+        ],
+        [
+          381,
+          1
+        ],
+        [
+          381,
+          2
+        ],
+        [
+          381,
+          3
+        ],
+        [
+          381,
+          4
+        ],
+        [
+          381,
+          5
+        ],
+        [
+          381,
+          6
+        ],
+        [
+          381,
+          9
+        ],
+        [
+          381,
+          10
+        ],
+        [
+          381,
+          11
+        ],
+        [
+          381,
+          12
+        ],
+        [
+          381,
+          13
+        ],
+        [
+          381,
+          18
+        ],
+        [
+          381,
+          19
+        ],
+        [
+          381,
+          20
+        ],
+        [
+          381,
+          22
+        ],
+        [
+          381,
+          23
+        ],
+        [
+          381,
+          24
+        ]
+      ]
+    },
+    {
+      "name": "hm-prompts-ds-unova1",
+      "note": "Unova storyline archive: the same obstacle prompts plus Flash, Teleport and Dig",
+      "archives": [
+        [
+          1,
+          2
+        ]
+      ],
+      "ds_ids": [
+        [
+          280,
+          0
+        ],
+        [
+          280,
+          1
+        ],
+        [
+          280,
+          2
+        ],
+        [
+          280,
+          6
+        ],
+        [
+          280,
+          8
+        ],
+        [
+          280,
+          10
+        ],
+        [
+          280,
+          13
+        ],
+        [
+          280,
+          14
+        ],
+        [
+          280,
+          23
+        ],
+        [
+          280,
+          24
+        ],
+        [
+          280,
+          25
+        ],
+        [
+          280,
+          27
+        ],
+        [
+          280,
+          28
+        ],
+        [
+          280,
+          29
+        ],
+        [
+          280,
+          30
+        ],
+        [
+          280,
+          31
+        ],
+        [
+          280,
+          32
+        ]
+      ]
+    },
+    {
+      "name": "counters-ds-sinnoh",
+      "note": "Sinnoh archive: Great Marsh gate, Elite Four door, Pokecenter and shop desk, Day Care",
+      "_note2": "Table 136 entry 9 -- `You still have time left. Are you sure you want to exit the Great Marsh?` -- is deliberately absent. SupersSpeedStrings silences it; ending a Safari run early is a decision, and an unlabelled Yes/No is not enough to make it.",
+      "archives": [
+        [
+          0,
+          3
+        ]
+      ],
+      "ds_ids": [
+        [
+          136,
+          0
+        ],
+        [
+          136,
+          2
+        ],
+        [
+          136,
+          3
+        ],
+        [
+          136,
+          4
+        ],
+        [
+          136,
+          10
+        ],
+        [
+          184,
+          3
+        ],
+        [
+          184,
+          4
+        ],
+        [
+          213,
+          0
+        ],
+        [
+          213,
+          1
+        ],
+        [
+          213,
+          2
+        ],
+        [
+          213,
+          3
+        ],
+        [
+          213,
+          37
+        ],
+        [
+          213,
+          120
+        ],
+        [
+          213,
+          121
+        ],
+        [
+          547,
+          15
+        ],
+        [
+          547,
+          16
+        ],
+        [
+          547,
+          17
+        ],
+        [
+          547,
+          20
+        ],
+        [
+          547,
+          23
+        ],
+        [
+          547,
+          24
+        ],
+        [
+          547,
+          29
+        ],
+        [
+          547,
+          30
+        ]
+      ]
+    },
+    {
+      "name": "battle-end",
+      "note": "The end-of-battle run: faint, EXP, level-up, move learned, winnings, capture",
+      "_note2": "Chosen by id, not pattern. In the battle tables a trailing double newline is the client's own marker for `wait for a tap` -- these are the entries that cost taps. The move-learn *prompts* (200004/5/6/8) are deliberately absent: you have to see which move you are replacing.",
+      "ids": [
+        200001,
+        200002,
+        200003,
+        200007,
+        200009,
+        200016,
+        200017,
+        200018,
+        200019,
+        200111,
+        200207,
+        200208,
+        200211,
+        200309,
+        200251,
+        200255,
+        200256,
+        200259,
+        205001,
+        205002,
+        205003,
+        205007,
+        205009,
+        205016,
+        205017,
+        205018,
+        205019,
+        205111,
+        205207,
+        205208,
+        205211,
+        205309,
+        205351,
+        205251,
+        205255,
+        205256,
+        205259
+      ]
+    },
+    {
+      "name": "field-moves",
+      "note": "Overworld move use -- Teleport, Sweet Scent, Cut, Fly, Dig, Flash, Headbutt, all of them",
+      "_note2": "The client does not have a string per move out here. It has one generic `{02} used {03}!` plus a PP variant, which is why matching on `used CUT` and friends missed Teleport and Sweet Scent entirely. Battle's own `{1C} {1D} used {16}!` is NOT in this list: in a battle you want to read which move was used.",
+      "ids": [
+        1826775,
+        271124337,
+        16804105,
+        6060,
+        6087,
+        1725861,
+        271003661,
+        1827322,
+        271124876,
+        1827704,
+        271125244,
+        1827995,
+        271125530,
+        1828205,
+        271125687
+      ]
+    },
+    {
+      "name": "field-move-prompts",
+      "note": "Cut / Rock Smash / Surf / Dive confirmations before the move fires",
+      "ids": [
+        1826708,
+        1826787,
+        271124270,
+        1826973,
+        271124538,
+        16780421
+      ],
+      "match": "This tree looks like it can be|This rock appears to be breakable|This rock looks like it's breakable|would like to SURF|The water is dyed a deep blue",
+      "max_len": 140
+    },
+    {
+      "name": "hm-field-prompts",
+      "note": "Every HM obstacle prompt: tree, boulder, rock, waterfall, dive, surf",
+      "_note2": "The client has a separate string per obstacle per region, and a second copy of each without the question. v1.1 matched `used CUT` and friends, which caught none of them.",
+      "match": "tree looks like it can be|rock appears to be breakable|rock looks like it's breakable|rugged rock, but a POK|big boulder, but a POK|STRENGTH made it possible|wall of water is crashing|large waterfall|sea is deep here|Light is filtering down|water is dyed a deep blue",
+      "max_len": 140
+    },
+    {
+      "name": "fossil-reviver",
+      "note": "Fossil revival counter, used in every region",
+      "match": "researching \\{STRING_0\\} Fossils|I can revive them|bring it back to life|was revived from the|Which Fossil should I revive|revive another fossil|Alright\\.\\\\nGive me one moment|Please take good care of it|was sent to PC Box|Come back if you change your mind",
+      "max_len": 160,
+      "ids": [
+        16807107
+      ]
+    },
+    {
+      "name": "move-tutor",
+      "note": "Move Master, Move Maniac and the Special Move Tutor",
+      "_note2": "The relearn/forget *choice* prompts stay: `Do you want to relearn or forget a move?` picks between two different outcomes, so an unlabelled Yes/No is not enough.",
+      "match": "Move Maniac|Move Master|Special Move Tutor|should be tutored|should relearn a move|should have its move removed|now knows \\{01\\}|anything I can teach|tutor another \\{STRING_0\\}|teach a special move|Battle Point Exchange Service|forgot \\{01\\}!",
+      "exclude": "relearn or forget|which move should|Which move should|Which move should",
+      "max_len": 200
+    },
+    {
+      "name": "breeder",
+      "note": "Day-care Breeder trade-in and egg hand-off",
+      "_note2": "`You won't get these back. Are you sure?` is excluded: it is the only confirmation in the mod that destroys Pokemon you own.",
+      "match": "I breed \\{STRING_0\\}|would you like to trade\\?|had an Egg!|I'll take your \\{00\\}",
+      "exclude": "won't get these|Are you sure",
+      "max_len": 220
+    },
+    {
+      "name": "berry-farming",
+      "note": "Soil, planting, watering and picking",
+      "match": "soft fertile soil|This plant is dead|Would you like to pick the|is needed to plant seeds",
+      "max_len": 200
+    },
+    {
+      "name": "stylist",
+      "note": "Personal stylist and the bike-skin counter",
+      "_note2": "The price confirmation (`It'll cost $x for your makeover.`) is excluded; the number is the point of the box.",
+      "match": "personal stylist|You look amazing|Bicycle's appearance|switching BIKES|switch BIKES for you|urge to switch|happy that you like it",
+      "exclude": "cost \\$",
+      "max_len": 200,
+      "ids": [
+        16780171,
+        16780174
+      ]
+    },
+    {
+      "name": "safari-gate",
+      "note": "Safari Zone entry and sign-out counters",
+      "match": "Welcome to the SAFARI ZONE!|play the\\\\nSAFARI GAME|received 30 SAFARI BALLS|Here are your SAFARI BALLS|call you on the PA|take back your remaining SAFARI|start with 30 SAFARI BALLS|Please return any SAFARI BALLS|All you can catch for just",
+      "exclude": "couple SAFARI BALLS|SAFARI ZONE OFFICE",
+      "max_len": 240,
+      "ids": [
+        1670407,
+        271208407,
+        271208559,
+        271208986,
+        271209131,
+        16780135
+      ]
+    },
+    {
+      "name": "elite-four-door",
+      "note": "The Elite Four door guards, re-read on every league run",
+      "ids": [
+        1681624,
+        270702312,
+        270702575
+      ]
+    },
+    {
+      "name": "battle-frontier",
+      "note": "Battle Tower / Palace / Arena / Factory reception counters",
+      "_note2": "By explicit id, taken from the same set SupersSpeedStrings silences. The facility *names* live in the same id range and are menu labels, so a pattern here would break the UI.",
+      "ids": [
+        270793991,
+        270794043,
+        270794791,
+        270795019,
+        270795227,
+        270795453,
+        270795659,
+        270795883,
+        270796087,
+        270796211,
+        270796710,
+        270796770,
+        270796894,
+        270797392,
+        270797451,
+        270797574,
+        270798299,
+        270798357,
+        270798485,
+        270851419,
+        270851553,
+        270851607,
+        270852312,
+        270852377,
+        270853017,
+        270854918,
+        270855052,
+        270855106,
+        270885222,
+        270885354,
+        270885407,
+        270886163,
+        270886259,
+        270895342,
+        270895482,
+        270897043,
+        270897183,
+        270923770,
+        270925586,
+        270896069,
+        270896105,
+        270901704,
+        271036072
+      ]
+    },
+    {
+      "name": "status-battle",
+      "note": "Per-turn battle status chatter",
+      "_note2": "Pinned to the GBA battle tables, ids 200xxx / 205xxx. The live client reads the Unova archive instead -- see `status-battle-ds` above -- but these entries are still in the dumps. Before 1.2 this was a bare text match, and `hurt by` plus `is confused` silenced seven move descriptions and two NPC lines that merely happened to use the same words.",
+      "id_match": "20[05][0-9]{3}",
+      "match": "fainted!|is paralyzed|was burned|was frozen solid|fell asleep|became\\\\nconfused|is fast\\\\nasleep|snapped\\\\nout of|flinched!|regained\\\\nhealth|restored health|is hurt\\\\nby|was poisoned|is hurt\\\\nby poison|was hurt by|is hurt by|hurt by the|was seeded|is buffeted|is pelted|took damage|is confused!|became\\\\nconfused|woke up!|is already"
+    },
     {
       "name": "pokecenter",
       "note": "Nurse Joy / healing counter flow",
-      "match": "restore your tired|We hope to see you again|Welcome to our POK|Thank you for waiting|We've restored your|take your POK[^ ]*MON for a few seconds|Your POK[^ ]*MON are fighting fit"
+      "match": "restore your tired|We hope to see you again|Welcome to our POK|Thank you for waiting|We've restored your|take your POK[^ ]*MON for a few seconds|Your POK[^ ]*MON are fighting fit|welcome to\\\\nthe POK[^ ]*MON CENTER|restored your POK[^ ]*MON\\\\nto full health|We hope to see you again!",
+      "max_len": 140,
+      "exclude_ids": [
+        271209032
+      ],
+      "_exclude_note": "The Safari Zone sign-out desk borrows the Pokecenter farewell; it fires once per Safari run, and the ball count it reports is worth reading."
     },
     {
       "name": "mart",
       "note": "Shop clerk purchase and sale flow",
-      "match": "Anything else\\?|Here you are! Thank you|Thank you very much!|Welcome!\\\\nHow may I serve you|Please come again|How many would you like"
+      "match": "Anything else\\?|Here you are! Thank you|Thank you very much!|Welcome!\\\\nHow may I serve you|Please come again|How many would you like|How may I serve you|May I help you\\?",
+      "max_len": 120,
+      "exclude_ids": [
+        271226285
+      ],
+      "_exclude_note": "The Hoenn Blend Master thanks you in the clerk's exact words; he is story flavour, not a counter.",
+      "exclude": "Gym Leader|Route \\d|Opelucid",
+      "_exclude_note2": "Two Unova NPCs close on the clerk's own `Please come again`: the Driftveil gate guard reporting that Clay is busy, and the Opelucid route announcer. Both are directions, not a counter."
     },
     {
       "name": "daycare",
       "note": "Day-care deposit, retrieval and egg hand-off",
-      "match": "DAY.?CARE|Take good care of it|found an EGG|got an EGG|raise one of\\\\nyour POK|We can raise"
+      "match": "DAY.?CARE|Take good care of it|found an EGG|got an EGG|raise one of\\\\nyour POK|We can raise|received the EGG|took back \\{|look after your(\\\\n)? ?\\{02\\}|raise your \\{02\\}|Come see me in a while|can only be doing|Here's your POK",
+      "max_len": 155,
+      "exclude_ids": [
+        270482556,
+        270530862,
+        270445982,
+        1717911,
+        271173003
+      ],
+      "_exclude_note": "NPCs who talk *about* the Day Care rather than run it. They use the counter's own words and are read once, not hundreds of times."
     },
     {
       "name": "fishing",
       "note": "Rod cast results",
-      "match": "Not even a nibble|Looks like there's nothing here|A bite!|Oh! A bite"
-    },
-    {
-      "name": "hm-field-moves",
-      "note": "Cut / Surf / Strength / Rock Smash / Waterfall prompts",
-      "match": "used CUT|used SURF|used STRENGTH|used ROCK SMASH|used WATERFALL|used FLASH|used DIVE|would like to SURF|Do you want to use"
-    },
-    {
-      "name": "exp-messages",
-      "note": "Experience and level-up chatter",
-      "match": "EXP\\. Points|gained\\\\n|grew to level|Points!"
-    },
-    {
-      "name": "status-battle",
-      "note": "Battle status spam: faint, paralysis, burn, sleep, confusion, recoil",
-      "match": "fainted!|is paralyz|was burned|was frozen|fell asleep|is confused|flinched|hurt by|restored health|is fast asleep|snapped out of"
+      "match": "Not even a nibble|Looks like there's nothing here|A bite!|Oh! A bite",
+      "max_len": 80
     },
     {
       "name": "shop-extra",
       "note": "Remaining shop counter lines",
-      "match": "Thank you\\.|Come again|That will be|Is that OK\\?"
+      "_note2": "`Thank you.` is anchored to its own line and the rule is capped at 90 characters. Unanchored and uncapped it silenced Mr. Fuji, Lorelei and Wally, none of whom are a shop counter.",
+      "match": "(^|\\\\n)Thank you\\.($|\\\\n)|Come again|That will be",
+      "max_len": 90,
+      "exclude": "waiting in|looking forward to|return your Pok|You are really great",
+      "_note3": "`Is that OK?` was removed in 1.3. It is not a shop phrase: across the dumps it matched 44 entries and almost all of them are the confirmation on a destructive or branching choice -- `The message will be lost.`, `If the leader drops out, the group will be disbanded.`, `Held items will be put in the Bag.`, `It will forget the saying it now knows.`, `You must save the game before I show you in.` The shop lines it did catch are price prompts, which this mod keeps visible on purpose anyway. The excludes cover the Black City / White Forest recruiters and the Dreamyard gift, who all close on `Thank you.`",
+      "_note4": "`You are really great.` is a trainer's post-battle line in table 189, not a counter. Same over-reach as the Black City recruiters: the rule anchors on `Thank you.` and anything that closes on it gets caught."
     },
     {
       "name": "catch-flow",
       "note": "Ball throw result -- fires on every encounter you throw at",
-      "match": "Gotcha!|was caught!|The POK[^ ]*MON broke free|Aww! It appeared to be caught",
-      "exclude": "Give a nickname"
+      "match": "Gotcha!|was caught!|The POK[^ ]*MON broke free|Aww! It appeared to be caught|popped out of the",
+      "exclude": "Give a nickname|BOX is full",
+      "max_len": 120
     },
     {
       "name": "evolution",
       "note": "Evolution start, finish and cancel",
-      "match": "is evolving|evolved into|stopped evolving|Congratulations! Your"
+      "match": "is evolving|evolved into|stopped evolving|Congratulations! Your",
+      "exclude": "CONTEST",
+      "max_len": 80
     },
     {
       "name": "repel",
-      "note": "Repel wear-off and re-apply prompt",
-      "match": "REPEL|Repel's effect|repellent"
+      "note": "Repel wear-off",
+      "_note2": "Was a bare `REPEL`, which caught nine NPCs who merely mention the item, including a quiz question. The re-apply prompt (id 6012, `{00} has worn off.\\nUse another?`) is deliberately left alone: silencing it leaves a naked Yes/No on a choice that wastes an item if you get it wrong.",
+      "match": "REPEL's effect wore off|Repel's effect wore off",
+      "max_len": 60
     },
     {
       "name": "move-learned",
       "note": "Move learned on level-up (not the forget prompt)",
-      "match": "learned [A-Z]{2,}|learned \\{",
-      "exclude": "wants to learn|Forget a move|Stop learning|Delete a move"
+      "match": "learned [A-Z]{2,}|learned \\{|learned\\\\n\\{",
+      "exclude": "wants to learn|Forget a move|Stop learning|Delete a move|is trying to",
+      "max_len": 120
     }
   ],
-  "never": "raising its |Raises the |lowers the |inflict damage|An item to be held|A Pok[eé] Ball|Use it to flee|It is designed|restores? \\d|An item for use on a POK|The user |A move that",
-  "_never_comment": "Global guard. Item and move descriptions are read on purpose, never mashed through -- 966 entries and ~96k characters in this corpus. No rule may silence them, however tempting the volume."
+  "never": "raising its |Raises the |Raises evasion|Raises |Lowers |lowers the |inflict damage|inflicts |An item to be held|An attack move|A Pok[eé] Ball|Use it to flee|It is designed|restores? \\d|An item for use on a POK|The user |A move that|has been hurt by|A \\w+-type move",
+  "_never_comment": "Global guard on regex rules only; an id listed by hand is a decision already made and is not second-guessed. Item and move descriptions are read on purpose, never mashed through -- 966 entries and ~96k characters in this corpus. No pattern may silence them, however tempting the volume. `An attack move`, `inflicts ` and `has been hurt by` were added in 1.2 after `hurt by` in status-battle silenced seven of them.",
+  "never_label": "^[^.!?]{0,34}$",
+  "_never_label_comment": "Second global guard, patterns only. A short entry with no sentence-ending punctuation is a UI label -- 'BATTLE FACTORY', 'Sweet Scent', 'Super Repel', 'Fossil' -- not a message. Silencing one blanks a menu entry rather than skipping a box, and the `never` guard above does not catch it because labels read nothing like a description.",
+  "never_ds_tables": [
+    [
+      0,
+      2,
+      14
+    ],
+    [
+      0,
+      2,
+      15
+    ],
+    [
+      0,
+      2,
+      157
+    ],
+    [
+      0,
+      2,
+      172
+    ]
+  ],
+  "_never_ds_tables_comment": "(archive_type, region_id, table) triples in the NDS battle engine. Third global guard, patterns only. A box drawn by these tables cannot be removed by anything the strings side has -- proven on hardware 2026-08-30 -- so silencing one trades a readable line for an empty box that costs the same tap and drags the battle out. The guard exists because disabling the battle-flow rules was not enough: `catch-flow` still reached 15/65 (`Gotcha! {00} was caught!`), `evolution` still reached all of table 172, and `move-learned` still reached 157/41 and 14/688-690. Those rules were written for the GBA ids and found the Unova archive by accident. Table 8 is deliberately absent: it is the field-move table, the one call site where {09} does remove the box."
 }
