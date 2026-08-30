@@ -58,7 +58,7 @@ it belongs to the client's theme and not to anything the player installed.
 
 ## Install
 
-1. Mod Management → **Import Mod** → pick `android-layout-fix-1-0.mod`.
+1. Mod Management → **Import Mod** → pick `vanbobby-android-layout-fix-1-0.mod`.
 2. Enable it, save, restart.
 3. **Settings → Interface → Theme → Android Layout Fix**, then restart once more.
 

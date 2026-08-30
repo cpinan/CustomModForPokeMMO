@@ -48,7 +48,7 @@ Five lines. Nothing else is touched:
 
 ## Install
 
-1. Mod Management → **Import Mod** → pick `region-label-unpad-1-0.mod`.
+1. Mod Management → **Import Mod** → pick `vanbobby-region-label-unpad-1-0.mod`.
 2. Enable it.
 3. **Order matters** — use the down arrow so it sits *below* SupersStrings in
    the list. The last mod to load wins for a given string id.

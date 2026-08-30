@@ -15,15 +15,15 @@ eyeballing the UI.
 ## The mods
 
 Each mod has its own README with the full write-up:
-[android-layout-fix](mods/android-layout-fix/README.md) ·
-[region-label-unpad](mods/region-label-unpad/README.md) ·
-[bobby-fast-strings](mods/bobby-fast-strings/README.md) ·
-[only-shiny-sprites](mods/only-shiny-sprites/README.md) ·
-[shiny-scale-probe](mods/shiny-scale-probe/README.md) ·
-[stadium-battlesprites](mods/stadium-battlesprites/README.md) ·
-[demo-strings](mods/demo-strings/README.md)
+[vanbobby-android-layout-fix](mods/vanbobby-android-layout-fix/README.md) ·
+[vanbobby-region-label-unpad](mods/vanbobby-region-label-unpad/README.md) ·
+[vanbobby-fast-strings](mods/vanbobby-fast-strings/README.md) ·
+[vanbobby-only-shiny-sprites](mods/vanbobby-only-shiny-sprites/README.md) ·
+[vanbobby-shiny-scale-probe](mods/vanbobby-shiny-scale-probe/README.md) ·
+[vanbobby-stadium-battlesprites](mods/vanbobby-stadium-battlesprites/README.md) ·
+[vanbobby-demo-strings](mods/vanbobby-demo-strings/README.md)
 
-### `android-layout-fix` — stops the "UI layout loop" warning
+### `vanbobby-android-layout-fix` — stops the "UI layout loop" warning
 
 PokeMMO's stock Android theme gives one widget contradictory width bounds. In
 `data/themes/android/ui/android-settings.xml`:
@@ -57,10 +57,10 @@ Verified by elimination:
 | `min 500 / max 32767` | no loop, but the controls are squeezed |
 | **`min 800 / max 1080`** | **no loop, layout renders correctly** |
 
-**Install:** import it, then pick *Android Layout Fix* at
+**Install:** import it, then pick *VanBobby Android Layout Fix* at
 **Settings → Interface → Theme** and restart.
 
-### `region-label-unpad` — fixes the Pokédex loop on Sinnoh and Unova
+### `vanbobby-region-label-unpad` — fixes the Pokédex loop on Sinnoh and Unova
 
 Not a client bug. [SupersStrings](https://forums.pokemmo.com/index.php?/topic/188112-supersstrings/)
 redefines the five region names as padded two-line labels to make the region
@@ -85,7 +85,7 @@ working; you only lose the wider region buttons.
 **Install:** it must load **after** SupersStrings — use the down arrow in Mod
 Management to place it below, then restart.
 
-### `bobby-fast-strings` — faster text, English and Spanish
+### `vanbobby-fast-strings` — faster text, English and Spanish
 
 Removes the text from the interactions you repeat all day — healing counter,
 shop flow, day-care and eggs, EXP chatter, field-move prompts, fishing casts —
@@ -104,7 +104,7 @@ Kanto's 3,607 storyline ids exist in the translated set. Since silencing is
 language-neutral, one storyline file serves every player and Spanish only needs
 its own UI file.
 
-### `only-shiny-sprites` — hides every non-shiny in battle
+### `vanbobby-only-shiny-sprites` — hides every non-shiny in battle
 
 The client tells normal and shiny apart by filename alone — `25-front-n.png`
 versus `25-front-s.png` — so this mod ships a fully transparent PNG for every
@@ -119,7 +119,7 @@ all, so a shiny is impossible to miss.
 Only the enemy side is blanked; your own Pokémon renders normally. Covers dex ids 1–649; alternate forms and event
 costumes use higher sprite ids and are not blanked.
 
-### `shiny-scale-probe` — a throwaway diagnostic
+### `vanbobby-shiny-scale-probe` — a throwaway diagnostic
 
 Ships only the three scale tables, no sprites, with deliberately extreme values
 for common early-route species (some at `1`, some at `4`, against a default of
@@ -127,19 +127,23 @@ for common early-route species (some at `1`, some at `4`, against a default of
 has *not* replaced — which decides whether "make shinies bigger" is ten lines of
 text or a per-species asset pull. Delete it once you have the answer.
 
-### `stadium-battlesprites` — Pokémon Stadium 2 battle sprites
+### `vanbobby-stadium-battlesprites` — Pokémon Stadium 2 battle sprites
 
 299 animated GIFs, front and back, with a per-species scale table.
 
 > Rendered from Pokémon Stadium 2 model rips. Check that you are comfortable
 > redistributing them before publishing this folder anywhere.
 
-### `demo-strings` — a worked example
+### `vanbobby-demo-strings` — a worked example
 
 Overrides two menu labels. Useful only as a template for how a strings mod is
 put together.
 
 ---
+
+## Contributing / picking this up
+
+`docs/OPEN-WORK.md` lists every known bug and unfinished piece, with the reasoning behind each. `docs/FINDING-string-call-sites.html` explains which replacement token silences which kind of message — read that before changing any strings rule; it is not derivable from the dumps and getting it wrong has broken the game more than once.
 
 ## Installing any of them
 
@@ -162,7 +166,7 @@ put together.
   list after each toggle instead of trusting positions.
 * **Order decides who wins.** When two strings mods override the same id, the
   one *lower* in the list is applied last and takes effect. The up/down arrows
-  set that order. `region-label-unpad` only works if it sits below
+  set that order. `vanbobby-region-label-unpad` only works if it sits below
   SupersStrings.
 * **Enabling a theme is not selecting it.** A theme mod does nothing until you
   pick it in **Settings → Interface → Theme**. Only one theme can be active at
@@ -180,11 +184,11 @@ put together.
 
 | If you run | Also run | Why |
 |---|---|---|
-| SupersStrings | `region-label-unpad` | otherwise the Pokédex loops on Sinnoh and Unova |
-| `bobby-fast-strings` | nothing extra | it never touches the region names |
-| Any Android handheld | `android-layout-fix` | Settings loops without it |
+| SupersStrings | `vanbobby-region-label-unpad` | otherwise the Pokédex loops on Sinnoh and Unova |
+| `vanbobby-fast-strings` | nothing extra | it never touches the region names |
+| Any Android handheld | `vanbobby-android-layout-fix` | Settings loops without it |
 
-`bobby-fast-strings` and SupersStrings both silence dialogue, so running both is
+`vanbobby-fast-strings` and SupersStrings both silence dialogue, so running both is
 redundant rather than harmful — whichever sits lower wins on shared ids.
 
 ## Building from source
@@ -201,7 +205,7 @@ check `Client Theme Revision` at the top of `log/mods.log` and re-base.
 
 ## Credits
 
-* SupersStrings by **superworldsun** — `region-label-unpad` exists to sit
+* SupersStrings by **superworldsun** — `vanbobby-region-label-unpad` exists to sit
   alongside it, not to replace it.
 * The absolute-include pattern for themes is borrowed from
   [pokemmo-port-themes](https://github.com/CodesNL/pokemmo-port-themes).

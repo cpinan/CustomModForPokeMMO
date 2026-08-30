@@ -119,7 +119,7 @@ The mod is produced by `pmmod strings fasttext` from **your own client's**
 `Settings → Utilities` dumps, driven by the twenty-two rules in `rules.json`:
 
 ```bash
-pmmod strings fasttext mods/bobby-fast-strings \
+pmmod strings fasttext mods/vanbobby-fast-strings \
     --dumps <client>/dump/strings \
     --rules rules.json \
     --langs en,es
@@ -179,7 +179,7 @@ PYTHONPATH=modkit/src python3 -m unittest discover -s modkit/tests -t modkit
 
 ## Install
 
-1. Mod Management → **Import Mod** → pick `bobby-fast-strings-1-2.mod`.
+1. Mod Management → **Import Mod** → pick `vanbobby-fast-strings-1-2.mod`.
 2. Enable it, save, restart.
 3. Heal at a Pokémon Center — the counter dialogue should be gone.
 

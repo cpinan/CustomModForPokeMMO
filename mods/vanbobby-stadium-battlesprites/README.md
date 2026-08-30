@@ -29,7 +29,7 @@ Only list species you actually want to override.
 
 ## Install
 
-1. Mod Management → **Import Mod** → pick `stadium-2-battle-sprites-1-0.mod`.
+1. Mod Management → **Import Mod** → pick `vanbobby-stadium-2-battle-sprites-1-0.mod`.
 2. Enable it, save, restart.
 3. Enter any battle.
 

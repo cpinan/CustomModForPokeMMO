@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource name="VanBobby Demo Strings" version="1.0" description="Proof-of-life strings mod: renames two menu labels." author="carlospinan" weblink="https://forums.pokemmo.com/">
+    <strings string_revision="1">
+        <string path="data/strings/strings_en_pmmod_demo_strings.xml"/>
+    </strings>
+</resource>

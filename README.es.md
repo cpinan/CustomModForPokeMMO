@@ -14,7 +14,7 @@ mirando la interfaz a ojo.
 
 ## Los mods
 
-### `android-layout-fix` — elimina el aviso de "UI layout loop"
+### `vanbobby-android-layout-fix` — elimina el aviso de "UI layout loop"
 
 El tema Android que trae PokeMMO le da a un widget dos límites de ancho que se
 contradicen. En `data/themes/android/ui/android-settings.xml`:
@@ -49,10 +49,10 @@ Verificado por eliminación:
 | `min 500 / max 32767` | sin ciclo, pero los controles quedan aplastados |
 | **`min 800 / max 1080`** | **sin ciclo y la interfaz se ve correcta** |
 
-**Instalación:** impórtalo y luego elige *Android Layout Fix* en
+**Instalación:** impórtalo y luego elige *VanBobby Android Layout Fix* en
 **Ajustes → Interfaz → Tema**, y reinicia.
 
-### `region-label-unpad` — corrige el ciclo de la Pokédex en Sinnoh y Unova
+### `vanbobby-region-label-unpad` — corrige el ciclo de la Pokédex en Sinnoh y Unova
 
 Este no es un fallo del cliente. [SupersStrings](https://forums.pokemmo.com/index.php?/topic/188112-supersstrings/)
 redefine los nombres de las cinco regiones como etiquetas de dos líneas
@@ -78,7 +78,7 @@ funcionando; lo único que pierdes son los botones de región más anchos.
 **Instalación:** tiene que cargarse **después** de SupersStrings — usa la flecha
 hacia abajo en Administración de Mods para colocarlo debajo, y reinicia.
 
-### `bobby-fast-strings` — texto más rápido, en inglés y español
+### `vanbobby-fast-strings` — texto más rápido, en inglés y español
 
 Quita el texto de las interacciones que repites todo el día — el mostrador de
 curación, la tienda, la guardería y los huevos, los mensajes de experiencia, los
@@ -100,7 +100,7 @@ PokeMMO traduce su interfaz a once idiomas pero no la historia — solo 8 de los
 es independiente del idioma, un solo archivo de historia sirve para todos y el
 español únicamente necesita su propio archivo de interfaz.
 
-### `only-shiny-sprites` — oculta a todos los que no son shiny en combate
+### `vanbobby-only-shiny-sprites` — oculta a todos los que no son shiny en combate
 
 El cliente distingue normal de shiny solo por el nombre del archivo —
 `25-front-n.png` frente a `25-front-s.png` — así que este mod incluye un PNG
@@ -116,7 +116,7 @@ nada, así que un shiny es imposible de pasar por alto.
 Solo se oculta el lado rival; tu propio Pokémon se ve con normalidad. Cubre los ids 1–649; las formas
 alternativas y los disfraces de evento usan ids más altos y no se ocultan.
 
-### `shiny-scale-probe` — una prueba desechable
+### `vanbobby-shiny-scale-probe` — una prueba desechable
 
 Incluye solo las tres tablas de escala, sin sprites, con valores exagerados a
 propósito para especies comunes de las primeras rutas (algunas en `1`, otras en
@@ -125,14 +125,14 @@ las tablas de escala afectan a sprites que el mod **no** ha reemplazado — eso
 decide si "hacer los shiny más grandes" son diez líneas de texto o descargar un
 sprite por especie. Bórralo cuando tengas la respuesta.
 
-### `stadium-battlesprites` — sprites de combate de Pokémon Stadium 2
+### `vanbobby-stadium-battlesprites` — sprites de combate de Pokémon Stadium 2
 
 299 GIFs animados, de frente y de espalda, con una tabla de escala por especie.
 
 > Renderizados a partir de modelos extraídos de Pokémon Stadium 2. Asegúrate de
 > estar cómodo redistribuyéndolos antes de publicar esta carpeta en otro sitio.
 
-### `demo-strings` — un ejemplo
+### `vanbobby-demo-strings` — un ejemplo
 
 Cambia dos etiquetas de menú. Sirve únicamente como plantilla para ver cómo se
 arma un mod de textos.
@@ -159,7 +159,7 @@ arma un mod de textos.
   la lista después de cada toque en vez de fiarte de las posiciones.
 * **El orden decide quién gana.** Cuando dos mods de textos sobrescriben el
   mismo id, se aplica el que está *más abajo*. Las flechas arriba/abajo
-  establecen ese orden. `region-label-unpad` solo funciona si queda por debajo
+  establecen ese orden. `vanbobby-region-label-unpad` solo funciona si queda por debajo
   de SupersStrings.
 * **Activar un tema no es seleccionarlo.** Un mod de tema no hace nada hasta que
   lo eliges en **Ajustes → Interfaz → Tema**. Solo puede haber un tema activo.
@@ -176,11 +176,11 @@ arma un mod de textos.
 
 | Si usas | Usa también | Por qué |
 |---|---|---|
-| SupersStrings | `region-label-unpad` | si no, la Pokédex se cicla en Sinnoh y Unova |
-| `bobby-fast-strings` | nada más | no toca los nombres de región |
-| Cualquier consola Android | `android-layout-fix` | sin él, Ajustes se cicla |
+| SupersStrings | `vanbobby-region-label-unpad` | si no, la Pokédex se cicla en Sinnoh y Unova |
+| `vanbobby-fast-strings` | nada más | no toca los nombres de región |
+| Cualquier consola Android | `vanbobby-android-layout-fix` | sin él, Ajustes se cicla |
 
-`bobby-fast-strings` y SupersStrings silencian diálogos los dos, así que usarlos
+`vanbobby-fast-strings` y SupersStrings silencian diálogos los dos, así que usarlos
 juntos es redundante más que dañino — en los ids compartidos gana el que esté
 más abajo.
 
@@ -199,7 +199,7 @@ de `log/mods.log` y vuelve a basarlo.
 
 ## Créditos
 
-* SupersStrings, de **superworldsun** — `region-label-unpad` existe para
+* SupersStrings, de **superworldsun** — `vanbobby-region-label-unpad` existe para
   acompañarlo, no para reemplazarlo.
 * El patrón de includes absolutos para temas viene de
   [pokemmo-port-themes](https://github.com/CodesNL/pokemmo-port-themes).
