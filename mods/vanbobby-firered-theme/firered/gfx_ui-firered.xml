@@ -565,7 +565,7 @@
         <area name="ui-popup.background" xywh="297,119,42,42" splitx="L6,R6" splity="T6,B6" />
         <area name="ui-popup-warning.background" xywh="340,119,41,41" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-popup-button.selected" xywh="60,162,35,29" splitx="L5,R5" splity="T5,B5" />
-        <area name="ui-popup-button.default" xywh="41,210,44,14" />
+        <area name="ui-popup-button.default" xywh="41,210,44,14" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-popup.background" xywh="297,119,42,42" splitx="L6,R6" splity="T6,B6" />
         <area name="ui-misc-btn.background" xywh="256,162,23,20" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-misc-btn.selected" xywh="142,192,17,16" splitx="L5,R5" splity="T5,B5" />
@@ -694,7 +694,7 @@
             <alias ref="ui-button.hover" />
         </composed>
         <area name="button-npc-dark.selected" xywh="150,210,8,9" splitx="L5,R2" splity="T3,B5" />
-        <area name="ui-close.background" xywh="178,162,36,25" />
+        <area name="ui-close.background" xywh="178,162,36,25" splitx="L5,R5" splity="T5,B5" />
         <select name="button-npc.background">
             <alias ref="ui-popup-button.selected" inset="-1,0,-1,0" if="hover | keyboardFocus" />
             <alias ref="ui-popup-button.selected" if="selected" />

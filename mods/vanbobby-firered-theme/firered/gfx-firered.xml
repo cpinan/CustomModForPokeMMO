@@ -39,11 +39,11 @@
         <area name="ui-violet-button.pressed" xywh="366,103,37,19" splitx="L6,R6" splity="T6,B8" />
         <area name="hud.background" xywh="396,33,33,27" splity="T5,B5" border="8,6,6,6" splitx="L5,R5" />
         <area name="popup.background" xywh="396,33,33,27" splity="T5,B5" border="8,5,3,5" splitx="L5,R5" />
-        <area name="monster-slot-green" xywh="487,33,23,25" sizeOverwriteH="40" />
-        <area name="monster-slot-orange" xywh="487,33,23,25" />
-        <area name="monster-slot-red" xywh="487,33,23,25" />
-        <area name="monster-slot-purple" xywh="487,33,23,25" />
-        <area name="monster-slot-selected" xywh="487,33,23,25" />
+        <area name="monster-slot-green" xywh="487,33,23,25" sizeOverwriteH="40" splitx="L4,R4" splity="T4,B4" />
+        <area name="monster-slot-orange" xywh="487,33,23,25" splitx="L4,R4" splity="T4,B4" />
+        <area name="monster-slot-red" xywh="487,33,23,25" splitx="L4,R4" splity="T4,B4" />
+        <area name="monster-slot-purple" xywh="487,33,23,25" splitx="L4,R4" splity="T4,B4" />
+        <area name="monster-slot-selected" xywh="487,33,23,25" splitx="L4,R4" splity="T4,B4" />
         <area name="game-shop-area" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="30,0,30,-7" />
         <area name="tab-area" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="25,0,0,-5" />
         <area name="tab-area2" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="25,0,0,-7" />
@@ -233,14 +233,14 @@
             <alias ref="-frame.maximizeIcon" />
         </select>
         <select name="vscrollbar.upbutton.background" center="true">
-            <area if="pressed" xywh="207,140,7,7" />
-            <area if="hover" xywh="207,140,7,7" />
-            <area xywh="207,140,7,7" />
+            <area if="pressed" xywh="207,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="207,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="207,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="vscrollbar.downbutton.background" center="true">
-            <area if="pressed" xywh="215,140,7,7" />
-            <area if="hover" xywh="215,140,7,7" />
-            <area xywh="215,140,7,7" />
+            <area if="pressed" xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="vscrollbar.thumb.background">
             <area splity="T2,B2" if="pressed" xywh="223,140,7,7" splitx="L2,R2" />
@@ -263,14 +263,14 @@
             <area xywh="231,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="hscrollbar.leftbutton.background" center="true">
-            <area if="pressed" xywh="239,140,7,7" />
-            <area if="hover" xywh="239,140,7,7" />
-            <area xywh="239,140,7,7" />
+            <area if="pressed" xywh="239,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="239,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="239,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="hscrollbar.rightbutton.background" center="true">
-            <area if="pressed" xywh="247,140,7,7" />
-            <area if="hover" xywh="247,140,7,7" />
-            <area xywh="247,140,7,7" />
+            <area if="pressed" xywh="247,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="247,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="247,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="hscrollbar-white.thumb.background">
             <area if="pressed" xywh="231,140,7,7" splitx="L2,R2" splity="T2,B2" />
@@ -278,27 +278,27 @@
             <area xywh="231,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="hscrollbar-white.leftbutton.background" center="true">
-            <area if="pressed" xywh="239,140,7,7" />
-            <area if="hover" xywh="239,140,7,7" />
-            <area xywh="239,140,7,7" />
+            <area if="pressed" xywh="239,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="239,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="239,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="hscrollbar-white.rightbutton.background" center="true">
-            <area if="pressed" xywh="247,140,7,7" />
-            <area if="hover" xywh="247,140,7,7" />
-            <area xywh="247,140,7,7" />
+            <area if="pressed" xywh="247,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="247,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="247,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="vscrollbar-white.upbutton.background" center="true">
-            <area if="pressed" xywh="207,140,7,7" />
-            <area if="hover" xywh="207,140,7,7" />
-            <area xywh="207,140,7,7" />
+            <area if="pressed" xywh="207,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="207,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="207,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
         <select name="vscrollbar-white.downbutton.background" center="true">
-            <area if="pressed" xywh="215,140,7,7" />
-            <area if="hover" xywh="215,140,7,7" />
-            <area xywh="215,140,7,7" />
+            <area if="pressed" xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area if="hover" xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
+            <area xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
-        <area name="monster-frame-tab-empty.default" xywh="338,33,28,30" inset="-10,0,10,0" />
-        <area name="monster-frame-tab-empty.selected" xywh="367,33,28,30" inset="-10,0,10,0" />
+        <area name="monster-frame-tab-empty.default" xywh="338,33,28,30" inset="-10,0,10,0" splitx="L4,R4" splity="T4,B4" />
+        <area name="monster-frame-tab-empty.selected" xywh="367,33,28,30" inset="-10,0,10,0" splitx="L4,R4" splity="T4,B4" />
         <select name="monster-frame-tab-empty.background">
             <alias ref="monster-frame-tab-empty.selected" if="selected | hover" />
             <alias ref="monster-frame-tab-empty.default" />

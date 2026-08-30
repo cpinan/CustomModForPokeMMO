@@ -91,7 +91,7 @@
             <alias ref="button.hover" if="selected" />
             <alias ref="button.default" />
         </select>
-        <area name="frame.background" xywh="0,383,517,45" />
+        <area name="frame.background" xywh="0,383,517,45" splitx="L7,R7" splity="T7,B7" />
         <area name="frame-split.background1" xywh="391,0,89,173" splitx="L5,R5" splity="T5,B5" />
         <grid name="frame-split.background2" weightsX="0,1,0" weightsY="0,1,0">
             <area xywh="0,0,3,3" />
@@ -157,16 +157,16 @@
         <area name="chat.top.background" tint="#FFFFFFFF" xywh="469,429,29,29" splitx="L5,R5" splity="T5,B1" inset="-10,-3,-3,-3" />
         <area name="chat.bottom.background" tint="#FFFFFFFF" xywh="39,514,5,5" inset="-5,-3,0,-3" />
         <area name="chat.content.background" tint="#FFFFFFFF" xywh="39,514,5,5" inset="0,-3,0,-3" />
-        <area name="label1.background" xywh="45,514,5,5" inset="0,0,0,0" />
-        <area name="label2.background" xywh="45,514,5,5" inset="0,0,0,0" />
-        <area name="label3.background" xywh="45,514,5,5" inset="0,0,0,0" />
-        <area name="label4.background" xywh="45,514,5,5" inset="0,0,0,0" />
-        <area name="label5.background" xywh="45,514,5,5" inset="0,0,0,0" />
-        <area name="label6.background" xywh="51,514,5,5" inset="0,0,0,0" />
-        <area name="label7.background" xywh="45,514,5,5" inset="7,0,0,0" />
+        <area name="label1.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
+        <area name="label2.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
+        <area name="label3.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
+        <area name="label4.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
+        <area name="label5.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
+        <area name="label6.background" xywh="51,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
+        <area name="label7.background" xywh="45,514,5,5" inset="7,0,0,0" splitx="L1,R1" splity="T1,B1" />
         <area name="table-header.background" xywh="57,514,5,5" inset="1,1,1,1" />
-        <area name="table-row.background" xywh="45,514,5,5" inset="1,1,1,1" />
-        <area name="table-row.background2" xywh="51,514,5,5" inset="1,1,1,1" />
+        <area name="table-row.background" xywh="45,514,5,5" inset="1,1,1,1" splitx="L1,R1" splity="T1,B1" />
+        <area name="table-row.background2" xywh="51,514,5,5" inset="1,1,1,1" splitx="L1,R1" splity="T1,B1" />
         <select name="table.td.background">
             <alias ref="table-row.background2" if="selected" />
             <alias ref="table-row.background" />
@@ -277,12 +277,12 @@
         <area name="editfield.background" xywh="275,460,125,25" splitx="L4,R4" splity="T4,B4" sizeOverwriteH="0" />
         <area name="tabbed-area.background" xywh="156,174,125,81" splitx="L7,R7" splity="T7,B7" />
         <area name="monster-icon.background" xywh="0,174,155,155" splitx="L9,R12" splity="T8,B13" sizeOverwriteH="155" sizeOverwriteV="155" />
-        <area name="button-popup.default" xywh="401,460,125,25" />
+        <area name="button-popup.default" xywh="401,460,125,25" splitx="L5,R5" splity="T5,B5" />
         <select name="button-popup.background">
             <alias ref="button-popup.default" if="hover | keyboardFocus" />
             <alias ref="button-popup.default" tint="#00FFFFFF" />
         </select>
-        <area name="button-icon.default" xywh="527,460,25,25" />
+        <area name="button-icon.default" xywh="527,460,25,25" splitx="L5,R5" splity="T5,B5" />
         <select name="button-icon.background">
             <alias ref="button-icon.default" tint="#FFdcaa69" if="selected" />
             <alias ref="button-icon.default" if="hover | keyboardFocus" />
