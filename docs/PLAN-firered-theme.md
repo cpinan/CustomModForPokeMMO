@@ -137,32 +137,63 @@ the project.** It is also the easiest thing to revert, which is why it goes firs
 The pixel face is a separate, later decision inside this phase — outline first, prove it,
 then swap the face.
 
-### P2 — Scanline backgrounds
-Never a flat fill in FireRed. Horizontal 1 px stripes at a per-screen rhythm — 1:1 teal on
-the bag, 1:3 on the trainer card, 9:1:1 salmon on the summary. Two colours and a modulo,
-applied to `bg.png` and every panel fill. Second-cheapest identity win.
+### P2 — The frame primitive, scanlines and the core skin
+_Was two phases. Merged, because scanlines had nothing to draw on: panel fills
+come out of `pokemmo_ui.png`, and that atlas is not repainted until this phase.
+Cheap to build is not the same as possible to validate._
 
-### P3 — The frame primitive + core skin
 Not 142 hand-mapped slices. One function:
 
 ```
 frame(rect, accent, corner)  ->  outer #283030 x2 | accent x1-3 | bevel x1-2 | fill
 ```
 
-with two corner modes — **chamfered** (dialogue, 45 degree stair over 4 px) and **square**
-(menus). Then a role table of roughly 20 entries maps the 142 slice names in `gfx_ui.xml`
-onto an accent: `ui-frame` -> gold, `ui-popup` -> lavender, `ui-inputbox` -> white/grey,
-`ui-button` -> gold, `ui-table-row` -> pale yellow, and so on.
+with two corner modes, **chamfered** (dialogue, 45 degree stair over 4 px) and
+**square** (menus), and fills that are **scanlined** rather than flat, at the per-screen
+rhythm in the spec. Then a role table of roughly 20 entries maps the 142 slice names in
+`gfx_ui.xml` onto an accent: `ui-frame` -> gold, `ui-popup` -> lavender, `ui-inputbox` ->
+white/grey, `ui-button` -> gold, `ui-table-row` -> pale yellow.
 
-`tools/build-firered-theme.py` parses the stock `gfx_ui.xml` / `gfx.xml` for every
-`<area xywh>`, applies the role table, **asserts output dimensions equal the stock PNG**,
-and emits a coverage report naming every slice it painted and every one it passed through.
+`tools/build-firered-theme.py` parses the stock `gfx_ui.xml` for every `<area xywh>`,
+applies the role table, asserts the output dimensions match, and emits a coverage report
+naming every slice it painted and every one it passed through.
 
-Deliverable: `pokemmo_ui.png` repainted, desktop theme loads, login screen screenshotted.
+This is the first milestone visible without being told where to look: every window,
+button, tab, input and table changes at once. It also completes P1, because the text
+shadow can finally be retuned from black to FireRed's own `#606060` against light panels.
 
-### P4 — Dialogue box, pill labels, login background
+### P3 — Login splash plate
+The FireRed title screen, adapted to the one surface the login screen exposes.
+
+**Only `bg.png` is themeable there.** `logingui > logo` binds `background-image`, and that
+is the whole extent of it. There is no widget for the full-screen backdrop; the
+checkerboard and the 3D model come from the client and from `vanbobby_pokemmo3d.mod`.
+
+`bg.png` is declared `xywh="*"`, a whole image with no slice geometry, so unlike every
+other atlas it may be **resized**. The plate can be considerably larger than the stock
+484x143.
+
+Composition measured off `PokemonFireRedRef/splash.jpg` (720x480, a 3x scale of the GBA
+240x160), read as horizontal bands down the left edge:
+
+| band | height @3x | colour |
+|---|---|---|
+| top rule | 25 px | `#F04800` orange |
+| black | 61 px | `#000000` |
+| teal field | 143 px | `#30A890` |
+| flame row | ~20 px | `#F0C030` gold, `#F0F0A8` cream |
+| black | 112 px | `#000000` |
+| bottom rule | 27 px | `#780000` dark red |
+
+**Lettering is original, in FireRed's style, not a trace of Nintendo's wordmark, and the
+Charizard is not reused.** That is partly a takedown-risk call for a forum release, but
+mostly it is the right product answer: the client is PokeMMO, so the plate should read
+PokeMMO in FireRed's blocky gold-on-blue outlined lettering rather than borrow another
+game's title.
+
+### P4 — Dialogue box and pill labels
 `text-bubble.png` gets the navy-fill/gold-chamfer treatment. Pill labels (`#788090` capsule,
-white text) are added as a reusable slice for field headers. `bg.png` gets the stripe.
+white text) are added as a reusable slice for field headers.
 
 ### P5 — Battle HUD and summary
 `battle-hud.png` (43 named / 64 areas) — HP capsule `#506858` outline, `#484058` track,
