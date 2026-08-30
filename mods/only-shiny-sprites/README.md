@@ -4,11 +4,12 @@
 
 ## What it does
 
-Hides every **non-shiny** Pokémon in battle. Normal encounters draw nothing at
-all; a shiny draws normally, so it is impossible to miss.
+Hides every **non-shiny opponent** in battle. A normal wild encounter draws
+nothing on the enemy side; a shiny draws normally, so it is impossible to miss.
 
-Nothing else changes — overworld sprites, party icons, PC boxes and the Pokédex
-are untouched. Only what you see inside a battle.
+Your own Pokémon is untouched — only the opposing side is blanked. Nothing
+outside battle changes either: overworld sprites, party icons, PC boxes and the
+Pokédex all render normally.
 
 ## How it works
 
@@ -19,29 +20,31 @@ The client tells normal and shiny apart by filename alone:
 25-front-s.png      Pikachu, enemy side, shiny
 ```
 
-So this mod ships a fully transparent 64×64 PNG for every **`-n`** file across
-the gen 1–5 dex (ids 1–649), front and back, including the `-m` / `-f` gendered
-variants for species whose ROM sprite differs by gender:
+So this mod ships a fully transparent 64×64 PNG for every **`-front-n`** file
+across the gen 1–5 dex (ids 1–649), including the `-m` / `-f` gendered variants
+for species whose ROM sprite differs by gender:
 
 ```
 sprites/battlesprites/
     1-front-n.png     1-front-n-m.png   1-front-n-f.png
-    1-back-n.png      1-back-n-m.png    1-back-n-f.png
-    ... 649 species, 3894 files
+    ... 649 species, 1947 files
 ```
+
+`front` is the **enemy** sprite and `back` is your own, so shipping only
+`-front-` files leaves your side of the battle completely alone.
 
 It ships **no** `-s` files. Shinies are not overridden, so the client falls back
 to the ROM's own shiny sprite and they render exactly as they always did.
 
-The archive is under 900 KB — every file is the same handful of transparent
+The archive is under 450 KB — every file is the same handful of transparent
 bytes, so it compresses to almost nothing.
 
 ## Install
 
 1. Mod Management → **Import Mod** → pick `only-shiny-sprites-1-0.mod`.
 2. Enable it, save, restart.
-3. Walk into any wild encounter: the enemy side should be empty. Your own
-   Pokémon disappears too — that is the `-back-n` half doing its job.
+3. Walk into any wild encounter: the enemy side should be empty, your own
+   Pokémon unchanged.
 
 ## Known limits
 
@@ -52,8 +55,8 @@ bytes, so it compresses to almost nothing.
 * **You cannot see what you are fighting.** That is the point, but it does mean
   no visual cue for species, gender or animation state. The name and health bar
   still read normally.
-* Your own Pokémon is hidden as well. If you would rather keep your side
-  visible, delete the `*-back-n*.png` files and rebuild.
+* Only the enemy side is hidden. To blank your own side too, regenerate with
+  `pmmod sprites blank <dir> --ids 1-649 --sides front,back`.
 
 ## Making shinies bigger
 

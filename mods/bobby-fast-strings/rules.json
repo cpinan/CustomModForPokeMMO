@@ -1,0 +1,35 @@
+{
+  "_comment": "Rules for `pmmod strings fasttext`. Each rule matches text in the client's own dumps; every match is replaced with an escaped newline so the box advances immediately. Keep rules narrow: silencing a prompt still shows its Yes/No box, but silencing quest directions loses information you may need.",
+  "rules": [
+    {
+      "name": "pokecenter",
+      "note": "Nurse Joy / healing counter flow",
+      "match": "restore your tired|We hope to see you again|Welcome to our POK|Thank you for waiting|We've restored your|take your POK[^ ]*MON for a few seconds|Your POK[^ ]*MON are fighting fit"
+    },
+    {
+      "name": "mart",
+      "note": "Shop clerk purchase and sale flow",
+      "match": "Anything else\\?|Here you are! Thank you|Thank you very much!|Welcome!\\\\nHow may I serve you|Please come again|How many would you like"
+    },
+    {
+      "name": "daycare",
+      "note": "Day-care deposit, retrieval and egg hand-off",
+      "match": "DAY.?CARE|Take good care of it|found an EGG|got an EGG|raise one of\\\\nyour POK|We can raise"
+    },
+    {
+      "name": "fishing",
+      "note": "Rod cast results",
+      "match": "Not even a nibble|Looks like there's nothing here|A bite!|Oh! A bite"
+    },
+    {
+      "name": "hm-field-moves",
+      "note": "Cut / Surf / Strength / Rock Smash / Waterfall prompts",
+      "match": "used CUT|used SURF|used STRENGTH|used ROCK SMASH|used WATERFALL|used FLASH|used DIVE|would like to SURF|Do you want to use"
+    },
+    {
+      "name": "exp-messages",
+      "note": "Experience and level-up chatter",
+      "match": "EXP\\. Points|gained\\\\n|grew to level|Points!"
+    }
+  ]
+}

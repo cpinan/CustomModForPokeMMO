@@ -17,6 +17,7 @@ eyeballing the UI.
 Each mod has its own README with the full write-up:
 [android-layout-fix](mods/android-layout-fix/README.md) ·
 [region-label-unpad](mods/region-label-unpad/README.md) ·
+[bobby-fast-strings](mods/bobby-fast-strings/README.md) ·
 [only-shiny-sprites](mods/only-shiny-sprites/README.md) ·
 [shiny-scale-probe](mods/shiny-scale-probe/README.md) ·
 [stadium-battlesprites](mods/stadium-battlesprites/README.md) ·
@@ -84,20 +85,36 @@ working; you only lose the wider region buttons.
 **Install:** it must load **after** SupersStrings — use the down arrow in Mod
 Management to place it below, then restart.
 
+### `bobby-fast-strings` — faster text, English and Spanish
+
+Removes the text from the interactions you repeat all day — healing counter,
+shop flow, day-care and eggs, EXP chatter, field-move prompts, fishing casts —
+so the box advances instantly. 186 entries across six rules. Quest directions and
+story dialogue are left alone.
+
+It is **generated, not hand-written**: `pmmod strings fasttext` reads your own
+client's `Settings → Utilities` dumps and applies six regexes from `rules.json`.
+Nothing is copied from anyone else's mod, it survives client patches by being
+re-run rather than hand-fixed, and any language the client ships comes free.
+
+PokeMMO translates its UI into eleven languages but not the storyline — only 8 of
+Kanto's 3,607 storyline ids exist in the translated set. Since silencing is
+language-neutral, one storyline file serves every player and Spanish only needs
+its own UI file.
+
 ### `only-shiny-sprites` — hides every non-shiny in battle
 
 The client tells normal and shiny apart by filename alone — `25-front-n.png`
 versus `25-front-s.png` — so this mod ships a fully transparent PNG for every
-`-n` file across the gen 1–5 dex, front and back, including the `-m`/`-f`
-gendered variants. 3,894 files, all the same handful of transparent bytes, which
-is why the archive is under 900 KB.
+`-n` file across the gen 1–5 dex, including the `-m`/`-f` gendered
+variants. 1,947 files, all the same handful of transparent bytes, which
+is why the archive is under 450 KB.
 
 It ships **no** `-s` files. Shinies are not overridden, fall back to the ROM
 sprite, and render exactly as they always did. Normal encounters draw nothing at
 all, so a shiny is impossible to miss.
 
-Your own Pokémon is hidden too — delete `*-back-n*.png` and rebuild if you would
-rather keep your side visible. Covers dex ids 1–649; alternate forms and event
+Only the enemy side is blanked; your own Pokémon renders normally. Covers dex ids 1–649; alternate forms and event
 costumes use higher sprite ids and are not blanked.
 
 ### `shiny-scale-probe` — a throwaway diagnostic

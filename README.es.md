@@ -78,6 +78,25 @@ funcionando; lo único que pierdes son los botones de región más anchos.
 **Instalación:** tiene que cargarse **después** de SupersStrings — usa la flecha
 hacia abajo en Administración de Mods para colocarlo debajo, y reinicia.
 
+### `bobby-fast-strings` — texto más rápido, en inglés y español
+
+Quita el texto de las interacciones que repites todo el día — el mostrador de
+curación, la tienda, la guardería y los huevos, los mensajes de experiencia, los
+avisos de movimientos de campo y la pesca — para que el cuadro avance al
+instante. Son 186 entradas repartidas en seis reglas. Las indicaciones de misión
+y los diálogos de la historia se quedan intactos.
+
+Está **generado, no escrito a mano**: `pmmod strings fasttext` lee los volcados
+de tu propio cliente (`Ajustes → Utilidades`) y aplica seis expresiones
+regulares desde `rules.json`. No se copia nada del mod de otra persona, sobrevive
+a los parches porque se vuelve a generar en lugar de arreglarse a mano, y
+cualquier idioma que traiga el cliente sale gratis.
+
+PokeMMO traduce su interfaz a once idiomas pero no la historia — solo 8 de los
+3.607 ids de historia de Kanto existen en el conjunto traducido. Como silenciar
+es independiente del idioma, un solo archivo de historia sirve para todos y el
+español únicamente necesita su propio archivo de interfaz.
+
 ### `only-shiny-sprites` — oculta a todos los que no son shiny en combate
 
 El cliente distingue normal de shiny solo por el nombre del archivo —
@@ -85,14 +104,13 @@ El cliente distingue normal de shiny solo por el nombre del archivo —
 totalmente transparente para cada archivo `-n` de la dex de la gen 1–5, de
 frente y de espalda, incluidas las variantes por género `-m`/`-f`. Son 3.894
 archivos con los mismos pocos bytes transparentes, por eso el archivo final pesa
-menos de 900 KB.
+menos de 450 KB.
 
 **No** incluye ningún archivo `-s`. Los shiny no se sobrescriben, se toman del
 sprite de la ROM y se ven igual que siempre. Los encuentros normales no dibujan
 nada, así que un shiny es imposible de pasar por alto.
 
-Tu propio Pokémon también queda oculto — borra `*-back-n*.png` y vuelve a
-compilar si prefieres seguir viendo tu lado. Cubre los ids 1–649; las formas
+Solo se oculta el lado rival; tu propio Pokémon se ve con normalidad. Cubre los ids 1–649; las formas
 alternativas y los disfraces de evento usan ids más altos y no se ocultan.
 
 ### `shiny-scale-probe` — una prueba desechable
