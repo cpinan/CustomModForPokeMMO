@@ -27,6 +27,23 @@ rm -f "$CLIENT/data/mods/$NAME"-*.mod
 cp "dist/$ARCHIVE" "$CLIENT/data/mods/"
 echo "   -> data/mods/$ARCHIVE"
 
+# The client keys enabled mods by FILENAME, and the filename carries the version.
+# Bump the version without rewriting this line and the new archive ships disabled,
+# which looks exactly like a theme that stopped working.
+PROPS="$CLIENT/config/main.properties"
+python3 - "$PROPS" "$NAME" "$ARCHIVE" <<'PYEOF'
+import re, sys
+props, name, archive = sys.argv[1], sys.argv[2], sys.argv[3]
+text = open(props).read()
+line = re.search(r'^client\.mods\.enabled_mods=(.*)$', text, re.M)
+mods = [m for m in (line.group(1).split('/') if line else []) if m and not m.startswith(name)]
+mods.append(archive)
+new = 'client.mods.enabled_mods=' + '/'.join(mods)
+text = re.sub(r'^client\.mods\.enabled_mods=.*$', new.replace('\\', '\\\\'), text, flags=re.M)
+open(props, 'w').write(text)
+print("   enabled: " + '/'.join(mods))
+PYEOF
+
 echo "== restart client =="
 # PokeMMO.sh does `cd "$(dirname "$0")"` then `exec bin/macos/<arch>/PokeMMO`, so
 # the process argv is that RELATIVE path. Two patterns that look right and are not:
