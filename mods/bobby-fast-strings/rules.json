@@ -30,6 +30,40 @@
       "name": "exp-messages",
       "note": "Experience and level-up chatter",
       "match": "EXP\\. Points|gained\\\\n|grew to level|Points!"
+    },
+    {
+      "name": "status-battle",
+      "note": "Battle status spam: faint, paralysis, burn, sleep, confusion, recoil",
+      "match": "fainted!|is paralyz|was burned|was frozen|fell asleep|is confused|flinched|hurt by|restored health|is fast asleep|snapped out of"
+    },
+    {
+      "name": "shop-extra",
+      "note": "Remaining shop counter lines",
+      "match": "Thank you\\.|Come again|That will be|Is that OK\\?"
+    },
+    {
+      "name": "catch-flow",
+      "note": "Ball throw result -- fires on every encounter you throw at",
+      "match": "Gotcha!|was caught!|The POK[^ ]*MON broke free|Aww! It appeared to be caught",
+      "exclude": "Give a nickname"
+    },
+    {
+      "name": "evolution",
+      "note": "Evolution start, finish and cancel",
+      "match": "is evolving|evolved into|stopped evolving|Congratulations! Your"
+    },
+    {
+      "name": "repel",
+      "note": "Repel wear-off and re-apply prompt",
+      "match": "REPEL|Repel's effect|repellent"
+    },
+    {
+      "name": "move-learned",
+      "note": "Move learned on level-up (not the forget prompt)",
+      "match": "learned [A-Z]{2,}|learned \\{",
+      "exclude": "wants to learn|Forget a move|Stop learning|Delete a move"
     }
-  ]
+  ],
+  "never": "raising its |Raises the |lowers the |inflict damage|An item to be held|A Pok[eé] Ball|Use it to flee|It is designed|restores? \\d|An item for use on a POK|The user |A move that",
+  "_never_comment": "Global guard. Item and move descriptions are read on purpose, never mashed through -- 966 entries and ~96k characters in this corpus. No rule may silence them, however tempting the volume."
 }

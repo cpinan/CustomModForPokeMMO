@@ -89,8 +89,10 @@ Management to place it below, then restart.
 
 Removes the text from the interactions you repeat all day — healing counter,
 shop flow, day-care and eggs, EXP chatter, field-move prompts, fishing casts —
-so the box advances instantly. 186 entries across six rules. Quest directions and
-story dialogue are left alone.
+so the box advances instantly — plus battle status spam, catch results, evolution
+and Repel prompts. 463 entries across twelve rules. Quest directions and story
+dialogue are left alone, and a global guard keeps item and move descriptions
+(966 entries, ~96k characters) off limits no matter what a rule matches.
 
 It is **generated, not hand-written**: `pmmod strings fasttext` reads your own
 client's `Settings → Utilities` dumps and applies six regexes from `rules.json`.

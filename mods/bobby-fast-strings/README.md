@@ -9,16 +9,36 @@ the box advances instantly instead of making you mash through it.
 
 | rule | entries | what it covers |
 |---|---|---|
-| `pokecenter` | 47 | Nurse Joy / healing counter |
+| `status-battle` | 113 | faint, paralysis, burn, sleep, confusion, recoil — the most repeated text in the game |
+| `shop-extra` | 111 | remaining shop counter lines |
 | `mart` | 70 | shop purchase and sale flow |
+| `pokecenter` | 47 | Nurse Joy / healing counter |
 | `daycare` | 28 | deposit, retrieval, egg hand-off |
 | `exp-messages` | 27 | experience and level-up chatter |
+| `catch-flow` | 17 | *Gotcha!* / *broke free* — fires on every ball you throw |
+| `evolution` | 16 | evolution start, finish and cancel |
+| `repel` | 14 | wear-off and re-apply prompt |
 | `hm-field-moves` | 10 | Cut / Surf / Strength / Rock Smash prompts |
+| `move-learned` | 6 | move learned on level-up |
 | `fishing` | 4 | rod cast results |
-| | **186** | |
+| | **463** | |
 
 Everything else is left exactly as it is. Quest directions, trainer dialogue and
 story beats still read normally — this is a speed mod, not a mute button.
+
+### What it deliberately will not touch
+
+`rules.json` carries a global `never` guard that no rule can override:
+
+* **Item and move descriptions** — 966 entries and ~96,000 characters in this
+  corpus. They look like an enormous saving if you rank text by volume, but you
+  *read* them on purpose; you never mash through them. Silencing them would gut
+  the game while showing a big number.
+* **The nickname prompt** — carved out of `catch-flow` by an `exclude`.
+  Silencing it leaves an unlabelled Yes/No on a decision that is annoying to
+  undo.
+* **Move learn / forget prompts** — you have to see which move you are
+  replacing. Only the *"learned X"* confirmation is silenced.
 
 ## It is generated, not hand-written
 
