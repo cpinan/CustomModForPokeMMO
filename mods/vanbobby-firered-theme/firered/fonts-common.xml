@@ -21,8 +21,20 @@
   gets away with it because it sits in default/. This file sits in firered/,
   where that path resolves to nothing, and a missing font raises no error.
 
-  The shadow colour is tuned for the CURRENT dark PokeMMO panels. Revisit in
-  P3/P4 once the surfaces are cream and navy.
+  ON THE SHADOW COLOUR, and why it is black rather than FireRed's own tone.
+
+  FireRed's shadow is a fixed desaturated midtone, about #606060, and it reads
+  because FireRed's panels are light or midtone: white glyph, midtone shadow,
+  light ground, three separated steps.
+
+  PokeMMO's panels are currently dark, #3B3F43. The first attempt used FireRed's
+  structural dark #283030, which is luminance 45 against a ground of 63. An 18
+  step out of 255 is invisible at 100 percent, and measurable only by sampling
+  pixels, which is not a standard a theme should be held to.
+
+  Black gives a 63 step and is visible. It is also still correct FireRed grammar:
+  the shadow is the darkest of the three tones. Retune to #FF606060 in P3/P4 once
+  the panels are cream and navy, where black would be harsher than the reference.
 -->
 <themes>
     <!-- The base face. pb-dark and the whole main-* family are ref="main", and
@@ -31,7 +43,7 @@
     <fontDef name="main" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
              faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="14"
              hinting="Full" hinting_cjk="Slight" default="true" unique_atlas="true"
-             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030">
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF000000">
         <fontParam if="disabled" color="#A9A9A9"/>
         <fontParam if="pressed" offsetX="1" offsetY="1"/>
     </fontDef>
@@ -45,7 +57,7 @@
              filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
              faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="14"
              hinting="Full" hinting_cjk="Slight" unique_atlas="true"
-             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030">
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF000000">
         <fontParam if="disabled" color="#A9A9A9"/>
         <fontParam if="pressed" offsetX="1" offsetY="1"/>
     </fontDef>
@@ -53,13 +65,13 @@
     <fontDef name="main-small" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
              faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="13"
              hinting="Full" hinting_cjk="Slight"
-             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030"/>
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF000000"/>
 
     <!-- border_width dropped: a surround is not what FireRed does. -->
     <fontDef name="main-border" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
              faces="sc,tc,jp" kerning="true" color="white" size="12" size_cjk="14"
              hinting="AutoSlight" hinting_cjk="Full"
-             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030">
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF000000">
         <fontParam if="pressed" offsetX="1" offsetY="1"/>
     </fontDef>
 
@@ -67,10 +79,10 @@
     <fontDef name="title-font" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc"
              faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="15"
              hinting="AutoMedium" hinting_cjk="Slight"
-             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030"/>
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF000000"/>
 
     <!-- border_width dropped, same reason as main-border. -->
     <fontDef name="mechabold" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc"
              faces="sc,tc,jp" color="#FFFFFF" hinting="Medium" kerning="false" size="14"
-             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030"/>
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF000000"/>
 </themes>
