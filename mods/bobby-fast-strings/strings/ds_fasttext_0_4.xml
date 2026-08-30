@@ -13,9 +13,6 @@
     field-moves-ds: Overworld move use in the live client - Teleport, Sweet Scent, every HM
     exp-gained-ds: EXP gained at the end of a battle, live client
     move-learn-result-ds: Move learned / forgotten / not learned at the end of a battle, live client
-    battle-flow-ds: Encounter, send-out, switch, battle result, winnings and capture, live client
-    party-menu-ds: Heal results, vitamins, EV berries and item hand-off, live client
-    probe-faint-ds: PROBE ONLY - one address, to find out whether table 14 accepts a blank line
     hm-prompts-ds-sinnoh: Sinnoh archive: every HM obstacle prompt and the `used <move>` line that follows
     hm-prompts-ds-unova1: Unova storyline archive: the same obstacle prompts plus Flash, Teleport and Dig
     counters-ds-sinnoh: Sinnoh archive: Great Marsh gate, Elite Four door, Pokecenter and shop desk, Day Care
@@ -46,7 +43,6 @@
 <ds_strings_archive archive_type="0" lang="en" region_id="4" is_primary="0">
   <string block_id="0" entry_id="0" table_id="23">{09}</string>
   <string block_id="0" entry_id="0" table_id="40">{09}</string>
-  <string block_id="0" entry_id="0" table_id="47">{09}</string>
   <string block_id="0" entry_id="0" table_id="117">{09}</string>
   <string block_id="0" entry_id="0" table_id="135">{09}</string>
   <string block_id="0" entry_id="0" table_id="211">{09}</string>
@@ -71,10 +67,8 @@
   <string block_id="0" entry_id="3" table_id="135">{09}</string>
   <string block_id="0" entry_id="3" table_id="211">{09}</string>
   <string block_id="0" entry_id="3" table_id="485">{09}</string>
-  <string block_id="0" entry_id="3" table_id="747">{09}</string>
   <string block_id="0" entry_id="4" table_id="40">{09}</string>
   <string block_id="0" entry_id="4" table_id="135">{09}</string>
-  <string block_id="0" entry_id="4" table_id="197">{09}</string>
   <string block_id="0" entry_id="4" table_id="211">{09}</string>
   <string block_id="0" entry_id="4" table_id="464">{09}</string>
   <string block_id="0" entry_id="4" table_id="571">{09}</string>
@@ -88,8 +82,6 @@
   <string block_id="0" entry_id="6" table_id="110">{09}</string>
   <string block_id="0" entry_id="6" table_id="135">{09}</string>
   <string block_id="0" entry_id="6" table_id="522">{09}</string>
-  <string block_id="0" entry_id="6" table_id="538">{09}</string>
-  <string block_id="0" entry_id="6" table_id="747">{09}</string>
   <string block_id="0" entry_id="7" table_id="211">{09}</string>
   <string block_id="0" entry_id="8" table_id="40">{09}</string>
   <string block_id="0" entry_id="8" table_id="267">{09}</string>
@@ -105,7 +97,6 @@
   <string block_id="0" entry_id="10" table_id="589">{09}</string>
   <string block_id="0" entry_id="11" table_id="211">{09}</string>
   <string block_id="0" entry_id="11" table_id="439">{09}</string>
-  <string block_id="0" entry_id="11" table_id="514">{09}</string>
   <string block_id="0" entry_id="12" table_id="211">{09}</string>
   <string block_id="0" entry_id="12" table_id="435">{09}</string>
   <string block_id="0" entry_id="14" table_id="211">{09}</string>
@@ -146,7 +137,6 @@
   <string block_id="0" entry_id="56" table_id="135">{09}</string>
   <string block_id="0" entry_id="59" table_id="117">{09}</string>
   <string block_id="0" entry_id="59" table_id="138">{09}</string>
-  <string block_id="0" entry_id="62" table_id="300">{09}</string>
   <string block_id="0" entry_id="63" table_id="117">{09}</string>
   <string block_id="0" entry_id="63" table_id="135">{09}</string>
   <string block_id="0" entry_id="65" table_id="40">{09}</string>
@@ -154,18 +144,6 @@
   <string block_id="0" entry_id="84" table_id="40">{09}</string>
   <string block_id="0" entry_id="85" table_id="135">{09}</string>
   <string block_id="0" entry_id="110" table_id="96">{09}</string>
-  <string block_id="0" entry_id="178" table_id="300">{09}</string>
-  <string block_id="0" entry_id="836" table_id="197">{09}</string>
-  <string block_id="0" entry_id="837" table_id="197">{09}</string>
-  <string block_id="0" entry_id="838" table_id="197">{09}</string>
-  <string block_id="0" entry_id="863" table_id="197">{09}</string>
-  <string block_id="0" entry_id="867" table_id="197">{09}</string>
-  <string block_id="0" entry_id="915" table_id="197">{09}</string>
-  <string block_id="0" entry_id="917" table_id="197">{09}</string>
-  <string block_id="0" entry_id="918" table_id="197">{09}</string>
-  <string block_id="0" entry_id="919" table_id="197">{09}</string>
   <string block_id="0" entry_id="922" table_id="724">{09}</string>
   <string block_id="0" entry_id="925" table_id="724">{09}</string>
-  <string block_id="0" entry_id="1192" table_id="197">{09}</string>
-  <string block_id="0" entry_id="1202" table_id="197">{09}</string>
 </ds_strings_archive>

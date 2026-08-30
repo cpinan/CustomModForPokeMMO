@@ -285,7 +285,9 @@
           75
         ]
       ],
-      "replace": "blank"
+      "replace": "blank",
+      "enabled": false,
+      "_disabled_why": "DISABLED 2026-08-30, same day it shipped. Blanking the battle-start entries HANGS a single wild encounter -- the battle never loads and the session has to be restarted. Reported on hardware. The reasoning that put these here was wrong: 15/42 (EXP) is proven safe, so the whole of table 15 was assumed safe, but a table is not a call site. 15/42 fires as a battle ends, 15/1 fires as one begins, and the start-of-battle message is part of a state machine that does not complete without it. SupersSpeedStrings touches none of these, which should have been the warning."
     },
     {
       "name": "party-menu-ds",
@@ -368,7 +370,9 @@
           179
         ]
       ],
-      "replace": "blank"
+      "replace": "blank",
+      "enabled": false,
+      "_disabled_why": "DISABLED 2026-08-30 as a precaution, not because it was seen to break. It shipped in the same untested batch as battle-flow-ds, and 157/44-52 fire inside a battle when an item is used, which is the code path that just hung. Re-enable only with evidence for these specific addresses -- the reference does not touch them either."
     },
     {
       "name": "probe-faint-ds",
@@ -386,7 +390,9 @@
           1
         ]
       ],
-      "replace": "blank"
+      "replace": "blank",
+      "enabled": false,
+      "_disabled_why": "DISABLED 2026-08-30 without an answer. It blanks 14/1, in the same battle state machine that hung on 15/1, so it is not safe to leave armed. Table 14 stays unknown."
     },
     {
       "name": "battle-end-ds",
@@ -1309,14 +1315,18 @@
       "note": "Ball throw result -- fires on every encounter you throw at",
       "match": "Gotcha!|was caught!|The (POK[^ ]*MON|Pok[eé]mon) broke free|Aww! It appeared to be caught|popped out of the",
       "exclude": "Give a nickname|BOX is full",
-      "max_len": 120
+      "max_len": 120,
+      "plain_only": true,
+      "_plain_only_why": "plain_only since 2026-08-30. This pattern was written for the GBA ids and it was reaching the NDS battle engines by accident -- Sinnoh table 368 and Johto table 197 are those archives' equivalent of Unova 14/15 -- writing {09} into a state machine, which is exactly what hung a wild encounter that day. It also cannot tell a move tutor's copy of a message from the battle engine's. Where the NDS equivalent is worth silencing it is hand-picked with evidence: `move-learn-result-ds` for Unova 157/38-41. Note this mod does not silence catching or evolving in Unova either, so silencing them in Sinnoh and Johto was inconsistent as well as risky."
     },
     {
       "name": "evolution",
       "note": "Evolution start, finish and cancel",
       "match": "is evolving|evolved into|stopped evolving|Congratulations! Your",
       "exclude": "CONTEST",
-      "max_len": 80
+      "max_len": 80,
+      "plain_only": true,
+      "_plain_only_why": "plain_only since 2026-08-30. This pattern was written for the GBA ids and it was reaching the NDS battle engines by accident -- Sinnoh table 368 and Johto table 197 are those archives' equivalent of Unova 14/15 -- writing {09} into a state machine, which is exactly what hung a wild encounter that day. It also cannot tell a move tutor's copy of a message from the battle engine's. Where the NDS equivalent is worth silencing it is hand-picked with evidence: `move-learn-result-ds` for Unova 157/38-41. Note this mod does not silence catching or evolving in Unova either, so silencing them in Sinnoh and Johto was inconsistent as well as risky."
     },
     {
       "name": "repel",
@@ -1330,7 +1340,9 @@
       "note": "Move learned on level-up (not the forget prompt)",
       "match": "learned [A-Z]{2,}|learned \\{|learned\\\\n\\{",
       "exclude": "wants to learn|Forget a move|Stop learning|Delete a move|is trying to",
-      "max_len": 120
+      "max_len": 120,
+      "plain_only": true,
+      "_plain_only_why": "plain_only since 2026-08-30. This pattern was written for the GBA ids and it was reaching the NDS battle engines by accident -- Sinnoh table 368 and Johto table 197 are those archives' equivalent of Unova 14/15 -- writing {09} into a state machine, which is exactly what hung a wild encounter that day. It also cannot tell a move tutor's copy of a message from the battle engine's. Where the NDS equivalent is worth silencing it is hand-picked with evidence: `move-learn-result-ds` for Unova 157/38-41. Note this mod does not silence catching or evolving in Unova either, so silencing them in Sinnoh and Johto was inconsistent as well as risky."
     }
   ],
   "never": "raising its |Raises the |Raises evasion|Raises |Lowers |lowers the |inflict damage|inflicts |An item to be held|An attack move|A Pok[eé] Ball|Use it to flee|It is designed|restores? \\d|An item for use on a POK|The user |A move that|has been hurt by|A \\w+-type move",
@@ -1357,7 +1369,12 @@
       0,
       2,
       172
+    ],
+    [
+      0,
+      2,
+      184
     ]
   ],
-  "_never_ds_tables_comment": "(archive_type, region_id, table) triples in the NDS battle engine. Third global guard, patterns only. A box drawn by these tables cannot be removed by anything the strings side has -- proven on hardware 2026-08-30 -- so silencing one trades a readable line for an empty box that costs the same tap and drags the battle out. The guard exists because disabling the battle-flow rules was not enough: `catch-flow` still reached 15/65 (`Gotcha! {00} was caught!`), `evolution` still reached all of table 172, and `move-learned` still reached 157/41 and 14/688-690. Those rules were written for the GBA ids and found the Unova archive by accident. Table 8 is deliberately absent: it is the field-move table, the one call site where {09} does remove the box."
+  "_never_ds_tables_comment": "(archive_type, region_id, table) triples in the NDS battle engine. Third global guard, patterns only. A box drawn by these tables cannot be removed by anything the strings side has -- proven on hardware 2026-08-30 -- so silencing one trades a readable line for an empty box that costs the same tap and drags the battle out. The guard exists because disabling the battle-flow rules was not enough: `catch-flow` still reached 15/65 (`Gotcha! {00} was caught!`), `evolution` still reached all of table 172, and `move-learned` still reached 157/41 and 14/688-690. Those rules were written for the GBA ids and found the Unova archive by accident. Unova table 184 is here too: it is 942 entries of trainer battle dialogue, and `mart` was matching two of them as shop lines. Table 8 is deliberately absent: it is the field-move table, the one call site where {09} does remove the box."
 }
