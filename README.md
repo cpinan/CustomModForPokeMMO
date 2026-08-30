@@ -1,5 +1,7 @@
 # CustomModForPokeMMO
 
+*[Versión en español](README.es.md)*
+
 Mods for [PokeMMO](https://pokemmo.com), built and verified against client
 revision **32920** (theme revision 8). Two of them fix real bugs that show up on
 Android handhelds; the rest are cosmetic.
@@ -11,6 +13,12 @@ eyeballing the UI.
 ---
 
 ## The mods
+
+Each mod has its own README with the full write-up:
+[android-layout-fix](mods/android-layout-fix/README.md) ·
+[region-label-unpad](mods/region-label-unpad/README.md) ·
+[stadium-battlesprites](mods/stadium-battlesprites/README.md) ·
+[demo-strings](mods/demo-strings/README.md)
 
 ### `android-layout-fix` — stops the "UI layout loop" warning
 
