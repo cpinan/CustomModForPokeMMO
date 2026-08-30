@@ -4,10 +4,10 @@
 
   Slice NAMES match the stock theme exactly: names are what widgets bind to, and
   a typo defines art nothing reads. The xywh deliberately do NOT match. The stock
-  atlas overlaps itself in 129 places, which no repaint can survive, so every
-  slice is repacked into its own rectangle and splitx/splity are rewritten to the
-  band thickness actually painted. Shipping our own slice table is what makes
-  that legal.
+  atlases overlap themselves, which no repaint can survive, so every slice is
+  repacked into its own rectangle and splitx/splity are rewritten to the band
+  thickness actually painted. Shipping our own slice table is what makes that
+  legal.
 -->
 <themes>
     <images file="res/pokemmo_ui.png" filter="nearest">
@@ -229,17 +229,17 @@
             <alias ref="ui-box.default" tint="#6635a135" />
         </select>
         <area name="ui-button.default" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
-        <area name="ui-button.default.selected" tint="#FF999999" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-button.default.selected" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-button.pressed.background" xywh="412,119,29,29" splitx="L5,R5" splity="T5,B5" />
-        <area name="ui-button.selected.background" tint="main-color" xywh="442,119,29,29" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-button.selected.background" xywh="442,119,29,29" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-button.disabled" xywh="0,162,29,29" splitx="L4,R4" splity="T4,B4" />
-        <area name="ui-button.hover.background" xywh="30,162,29,29" splitx="L5,R5" tint="main-color" splity="T5,B5" />
+        <area name="ui-button.hover.background" xywh="30,162,29,29" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-button-picker.background" xywh="31,210,9,14" center="true" />
-        <area name="ui-button.tinted.blue" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" tint="#ccf3ff" />
-        <area name="ui-button.tinted.green" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" tint="#d2efc3" />
-        <area name="ui-button.tinted.red" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" tint="#8b0000" />
-        <area name="ui-button.tinted.gold" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" tint="#d4af37" />
-        <area name="ui-button.tinted.orange" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" tint="#c68a55" />
+        <area name="ui-button.tinted.blue" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-button.tinted.green" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-button.tinted.red" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-button.tinted.gold" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-button.tinted.orange" xywh="382,119,29,29" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-sort-default.background" xywh="31,210,9,14" inset="0,73,0,0" center="true" />
         <area name="ui-sort-asc.background" xywh="159,210,9,8" inset="4,73,0,0" center="true" />
         <area name="ui-sort-desc.background" xywh="169,210,9,8" inset="-4,73,0,0" center="true" />
@@ -448,10 +448,10 @@
             <alias ref="ui-button.selected" if="keyboardFocus" />
             <alias ref="ui-button.default" />
         </select>
-        <area name="label-white.background" xywh="35,192,38,16" splitx="L2,R2" splity="T2,B2" tint="#33FFFFFF" />
+        <area name="label-white.background" xywh="35,192,38,16" splitx="L2,R2" splity="T2,B2" />
         <area name="ui-spacer.default" xywh="190,210,8,3" />
         <area name="ui-inputbox.default" xywh="74,192,16,16" splitx="L4,R4" splity="T4,B4" />
-        <area name="ui-inputbox.selected" xywh="91,192,16,16" splitx="L5,R5" splity="T5,B5" tint="sub-color" />
+        <area name="ui-inputbox.selected" xywh="91,192,16,16" splitx="L5,R5" splity="T5,B5" />
         <select name="ui-inputbox.background">
             <composed if="selected | keyboardFocus">
                 <alias ref="ui-inputbox.default" />
@@ -459,17 +459,17 @@
             </composed>
             <alias ref="ui-inputbox.default" />
         </select>
-        <area name="ui-inputbox.red" xywh="108,192,16,16" splitx="L5,R5" splity="T5,B5" tint="#ff6a6a" />
-        <area name="ui-inputbox.yellow" xywh="125,192,16,16" splitx="L4,R4" splity="T4,B4" tint="#ffff6a" />
-        <area name="ui-inputbox.grey" xywh="125,192,16,16" splitx="L4,R4" splity="T4,B4" tint="#bcbcbc" />
-        <area name="ui-inputbox.green" xywh="125,192,16,16" splitx="L4,R4" splity="T4,B4" tint="#abe500" />
+        <area name="ui-inputbox.red" xywh="108,192,16,16" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-inputbox.yellow" xywh="125,192,16,16" splitx="L4,R4" splity="T4,B4" />
+        <area name="ui-inputbox.grey" xywh="125,192,16,16" splitx="L4,R4" splity="T4,B4" />
+        <area name="ui-inputbox.green" xywh="125,192,16,16" splitx="L4,R4" splity="T4,B4" />
         <area name="ui-inputbox-2px.default" xywh="323,162,19,17" splitx="L4,R4" splity="T4,B4" />
-        <area name="ui-inputbox-2px.selected" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" tint="sub-color" />
-        <area name="ui-inputbox-2px.selected.blue" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" tint="#5db1ff" />
-        <area name="ui-inputbox-2px.selected.green" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" tint="#78C850" />
-        <area name="ui-inputbox-2px.selected.red" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" tint="#f94449" />
-        <area name="ui-inputbox-2px.selected.gold" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" tint="#d4af37" />
-        <area name="ui-inputbox-2px.selected.orange" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" tint="#c68a55" />
+        <area name="ui-inputbox-2px.selected" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-inputbox-2px.selected.blue" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-inputbox-2px.selected.green" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-inputbox-2px.selected.red" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-inputbox-2px.selected.gold" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" />
+        <area name="ui-inputbox-2px.selected.orange" xywh="343,162,19,17" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-inputbox-2px.red" xywh="363,162,66,17" splitx="L5,R5" splity="T5,B5" />
         <select name="ui-inputbox-2px.background">
             <alias ref="ui-inputbox-2px.selected" if="selected | keyboardFocus | hover" />
@@ -565,7 +565,7 @@
         <area name="ui-popup.background" xywh="297,119,42,42" splitx="L6,R6" splity="T6,B6" />
         <area name="ui-popup-warning.background" xywh="340,119,41,41" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-popup-button.selected" xywh="60,162,35,29" splitx="L5,R5" splity="T5,B5" />
-        <area name="ui-popup-button.default" xywh="41,210,44,14" tint="#00FFFFFF" />
+        <area name="ui-popup-button.default" xywh="41,210,44,14" />
         <area name="ui-popup.background" xywh="297,119,42,42" splitx="L6,R6" splity="T6,B6" />
         <area name="ui-misc-btn.background" xywh="256,162,23,20" splitx="L5,R5" splity="T5,B5" />
         <area name="ui-misc-btn.selected" xywh="142,192,17,16" splitx="L5,R5" splity="T5,B5" />
@@ -662,7 +662,7 @@
         <area name="ui-tab.active.color" xywh="96,162,40,26" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
         <area name="ui-tab.active" xywh="137,162,40,26" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
         <area name="ui-tab.inactive" xywh="215,162,40,22" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
-        <area name="ui-tab.default" xywh="215,162,40,22" splitx="L4,R4" inset="0,0,0,0" tint="#C5C5C5" splity="T4,B4" />
+        <area name="ui-tab.default" xywh="215,162,40,22" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
         <animation name="ui-tab.hover-animation" timeSource="hover" count="1">
             <frame duration="100" ref="ui-tab.inactive" tint="#C5C5C5" />
             <frame duration="100" ref="ui-tab.inactive" tint="#CFCFCF" />
