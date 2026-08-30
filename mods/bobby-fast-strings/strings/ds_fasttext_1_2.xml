@@ -13,9 +13,13 @@
     field-moves-ds: Overworld move use in the live client - Teleport, Sweet Scent, every HM
     exp-gained-ds: EXP gained at the end of a battle, live client
     move-learn-result-ds: Move learned / forgotten / not learned at the end of a battle, live client
+    battle-flow-ds: Encounter, send-out, switch, battle result, winnings and capture, live client
+    party-menu-ds: Heal results, vitamins, EV berries and item hand-off, live client
+    probe-faint-ds: PROBE ONLY - one address, to find out whether table 14 accepts a blank line
     hm-prompts-ds-sinnoh: Sinnoh archive: every HM obstacle prompt and the `used <move>` line that follows
     hm-prompts-ds-unova1: Unova storyline archive: the same obstacle prompts plus Flash, Teleport and Dig
     counters-ds-sinnoh: Sinnoh archive: Great Marsh gate, Elite Four door, Pokecenter and shop desk, Day Care
+    counters-ds-johto: Johto archive: HM prompts, Pokecenter, Safari Zone, Day Care, Kurt, shops, league door
     battle-end: The end-of-battle run: faint, EXP, level-up, move learned, winnings, capture
     field-moves: Overworld move use - Teleport, Sweet Scent, Cut, Fly, Dig, Flash, Headbutt, all of them
     field-move-prompts: Cut / Rock Smash / Surf / Dive confirmations before the move fires
@@ -58,6 +62,7 @@
   <string block_id="0" entry_id="5" table_id="423">{09}</string>
   <string block_id="0" entry_id="6" table_id="280">{09}</string>
   <string block_id="0" entry_id="6" table_id="285">{09}</string>
+  <string block_id="0" entry_id="6" table_id="346">{09}</string>
   <string block_id="0" entry_id="7" table_id="346">{09}</string>
   <string block_id="0" entry_id="7" table_id="423">{09}</string>
   <string block_id="0" entry_id="8" table_id="280">{09}</string>
