@@ -50,7 +50,9 @@ echo "   no client running"
 ( cd "$CLIENT" && nohup ./PokeMMO.sh >/dev/null 2>&1 & )
 # One instance, always. Piling them up makes every screenshot ambiguous.
 sleep 2
-[ "$(pgrep -cf "$CLIENT_PAT")" -eq 1 ] || echo "   WARNING: $(pgrep -cf "$CLIENT_PAT") client instances running"
+# BSD pgrep has no -c. Count with wc, or this silently reports nothing at all.
+RUNNING=$(pgrep -f "$CLIENT_PAT" | wc -l | tr -d ' ')
+[ "$RUNNING" -eq 1 ] || echo "   WARNING: $RUNNING client instances running"
 
 echo "== wait for theme load =="
 n=0

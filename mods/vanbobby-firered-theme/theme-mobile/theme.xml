@@ -23,7 +23,7 @@
 	<constantDef name="sub-color"><color>#5db1ff</color></constantDef>
 	<constantDef name="tooltip-tint"><color>#FF565D63</color></constantDef>
 
-<include filename="/data/themes/android/fonts.xml"/>
+<include filename="../firered/fonts-mobile.xml"/>
 	<!-- Must be included after all fonts are loaded -->
 	<fontGen/>
 

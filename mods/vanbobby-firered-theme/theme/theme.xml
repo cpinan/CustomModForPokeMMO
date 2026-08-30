@@ -21,7 +21,7 @@
 	<constantDef name="sub-color"><color>#5db1ff</color></constantDef>
 	<constantDef name="tooltip-tint"><color>#FF565D63</color></constantDef>
 
-<include filename="/data/themes/default/fonts.xml"/>
+<include filename="../firered/fonts-desktop.xml"/>
 	<!-- Must be included after all fonts are loaded -->
 	<fontGen/>
 	

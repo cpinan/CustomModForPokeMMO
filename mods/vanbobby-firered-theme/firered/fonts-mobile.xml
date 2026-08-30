@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Font set for the handheld theme.
+
+  Structure copied from the stock android fonts.xml, which includes
+  ../default/fonts.xml and then redefines battle, braille and mechabold-large.
+  That is the shape the client honours: one fonts file that layers over another.
+  theme.xml includes THIS instead of the stock one, never alongside it.
+
+  Mobile must layer over android/fonts.xml, not default/fonts.xml. The android
+  set adds battle-small, level, mechabold-large and the symbol faces, and the
+  android UI files reference them. Layering over default would drop them.
+-->
+<themes>
+    <include filename="/data/themes/android/fonts.xml"/>
+    <include filename="fonts-common.xml"/>
+</themes>

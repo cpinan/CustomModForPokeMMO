@@ -146,6 +146,101 @@ class Includes(unittest.TestCase):
                     self.assertLess(m.start(), gen, "font include after <fontGen/>")
 
 
+class Fonts(unittest.TestCase):
+    """Font overrides. Every failure here is silent: a font that never appears
+    looks exactly like a font you forgot to apply."""
+
+    def our_fontdefs(self):
+        for p in mod_xml_files():
+            text = strip_comments(read(p))
+            for m in re.finditer(r"<fontDef\b[^>]*>", text):
+                tag = m.group(0)
+                name = re.search(r'name="([^"]+)"', tag)
+                if name:
+                    yield p, name.group(1), tag
+
+    def stock_fontdef_names(self):
+        p = os.path.join(THEMES, "default", "fonts.xml")
+        return set(re.findall(r'<fontDef\s+name="([^"]+)"', strip_comments(read(p))))
+
+    def test_every_font_we_redefine_exists_in_the_stock_theme(self):
+        # A typo'd name does not override anything. It declares a brand new font
+        # that no widget asks for, while every widget keeps the stock face.
+        stock = self.stock_fontdef_names()
+        if not stock:
+            self.skipTest("could not read stock fonts.xml")
+        for xml, name, _ in self.our_fontdefs():
+            with self.subTest(font=name):
+                self.assertIn(name, stock, "not a font the stock theme declares")
+
+    def test_every_font_file_we_reference_resolves(self):
+        # The stock fonts.xml writes "res/fonts/x.ttf" and gets away with it
+        # because it lives in default/. Ours does not live there, so the same
+        # relative string would point at nothing and the face would never load.
+        for xml, name, tag in self.our_fontdefs():
+            m = re.search(r'filename="([^"]+)"', tag)
+            if not m:
+                continue          # ref= clone, inherits the file
+            f = m.group(1)
+            target = (os.path.join(THEMES, f[len("/data/themes/"):])
+                      if f.startswith("/data/themes/")
+                      else os.path.normpath(os.path.join(os.path.dirname(xml), f)))
+            with self.subTest(font=name, filename=f):
+                self.assertTrue(os.path.exists(target), "font file does not resolve")
+
+    def test_shadowed_faces_use_a_hard_opaque_shadow_and_no_border(self):
+        # FireRed's text treatment is a 1px HARD drop shadow at (+1,+1): fully
+        # opaque, one flat colour, right and below only. Two ways to lose it
+        # without any error appearing:
+        #   a shadow_color with alpha < FF renders as a soft blur, which is what
+        #   the client defaults to (#BF000000) and what stock title-font ships
+        #   (#55000000);
+        #   a leftover border_width draws a full surround instead, which is what
+        #   stock main-border and mechabold do.
+        for xml, name, tag in self.our_fontdefs():
+            if 'filename="' not in tag:
+                continue                      # ref= clone, shares the base atlas
+            with self.subTest(font=name):
+                self.assertNotIn("border_width", tag,
+                                 "surround outline; FireRed uses a drop shadow")
+                for axis in ("x", "y"):
+                    m = re.search(r'shadow_offset_%s="([^"]+)"' % axis, tag)
+                    self.assertIsNotNone(m, "no shadow_offset_%s" % axis)
+                    self.assertEqual("1", m.group(1), "shadow must be offset by 1px")
+                col = re.search(r'shadow_color="#([0-9A-Fa-f]{8})"', tag)
+                self.assertIsNotNone(col, "shadow_color must be 8 hex digits (ARGB)")
+                self.assertEqual("FF", col.group(1)[:2].upper(),
+                                 "shadow alpha must be FF; anything less is a blur")
+
+    def test_theme_includes_exactly_one_font_entry_point_before_fontgen(self):
+        for root in THEME_ROOTS:
+            text = strip_comments(read(os.path.join(MOD, root, "theme.xml")))
+            gen = text.index("<fontGen/>")
+            fonts = [(m.start(), m.group(1)) for m in
+                     re.finditer(r'<include filename="([^"]*fonts[^"]*\.xml)"/>', text)]
+            with self.subTest(theme=root):
+                self.assertEqual(1, len(fonts), "expected one fonts include, got %r" % (fonts,))
+                self.assertLess(fonts[0][0], gen, "fonts include lands after <fontGen/>")
+                self.assertNotIn("/data/themes/", fonts[0][1],
+                                 "theme includes the stock fonts directly; it must include "
+                                 "ours, which layers over the stock set")
+
+    def test_each_font_entry_point_layers_over_the_right_stock_set(self):
+        # Mobile must layer over android/fonts.xml, not default/fonts.xml. The
+        # android set adds battle-small, level, mechabold-large and the symbol
+        # faces, and the android UI files reference them by name. Layering over
+        # default silently drops all of them.
+        want = {"theme": "default", "theme-mobile": "android"}
+        for root in THEME_ROOTS:
+            theme_txt = strip_comments(read(os.path.join(MOD, root, "theme.xml")))
+            entry = re.search(r'<include filename="([^"]*fonts[^"]*\.xml)"/>', theme_txt).group(1)
+            entry_path = os.path.normpath(os.path.join(MOD, root, entry))
+            text = strip_comments(read(entry_path))
+            incs = re.findall(r'<include filename="([^"]+)"/>', text)
+            with self.subTest(theme=root):
+                self.assertEqual(["/data/themes/%s/fonts.xml" % want[root], "fonts-common.xml"],
+                                 incs, "wrong base set or wrong order")
+
 class InfoXml(unittest.TestCase):
     def setUp(self):
         self.root = ET.parse(os.path.join(MOD, "info.xml")).getroot()

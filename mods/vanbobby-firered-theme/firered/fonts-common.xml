@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  P1: FireRed's text treatment. Redefinitions only; fonts-desktop.xml and
+  fonts-mobile.xml decide which stock set this layers over.
+
+  Measured, not guessed. Every glyph in FireRed carries a ONE PIXEL HARD DROP
+  SHADOW offset by (+1,+1). It is not an outline. The shadow sits to the right
+  and below, never above or left. Two surfaces agree:
+
+      white #F8F8F8 on the navy message box  ->  shadow #685870
+      white #F8F8F8 on the blue item bar     ->  shadow #606060
+
+  Hard means fully opaque, one flat colour. The client's default shadow is
+  #BF000000, black at 75%, which reads as a blur. title-font already ships
+  #55000000; converting it to an opaque shadow is most of the FireRed look.
+
+  Two stock faces use border_width instead, a full surround: main-border and
+  mechabold. FireRed has no surrounds, so both become shadows here.
+
+  Every filename is ABSOLUTE. The stock fonts.xml writes "res/fonts/..." and
+  gets away with it because it sits in default/. This file sits in firered/,
+  where that path resolves to nothing, and a missing font raises no error.
+
+  The shadow colour is tuned for the CURRENT dark PokeMMO panels. Revisit in
+  P3/P4 once the surfaces are cream and navy.
+-->
+<themes>
+    <!-- The base face. pb-dark and the whole main-* family are ref="main", and
+         a ref clone shares the atlas, so the shadow baked in here reaches all
+         of them. pb-dark is restated below so it rebinds to this definition. -->
+    <fontDef name="main" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
+             faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="14"
+             hinting="Full" hinting_cjk="Slight" default="true" unique_atlas="true"
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030">
+        <fontParam if="disabled" color="#A9A9A9"/>
+        <fontParam if="pressed" offsetX="1" offsetY="1"/>
+    </fontDef>
+
+    <fontDef name="pb-dark" ref="main" color="#FFFFFF">
+        <fontParam if="disabled" color="#A9A9A9"/>
+        <fontParam if="pressed" offsetX="1" offsetY="1"/>
+    </fontDef>
+
+    <fontDef name="main-markup" markup="true"
+             filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
+             faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="14"
+             hinting="Full" hinting_cjk="Slight" unique_atlas="true"
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030">
+        <fontParam if="disabled" color="#A9A9A9"/>
+        <fontParam if="pressed" offsetX="1" offsetY="1"/>
+    </fontDef>
+
+    <fontDef name="main-small" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
+             faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="13"
+             hinting="Full" hinting_cjk="Slight"
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030"/>
+
+    <!-- border_width dropped: a surround is not what FireRed does. -->
+    <fontDef name="main-border" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc"
+             faces="sc,tc,jp" kerning="true" color="white" size="12" size_cjk="14"
+             hinting="AutoSlight" hinting_cjk="Full"
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030">
+        <fontParam if="pressed" offsetX="1" offsetY="1"/>
+    </fontDef>
+
+    <!-- was shadow_color="#55000000", a soft blur; FireRed's is opaque. -->
+    <fontDef name="title-font" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc"
+             faces="sc,tc,jp" color="#FFFFFF" size="12" size_cjk="15"
+             hinting="AutoMedium" hinting_cjk="Slight"
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030"/>
+
+    <!-- border_width dropped, same reason as main-border. -->
+    <fontDef name="mechabold" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc"
+             faces="sc,tc,jp" color="#FFFFFF" hinting="Medium" kerning="false" size="14"
+             shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030"/>
+</themes>
