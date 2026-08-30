@@ -36,16 +36,15 @@ Driving Mod Management over adb is fine; everything past the LOGIN button is not
 
 ## Bugs
 
-### 1. Two mods still ship strings under `data/strings/`
-**Files:** `mods/vanbobby-demo-strings/`, `mods/vanbobby-region-label-unpad/`
+### 1. ~~Two mods shipped strings under `data/strings/`~~ — FIXED 2026-08-30
+`vanbobby-demo-strings` and `vanbobby-region-label-unpad` now ship under `strings/`, like
+the generated mod has since 1.7. Both went 1.0 -> 1.1; the version is what tells a fixed
+artifact from an old one, since the change is invisible in game. All seven mods validate
+with zero warnings.
 
-`pmmod validate` reports both (`OVLUNDECLARED`). Anything a mod ships under
-`data/` is a directory overlay, and the client logs it as deprecated on every
-startup — a visible dialog, not just a log line. Fixed for the generated mod in
-1.7 by writing to `strings/` instead; these two are hand-written and were missed.
-
-**Fix:** move each mod's `data/strings/*.xml` to `strings/`, update the
-`<string path=...>` entries in its `info.xml`, rebuild. No generator involved.
+Not verified on hardware — no device was available. The expected result is simply that the
+client stops showing *"tries to overlay the data/strings/ directory while not requesting it
+in the info.xml"* on startup. If it still appears, the mod is not the cause.
 
 ### 2. The installed Android Layout Fix is not the one in this repo
 The Retroid runs `android-layout-fix-v3-3-0.mod`, display name

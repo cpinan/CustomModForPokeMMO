@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resource name="VanBobby Region Label Unpad" version="1.0" description="Restores plain region names, undoing the padded two-line labels that destabilise the Pokedex layout." author="carlospinan" weblink="https://forums.pokemmo.com/">
+<?xml version="1.1" encoding="UTF-8"?>
+<resource name="VanBobby Region Label Unpad" version="1.1" description="Restores plain region names, undoing the padded two-line labels that destabilise the Pokedex layout." author="carlospinan" weblink="https://forums.pokemmo.com/">
     <strings string_revision="1">
-        <string path="data/strings/strings_en_region_label_unpad.xml"/>
+        <string path="strings/strings_en_region_label_unpad.xml"/>
     </strings>
 </resource>
