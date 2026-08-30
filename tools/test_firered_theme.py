@@ -293,24 +293,73 @@ class Art(unittest.TestCase):
             with self.subTest(xml=os.path.relpath(xml, MOD), file=ref):
                 self.assertTrue(os.path.exists(target), "referenced art is missing")
 
-    def test_sliced_atlases_keep_the_stock_pixel_dimensions(self):
-        # Only applies to atlases carved up by explicit xywh rectangles: ship a
-        # differently sized PNG and every slice silently shifts.
-        #
-        # A block whose only area is xywh="*" has no geometry to break -- it is
-        # one whole image, sized by the widget. bg.png is exactly that, which is
-        # what lets the login plate be redrawn at a different size.
-        for xml, ref, body in self.override_blocks():
-            rects = re.findall(r'xywh="([^"]+)"', body)
-            if rects and all(r.strip() == "*" for r in rects):
-                continue
-            stock = os.path.join(THEMES, "default", "res", os.path.basename(ref))
-            if not os.path.exists(stock):
-                continue
-            ours = os.path.normpath(os.path.join(os.path.dirname(xml), ref))
-            with self.subTest(atlas=os.path.basename(ref)):
-                self.assertEqual(png_size(stock), png_size(ours),
-                                 "dimensions differ from stock")
+    def test_generated_tables_own_their_geometry_and_do_not_collide(self):
+        # Once a mod ships its own slice table, stock dimensions stop being the
+        # invariant. These two are: every rect inside the PNG, and no two rects
+        # partially overlapping. The stock atlas fails the second in 129 places,
+        # which is why the builder repacks rather than repainting in place.
+        import xml.etree.ElementTree as ETree
+        for xml in mod_xml_files():
+            root = ETree.parse(xml).getroot()
+            for images in root.iter("images"):
+                ref = images.get("file")
+                png = os.path.normpath(os.path.join(os.path.dirname(xml), ref))
+                if not os.path.exists(png):
+                    continue
+                pw, ph = png_size(png)
+                rects = sorted({tuple(int(v) for v in el.get("xywh").split(","))
+                                for el in images.iter() if el.get("xywh")
+                                and el.get("xywh").strip() != "*"})
+                for r in rects:
+                    with self.subTest(atlas=os.path.basename(ref), rect=r):
+                        self.assertLessEqual(r[0] + r[2], pw, "rect runs off the right")
+                        self.assertLessEqual(r[1] + r[3], ph, "rect runs off the bottom")
+                for i, a in enumerate(rects):
+                    for b in rects[i + 1:]:
+                        if (a[0] < b[0] + b[2] and b[0] < a[0] + a[2]
+                                and a[1] < b[1] + b[3] and b[1] < a[1] + a[3]):
+                            self.fail("%s: %s partially overlaps %s"
+                                      % (os.path.basename(ref), a, b))
+
+    def test_nine_slice_splits_fit_inside_their_rect(self):
+        # splitx/splity say where a 9-slice stops stretching. A split wider than
+        # half the rect makes the middle band negative and the art smears.
+        import xml.etree.ElementTree as ETree
+        for xml in mod_xml_files():
+            for el in ETree.parse(xml).getroot().iter("area"):
+                if not el.get("xywh") or el.get("xywh").strip() == "*":
+                    continue
+                x, y, w, h = (int(v) for v in el.get("xywh").split(","))
+                for attr, extent in (("splitx", w), ("splity", h)):
+                    spec = el.get(attr)
+                    if not spec:
+                        continue
+                    edges = sum(int(re.sub(r"[^0-9]", "", part) or 0)
+                                for part in spec.split(","))
+                    with self.subTest(name=el.get("name"), attr=attr):
+                        # A zero middle is a legal idiom: "L0,R9" on a 9px rect
+                        # means do not stretch, pin to the right. A NEGATIVE
+                        # middle is the bug -- the caps overrun the rect and the
+                        # art smears. Stock ships one, button-npc-dark.selected,
+                        # 8x9 with splitx="L20,R7"; the builder clamps it.
+                        self.assertLessEqual(edges, extent,
+                                             "%s=%s overruns %d px" % (attr, spec, extent))
+
+    def test_generated_slice_names_match_stock_exactly(self):
+        # Both directions. A missing name means a widget silently keeps stock
+        # art; an extra one means art nothing reads.
+        import xml.etree.ElementTree as ETree
+        gen = os.path.join(MOD, "firered", "gfx_ui-firered.xml")
+        if not os.path.exists(gen):
+            self.skipTest("atlas not generated")
+        ours = {el.get("name") for el in ETree.parse(gen).getroot().iter()
+                if el.get("name")}
+        stock_root = ETree.parse(os.path.join(THEMES, "default", "gfx_ui.xml")).getroot()
+        block = [i for i in stock_root.iter("images")
+                 if i.get("file") == "res/pokemmo_ui.png"][0]
+        stock = {el.get("name") for el in block.iter() if el.get("name")}
+        self.assertEqual(set(), stock - ours, "names dropped from the stock table")
+        self.assertEqual(set(), ours - stock, "names invented that stock does not define")
 
     def test_whole_image_blocks_declare_no_rectangles(self):
         # xywh="*" and an explicit rectangle in the same block means one of them
