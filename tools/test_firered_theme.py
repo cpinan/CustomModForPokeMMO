@@ -293,10 +293,17 @@ class Art(unittest.TestCase):
             with self.subTest(xml=os.path.relpath(xml, MOD), file=ref):
                 self.assertTrue(os.path.exists(target), "referenced art is missing")
 
-    def test_replacement_atlases_keep_the_stock_pixel_dimensions(self):
-        # Every xywh in the stock block is measured against the stock size.
-        # Ship a differently sized PNG and every slice silently shifts.
-        for xml, ref, _ in self.override_blocks():
+    def test_sliced_atlases_keep_the_stock_pixel_dimensions(self):
+        # Only applies to atlases carved up by explicit xywh rectangles: ship a
+        # differently sized PNG and every slice silently shifts.
+        #
+        # A block whose only area is xywh="*" has no geometry to break -- it is
+        # one whole image, sized by the widget. bg.png is exactly that, which is
+        # what lets the login plate be redrawn at a different size.
+        for xml, ref, body in self.override_blocks():
+            rects = re.findall(r'xywh="([^"]+)"', body)
+            if rects and all(r.strip() == "*" for r in rects):
+                continue
             stock = os.path.join(THEMES, "default", "res", os.path.basename(ref))
             if not os.path.exists(stock):
                 continue
@@ -304,6 +311,16 @@ class Art(unittest.TestCase):
             with self.subTest(atlas=os.path.basename(ref)):
                 self.assertEqual(png_size(stock), png_size(ours),
                                  "dimensions differ from stock")
+
+    def test_whole_image_blocks_declare_no_rectangles(self):
+        # xywh="*" and an explicit rectangle in the same block means one of them
+        # is a mistake, and the freedom to resize depends on telling them apart.
+        for xml, ref, body in self.override_blocks():
+            rects = [r.strip() for r in re.findall(r'xywh="([^"]+)"', body)]
+            with self.subTest(atlas=os.path.basename(ref)):
+                if "*" in rects:
+                    self.assertEqual(["*"] * len(rects), rects,
+                                     "mixes whole-image and sliced areas")
 
     def test_every_slice_name_we_declare_exists_in_the_stock_block(self):
         # A typo'd name does not error. It defines a slice nothing reads,
