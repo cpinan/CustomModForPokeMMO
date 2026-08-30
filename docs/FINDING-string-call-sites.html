@@ -1,0 +1,338 @@
+<title>Which Token Works Where</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,400&display=swap">
+<style>
+  :root{
+    --bg:#F4F5F9; --surface:#FFFFFF; --surface-2:#EDEFF6;
+    --ink:#191B24; --ink-2:#464B5E; --ink-3:#6E7488;
+    --rule:#D9DCE6; --rule-2:#C3C7D6;
+    --accent:#3E5FD9; --accent-soft:#E5E9FB;
+    --ok:#1B7A4B; --ok-soft:#DFF0E6;
+    --no:#A93B31; --no-soft:#F8E3E0;
+    --maybe:#8A6410; --maybe-soft:#F7EBD3;
+    --shadow:0 1px 2px rgba(25,27,36,.06),0 8px 24px -16px rgba(25,27,36,.28);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#101219; --surface:#171A23; --surface-2:#1E222D;
+      --ink:#E8EAF2; --ink-2:#AFB5C8; --ink-3:#848BA1;
+      --rule:#2A2F3D; --rule-2:#3A4053;
+      --accent:#8CA2F5; --accent-soft:#1E2540;
+      --ok:#6FD79E; --ok-soft:#12301F;
+      --no:#F0918A; --no-soft:#33191A;
+      --maybe:#E3BC6A; --maybe-soft:#302614;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -16px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#101219; --surface:#171A23; --surface-2:#1E222D;
+    --ink:#E8EAF2; --ink-2:#AFB5C8; --ink-3:#848BA1;
+    --rule:#2A2F3D; --rule-2:#3A4053;
+    --accent:#8CA2F5; --accent-soft:#1E2540;
+    --ok:#6FD79E; --ok-soft:#12301F;
+    --no:#F0918A; --no-soft:#33191A;
+    --maybe:#E3BC6A; --maybe-soft:#302614;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -16px rgba(0,0,0,.8);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:78ch; margin:0 auto; padding:clamp(2rem,6vw,5rem) clamp(1.1rem,4vw,2rem) 6rem;
+        display:flex; flex-direction:column; gap:2.75rem}
+  .measure{max-width:68ch}
+  code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.875em;
+             font-variant-ligatures:none}
+  code{background:var(--surface-2); border:1px solid var(--rule); border-radius:4px;
+       padding:.08em .34em; color:var(--ink)}
+
+  header{display:flex; flex-direction:column; gap:.9rem;
+         border-bottom:2px solid var(--ink); padding-bottom:1.6rem}
+  .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.14em;
+           text-transform:uppercase; color:var(--ink-3)}
+  h1{font-family:"IBM Plex Serif",Georgia,serif; font-weight:600; letter-spacing:-.015em;
+     font-size:clamp(2rem,5.5vw,2.9rem); line-height:1.1; margin:0; text-wrap:balance}
+  .standfirst{font-family:"IBM Plex Serif",Georgia,serif; font-size:1.14rem; line-height:1.55;
+              color:var(--ink-2); margin:0; max-width:60ch}
+  .meta{display:flex; flex-wrap:wrap; gap:.4rem 1.4rem; font-family:"IBM Plex Mono",monospace;
+        font-size:.76rem; color:var(--ink-3)}
+
+  section{display:flex; flex-direction:column; gap:1rem}
+  h2{font-family:"IBM Plex Serif",Georgia,serif; font-weight:600; font-size:1.5rem;
+     line-height:1.24; margin:0; text-wrap:balance; letter-spacing:-.01em}
+  h3{font-size:.95rem; font-weight:600; margin:0; letter-spacing:.005em}
+  p{margin:0; max-width:68ch}
+  .lede{color:var(--ink-2)}
+
+  .thesis{background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--accent);
+          border-radius:3px; padding:1.15rem 1.35rem; box-shadow:var(--shadow);
+          display:flex; flex-direction:column; gap:.6rem}
+
+  .scroll{overflow-x:auto; border:1px solid var(--rule); border-radius:4px; background:var(--surface);
+          box-shadow:var(--shadow)}
+  table{border-collapse:collapse; width:100%; min-width:38rem; font-size:.875rem}
+  th,td{text-align:left; padding:.62rem .85rem; border-bottom:1px solid var(--rule);
+        vertical-align:top}
+  thead th{font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.09em;
+           text-transform:uppercase; color:var(--ink-3); background:var(--surface-2);
+           border-bottom:1px solid var(--rule-2); white-space:nowrap}
+  tbody tr:last-child td{border-bottom:0}
+  td.addr{font-family:"IBM Plex Mono",monospace; white-space:nowrap; font-variant-numeric:tabular-nums;
+          color:var(--ink)}
+
+  .chip{display:inline-flex; align-items:center; gap:.34rem; font-family:"IBM Plex Mono",monospace;
+        font-size:.7rem; letter-spacing:.04em; text-transform:uppercase; font-weight:500;
+        padding:.16rem .45rem; border-radius:3px; white-space:nowrap; border:1px solid transparent}
+  .chip.ok{color:var(--ok); background:var(--ok-soft); border-color:color-mix(in srgb,var(--ok) 28%,transparent)}
+  .chip.no{color:var(--no); background:var(--no-soft); border-color:color-mix(in srgb,var(--no) 28%,transparent)}
+  .chip.maybe{color:var(--maybe); background:var(--maybe-soft); border-color:color-mix(in srgb,var(--maybe) 30%,transparent)}
+  .dot{width:.42em; height:.42em; border-radius:50%; background:currentColor; flex:none}
+
+  .tier{background:var(--surface); border:1px solid var(--rule); border-radius:4px;
+        box-shadow:var(--shadow); overflow:hidden}
+  .tier-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:.6rem 1rem;
+             padding:1rem 1.25rem; background:var(--surface-2); border-bottom:1px solid var(--rule)}
+  .tier-head h3{font-family:"IBM Plex Serif",Georgia,serif; font-size:1.12rem; font-weight:600}
+  .tier-body{padding:1.1rem 1.25rem; display:flex; flex-direction:column; gap:.85rem}
+  .tier-body .scroll{box-shadow:none}
+
+  ul{margin:0; padding-left:1.15rem; display:flex; flex-direction:column; gap:.4rem; max-width:68ch}
+  li::marker{color:var(--ink-3)}
+
+  .keep{border:1px dashed var(--rule-2); border-radius:4px; padding:1rem 1.25rem;
+        display:flex; flex-direction:column; gap:.6rem; background:transparent}
+
+  footer{border-top:1px solid var(--rule); padding-top:1.4rem; color:var(--ink-3); font-size:.82rem}
+  a{color:var(--accent); text-underline-offset:.18em}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Bobby Fast Strings · finding</div>
+    <h1>Which Token Works Where</h1>
+    <p class="standfirst">Silencing a PokeMMO message is not one trick. It is three, and which one
+      works is decided by the code that draws the box — not by the text, the table, or anything
+      visible in the dumps.</p>
+    <div class="meta">
+      <span>Established on hardware · Retroid Pocket G2 · client r32920</span>
+      <span>v1.3 → v1.7 · 2026-08-30</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="thesis">
+      <p><strong>The finding.</strong> The replacement token is a property of the <em>call site</em>.
+      The same <code>{09}</code> that erases a field-move box outright leaves an unresolved
+      placeholder at the battle tables — a box that sits there and visibly drags the end of a
+      fight out. Four build–install–play cycles were spent proving this the hard way, each one
+      reasoning from the corpus instead of reading the reference mod.</p>
+      <p class="lede">Nothing in the 30,341-entry dump distinguishes these call sites. The only
+      way to know is to test on hardware, or to copy a mod that already has.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The three tokens</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Token</th><th>What it is</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="addr">{09}</td>
+            <td>An argument placeholder. Slot 9 is never filled in the tables this mod touches.</td>
+            <td><span class="chip ok"><span class="dot"></span>Box removed</span> — but only where
+              the engine drops an unresolved message. Elsewhere it stalls.</td>
+          </tr>
+          <tr>
+            <td class="addr">\n\n</td>
+            <td>An escaped newline pair — a well-formed empty message.</td>
+            <td><span class="chip ok"><span class="dot"></span>Passes through</span> cleanly at the
+              battle tables. This is what SupersStrings uses.</td>
+          </tr>
+          <tr>
+            <td class="addr">&lt;string/&gt;</td>
+            <td>An empty element.</td>
+            <td><span class="chip no"><span class="dot"></span>Not a token</span> — the client reads
+              it as <em>no override</em> and its own text comes back.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lede">There is no fourth option. The only non-argument control codes in the entire
+      corpus are <code>DELAY_0F</code>, <code>DELAY_14</code>, <code>DELAY_3C</code>,
+      <code>DELAY_5A</code> and <code>DELAY_64</code>. The client has no close or skip code.</p>
+  </section>
+
+  <section>
+    <h2>The call-site map</h2>
+    <p class="lede">Everything the live client draws for battle and field text comes from the Unova
+      NDS archive — <code>archive_type 0, region 2</code> — in every region, Kanto included.</p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Table</th><th>Entries</th><th>What it holds</th><th>Token</th><th>Evidence</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="addr">8</td><td class="addr">68</td>
+            <td>C-Gear activity feed. PokeMMO repurposes <span class="mono">52/53</span> for the
+              player's own field-move line.</td>
+            <td><span class="chip ok"><span class="dot"></span>{09}</span></td>
+            <td>Confirmed in game. Sweet Scent and Teleport print nothing.</td>
+          </tr>
+          <tr>
+            <td class="addr">14</td><td class="addr">1159</td>
+            <td>Per-turn battle engine — damage, status, stat changes, faint.</td>
+            <td><span class="chip maybe"><span class="dot"></span>untested</span></td>
+            <td><code>{09}</code> stalls here. <code>\n\n</code> has never been tried.</td>
+          </tr>
+          <tr>
+            <td class="addr">15</td><td class="addr">200</td>
+            <td>Battle flow — encounter, send-out, result, EXP, capture.</td>
+            <td><span class="chip ok"><span class="dot"></span>\n\n</span></td>
+            <td>Confirmed at <span class="mono">42, 43</span>. The EXP line is gone with no stall.</td>
+          </tr>
+          <tr>
+            <td class="addr">157</td><td class="addr">180</td>
+            <td>Party, PC and item menus — heals, vitamins, move learning.</td>
+            <td><span class="chip ok"><span class="dot"></span>\n\n</span></td>
+            <td>Confirmed at <span class="mono">38, 40, 41</span>.</td>
+          </tr>
+          <tr>
+            <td class="addr">172</td><td class="addr">4</td>
+            <td>Evolution sequence.</td>
+            <td><span class="chip maybe"><span class="dot"></span>untested</span></td>
+            <td><code>{09}</code> stalls. Left alone; SupersStrings leaves it too.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Candidates, by how much is actually known</h2>
+    <p class="lede">Ranked by confidence, because after four wrong guesses that is the only ordering
+      worth having. Tier A needs no new evidence; Tier B needs one battle; Tier C needs a working
+      dump.</p>
+
+    <div class="tier">
+      <div class="tier-head">
+        <h3>Tier A — same table as a proven address</h3>
+        <span class="chip ok"><span class="dot"></span>ship without testing</span>
+      </div>
+      <div class="tier-body">
+        <p>These sit in tables 15 and 157, beside addresses already confirmed to accept
+          <code>\n\n</code>. Same table, same call site, same engine path.</p>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Address</th><th>Message</th><th>Fires</th></tr></thead>
+            <tbody>
+              <tr><td class="addr">15/1–6</td><td>“A wild {00} appeared!”</td><td>every wild encounter</td></tr>
+              <tr><td class="addr">15/11–19</td><td>“Go! {00}!” · “{00} sent out {01}!”</td><td>every battle</td></tr>
+              <tr><td class="addr">15/21–31</td><td>“{00}, come back!” and its six variants</td><td>every switch</td></tr>
+              <tr><td class="addr">15/44–53</td><td>“Player defeated {00} {01}!”</td><td>every trainer battle</td></tr>
+              <tr><td class="addr">15/55–59</td><td>“{00} got ${01} for winning!”</td><td>every trainer battle</td></tr>
+              <tr><td class="addr">15/61–65</td><td>“Gotcha! {00} was caught!” and the near-miss lines</td><td>every ball thrown</td></tr>
+              <tr><td class="addr">15/72–75</td><td>“Got away safely!”</td><td>every flee</td></tr>
+              <tr><td class="addr">157/44–52</td><td>“{00}'s HP was restored by {01} point(s).” · status cures · PP</td><td>every heal item</td></tr>
+              <tr><td class="addr">157/55, 83–86</td><td>“{00}'s base {01} rose!”</td><td>every vitamin — hundreds per EV spread</td></tr>
+              <tr><td class="addr">157/62, 179</td><td>“Received the {01} from {00}.” · “You used your last {00}.”</td><td>routine item handling</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Biggest single win:</strong> <span class="mono">157/55</span>. EV training with
+          vitamins means that box hundreds of times per Pokémon, and it says nothing the player did
+          not just choose.</p>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head">
+        <h3>Tier B — highest volume, no evidence at all</h3>
+        <span class="chip maybe"><span class="dot"></span>one battle to settle</span>
+      </div>
+      <div class="tier-body">
+        <p>Table 14 is 1,159 entries and the busiest thing in the game: every stat change, every
+          status tick, every “It's super effective!”. <code>{09}</code> is known to stall here.
+          Whether <code>\n\n</code> passes through is simply unknown — SupersStrings does not touch
+          this table, so there is no reference to copy.</p>
+        <p>Two things to settle before spending a cycle on it. First, whether these messages are
+          tap-gated at all or auto-advance mid-battle — the reported symptom was always the
+          <em>end</em> of a fight, which suggests the per-turn run already flows. Second, whether
+          silencing them is even wanted: “It's super effective!” is information during a real
+          battle and noise during a grind.</p>
+        <p class="lede">Cheapest test: blank <code>14/1</code> (“The wild {00} fainted!”) alone and
+          win one wild battle. It answers the token question without touching anything else.</p>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head">
+        <h3>Tier C — blocked on a dump</h3>
+        <span class="chip no"><span class="dot"></span>cannot proceed</span>
+      </div>
+      <div class="tier-body">
+        <p>SupersStrings ships 104 overrides for the Johto archive
+          (<code>archive_type 0, region 4</code>). This client has never produced that dump: the
+          utility aborts with <span class="mono">An invalid XML character (Unicode: 0x0)</span> on
+          Sinnoh and never reaches Johto.</p>
+        <p>Every region archive carries its own counters — Pokécenter, mart, Day Care — so Johto's
+          are genuinely uncovered today, and the parity suite skips them silently rather than
+          failing. Untried: unload the Sinnoh ROM and re-dump.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What stays readable, whatever the token</h2>
+    <div class="keep">
+      <p>Speed is not the only axis. These are deliberate keeps, and each has already survived a
+        review:</p>
+      <ul>
+        <li><strong>Decisions.</strong> Any box whose Yes/No leads somewhere different —
+          <span class="mono">15/20</span> “Will you switch your Pokémon?”,
+          <span class="mono">15/77</span> forfeit, <span class="mono">157/27</span> Mail will be
+          lost, <span class="mono">157/58</span> already holding an item. Silencing one leaves an
+          unlabelled prompt on a choice that costs something.</li>
+        <li><strong>The level-up.</strong> <span class="mono">15/60</span> “{00} grew to Lv. {01}!”
+          carries information the EXP number does not.</li>
+        <li><strong>The battle menu.</strong> <span class="mono">15/69–70</span> “What will {00}
+          do?” is the interface, not a message.</li>
+        <li><strong>Item and move descriptions.</strong> 966 entries, ~96k characters. They look
+          like an enormous saving if you rank by volume, but they are read on purpose. A global
+          <code>never</code> guard blocks them.</li>
+        <li><strong>Menu labels.</strong> A short entry with no sentence-ending punctuation is a
+          UI label. Silencing one blanks a menu instead of skipping a box.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>How to not repeat the four cycles</h2>
+    <ul>
+      <li><strong>Read the reference before theorising.</strong> SupersStrings is run by thousands
+        of people. Where it has an opinion about an address, that opinion is production evidence and
+        it outranks anything derived from the dumps.</li>
+      <li><strong>Never assume a token generalises.</strong> It is per call site. Table 8 and table
+        15 disagree, and they are three tables apart.</li>
+      <li><strong>Scope every NDS rule to its archive.</strong> A <span class="mono">(table, entry)</span>
+        pair means different text in each one — <span class="mono">15/45</span> is “Player beat {00}
+        {01}!” in Unova and the menu label “Game Sync” in Unova-1.</li>
+      <li><strong>Watch for patterns written for the GBA ids.</strong> <code>catch-flow</code>,
+        <code>evolution</code> and <code>move-learned</code> all found the NDS battle tables by
+        accident. A <code>never_ds_tables</code> guard now blocks that; hand-picked addresses still
+        pass.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Source of record: <span class="mono">strings-work/rules.json</span> ·
+    <span class="mono">modkit/tests/</span> (88 tests) ·
+    <span class="mono">docs/STATUS.md</span>. Regenerate with
+    <span class="mono">pmmod strings fasttext</span>; verify with <span class="mono">tools/verify.sh</span>.
+  </footer>
+</div>
