@@ -61,7 +61,7 @@ MOD = os.path.join(REPO, "mods", "vanbobby-firered-theme")
 CLIENT = os.environ.get("POKEMMO_HOME") or os.path.expanduser(
     "~/Library/Application Support/com.pokeemu.macos/pokemmo-client-live")
 STOCK = os.path.join(CLIENT, "data", "themes", "default")
-ATLAS = "res/pokemmo_ui.png"
+ATLAS = "res/pokemmo_ui.png"   # kept for load_block's default
 
 # ---------------------------------------------------------------- palette ---
 # Measured off PokemonFireRedRef/. docs/SPEC-firered-style.md carries the table.
@@ -116,6 +116,17 @@ ROLES = {
     "label":      ([(OUTER, 1), (GREY, 1)],               (WHITE, WHITE),   False),
     "close":      ([(OUTER, 2), (RED, 2), (BEVEL_W, 1)],  (CREAM, WHITE),   False),
     "header":     ([(OUTER, 2), (GOLD, 3), (BEVEL_W, 1)], (GOLD_LT, GOLD_LT), False),
+    # list rows: a hairline so rows read as rows, and a light scanlined ground
+    # so the dark #404040 glyph has something to sit on.
+    "row":        ([(GOLD_DK, 1)],                        (CREAM, WHITE),   False),
+    "row-header": ([(OUTER, 1), (GOLD, 2)],               (GOLD_LT, GOLD_LT), False),
+    # speech bubbles and tooltips are the one place FireRed goes dark
+    "dialogue":   ([(OUTER, 2), (GOLD, 3), (BEVEL_W, 2)], (NAVY, NAVY),     True),
+    "pill":       ([(OUTER, 1), (GREY, 1)],               (TAN, TAN),       False),
+    "scrollbar":  ([(OUTER, 1), (GOLD_DK, 1)],            (PALE, PALE_2),   False),
+    "bar":        ([],                                    (GOLD_LT, GOLD),  False),
+    "bar-green":  ([],                                    (TEAL_LT, TEAL),  False),
+    "solid-cream":([],                                    (CREAM, CREAM),   False),
 }
 
 # name prefix -> role. Longest prefix wins, so specific beats general.
@@ -158,6 +169,60 @@ ROLE_BY_PREFIX = [
     ("ui-checkbox",               "input"),
 ]
 
+# res/user-interface.png, declared in gfx.xml. 148 more slices, and the ones
+# that back Settings and every list: interface.background, row.background,
+# the scrollbars and all the button families. P2 shipped without these, so
+# those surfaces kept their stock dark art while the text went dark on top.
+ROLE_BY_PREFIX_IF = [
+    ("interface.background",   "frame"),
+    ("friends-list-bg",        "inner"),
+    ("hud.background",         "inner"),
+    ("popup.background",       "inner"),
+    ("chatframe",              "inner"),
+    ("inner-dialog-text",      "inner"),
+    ("inner-area",             "inner"),
+    ("game-shop-area",         "inner"),
+    ("movetutor-area",         "inner"),
+    ("tab-area",               "inner"),
+    ("row-header.background",  "row-header"),
+    ("row.background",         "row"),
+    ("chat-bubble",            "dialogue"),
+    ("chat-npc-bubble",        "dialogue"),
+    ("bubble",                 "dialogue"),
+    ("tooltip-left",           "dialogue"),
+    ("label-bg-",              "pill"),
+    ("label-hbg-",             "pill"),
+    ("label-area",             "pill"),
+    ("vscrollbar",             "scrollbar"),
+    ("hscrollbar",             "scrollbar"),
+    ("progressbar-green",      "bar-green"),
+    ("progressbar",            "bar"),
+    ("xp-monster-frame",       "bar-green"),
+    ("inventory-slot",         "box"),
+    ("trade-slot",             "box"),
+    ("monster-slot",           "box"),
+    ("monster-preview-bg",     "box"),
+    ("monstergear-pic",        "box"),
+    ("color-picker",           "box"),
+    ("input-black",            "input"),
+    ("input.background",       "input"),
+    ("chat-input",             "input"),
+    ("monster-frame-tab-empty", "tab-off"),
+    ("ui-tab-button.disabled", "tab-off"),
+    ("ui-tab-button",          "tab"),
+    ("inner-tab",              "tab"),
+    ("console.background",     "solid-cream"),
+]
+
+# 1x1 and tiny slices the client TINTS at draw time, or shapes that only make
+# sense as stock pixels. Repainting a 1x1 white fill gold breaks every widget
+# that tints it.
+KEEP_PREFIXES_IF = (
+    "white.background", "editfield.", "-editfield.", "-console.cursor",
+    "icon-", "close-handle", "minimize-handle", "maximize-handle",
+    "combobox-picker", "monster-frame-nameplate",
+)
+
 # Shapes, not panels. Redrawing these as frames destroys them, so their stock
 # pixels are kept and only recoloured.
 GLYPH_PREFIXES = (
@@ -166,26 +231,67 @@ GLYPH_PREFIXES = (
 )
 
 
-def role_for(name):
-    if name.startswith(GLYPH_PREFIXES):
+def role_for(name, table=None, glyphs=GLYPH_PREFIXES, keep=()):
+    """None means recolour the stock shape; "keep" means do not touch it."""
+    if name.startswith(keep):
+        return "keep"
+    if name.startswith(glyphs):
         return None
     best = None
-    for prefix, role in ROLE_BY_PREFIX:
+    for prefix, role in (table if table is not None else ROLE_BY_PREFIX):
         if name.startswith(prefix) and (best is None or len(prefix) > len(best[0])):
             best = (prefix, role)
     return best[1] if best else None
 
 
+def role_generic(name):
+    """res/main-hud.png is misnamed: it is the primary generic widget atlas.
+    frame.background, 38 button.* states, table-row, table-header, label1..7 and
+    tabbed-area all live here, which is why Settings and every list stayed stock
+    dark when only pokemmo_ui.png was repainted.
+
+    Resolved by suffix because the button families are combinatorial."""
+    if name.startswith(("chaticon", "gmicon", "trainer", "hotbar")):
+        return "keep"
+    base = name.split(".")[0]
+    if base.startswith("label"):
+        return "row"
+    if base in ("table-header",):
+        return "row-header"
+    if base.startswith("table"):
+        return "row"
+    if base.startswith("frame") or base == "tabbed-area":
+        return "inner" if "split" in base or "alpha" in base else "frame"
+    if base.startswith("button"):
+        if name.endswith((".disabled", ".disabled-hover")):
+            return "button-off"
+        if ".hover" in name or ".selected" in name or name.endswith(".ok"):
+            return "button-hi"
+        return "button"
+    return None
+
+
+ATLASES = [
+    dict(file="res/pokemmo_ui.png", source="gfx_ui.xml", out="gfx_ui-firered.xml",
+         table=None, glyphs=GLYPH_PREFIXES, keep=()),
+    dict(file="res/user-interface.png", source="gfx.xml", out="gfx-firered.xml",
+         table=ROLE_BY_PREFIX_IF, glyphs=("progressbar.progressImage_never",),
+         keep=KEEP_PREFIXES_IF),
+    dict(file="res/main-hud.png", source="gfx.xml", out="mainhud-firered.xml",
+         table=None, glyphs=(), keep=(), resolver=role_generic),
+]
+
+
 
 # ------------------------------------------------------------------ parse ---
-def load_block(path):
-    """The <images> element for our atlas, as XML. Regexes miss attribute
-    orderings; there are plenty of them in this file."""
+def load_block(path, atlas):
+    """The <images> element for one atlas, as XML. Regexes miss attribute
+    orderings, and there are plenty of them in these files."""
     root = ET.parse(path).getroot()
     for images in root.iter("images"):
-        if images.get("file") == ATLAS:
+        if images.get("file") == atlas:
             return images
-    sys.exit("no <images> block for %s in %s" % (ATLAS, path))
+    sys.exit("no <images> block for %s in %s" % (atlas, path))
 
 
 def rect_of(el):
@@ -307,24 +413,28 @@ class Packer:
         return self.y + self.row_h
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--report", action="store_true")
-    args = ap.parse_args()
-
-    stock = load_block(os.path.join(STOCK, "gfx_ui.xml"))
-    src = Image.open(os.path.join(STOCK, ATLAS)).convert("RGBA")
+def build(spec, report=False):
+    atlas = spec["file"]
+    stock = load_block(os.path.join(STOCK, spec["source"]), atlas)
+    src = Image.open(os.path.join(STOCK, atlas)).convert("RGBA")
     W, _ = src.size
+
+    resolver = spec.get("resolver")
+
+    def role_of(name):
+        if resolver:
+            return resolver(name)
+        return role_for(name, spec["table"], spec["glyphs"], spec["keep"])
 
     out_el = copy.deepcopy(stock)
     packer = Packer(W)
-    jobs = []          # (kind, dst, payload)
+    jobs, clamped = [], []
 
-    # --- grid cells: each gets its own slot, even if two grids shared a rect ---
     for grid in out_el.findall("grid"):
-        role = role_for(grid.get("name").split(".")[0]) or "frame"
-        wx = grid.get("weightsX", "0,1,0").split(",")
-        cols = len(wx)
+        role = role_of(grid.get("name").split(".")[0]) or "frame"
+        if role in ("keep", None):
+            role = "frame"
+        cols = len(grid.get("weightsX", "0,1,0").split(","))
         areas = grid.findall("area")
         rows = (len(areas) + cols - 1) // cols
         for i, area in enumerate(areas):
@@ -343,65 +453,91 @@ def main():
             area.set("xywh", "%d,%d,%d,%d" % dst)
             jobs.append(("panel", dst, (edges, role)))
 
-    # --- named areas: one slot per (rect, role); aliases share ---
-    clamped = []
-    named = [a for a in out_el.findall("area") if a.get("name")]
+    # Every <area> that is not inside a <grid>, wherever it lives. Several sit
+    # inside <select> blocks -- the scrollbars do -- carrying their own xywh and
+    # no name of their own. findall("area") returns direct children only, so
+    # those kept stock coordinates and collided with the repacked slices.
+    parent = {child: el for el in out_el.iter() for child in el}
+    in_grid = {id(a) for g in out_el.findall("grid") for a in g.iter("area")}
+
+    def owning_name(el):
+        while el is not None:
+            if el.get("name"):
+                return el.get("name")
+            el = parent.get(el)
+        return ""
+
+    named = [a for a in out_el.iter("area")
+             if a.get("xywh") and id(a) not in in_grid]
     groups = defaultdict(list)
     for a in named:
-        groups[(rect_of(a), role_for(a.get("name")))].append(a)
+        groups[(rect_of(a), role_of(owning_name(a)))].append(a)
 
     for (rect, role), els in sorted(groups.items(), key=lambda kv: -kv[0][0][3]):
         dst = packer.place(rect[2], rect[3])
         for a in els:
             a.set("xywh", "%d,%d,%d,%d" % dst)
-            if role is not None and (a.get("splitx") or a.get("splity")):
-                # keep the 9-slice split on the band we actually painted
+            if role not in (None, "keep") and a.get("tint"):
+                # A tint MULTIPLIES the art. label2.background ships
+                # tint="#99949494", 60% grey, which is what kept the login
+                # announcements dark and unreadable after the repaint. Anything
+                # we paint outright must lose its tint; glyphs keep theirs,
+                # since being tinted is the whole point of them.
+                del a.attrib["tint"]
+            if role not in (None, "keep") and band_total(role) \
+                    and (a.get("splitx") or a.get("splity")):
                 b = min(band_total(role), max(1, min(dst[2], dst[3]) // 2 - 1))
                 a.set("splitx", "L%d,R%d" % (b, b))
                 a.set("splity", "T%d,B%d" % (b, b))
             else:
                 clamp_split(a, dst, clamped)
-        if role is None:
-            jobs.append(("glyph", dst, rect))
-        else:
-            jobs.append(("panel", dst, ({"L", "R", "T", "B"}, role)))
+        jobs.append(("glyph" if role is None else
+                     "keep" if role == "keep" else "panel",
+                     dst, rect if role in (None, "keep") else ({"L", "R", "T", "B"}, role)))
 
-    # ------------------------------------------------------------- paint ----
     H = packer.height() + 1
     out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     px = out.load()
-    panels = glyphs = 0
+    counts = defaultdict(int)
     for kind, dst, payload in jobs:
+        counts[kind] += 1
         if kind == "glyph":
             recolour_glyph(px, src, payload, dst)
-            glyphs += 1
+        elif kind == "keep":
+            out.paste(src.crop((payload[0], payload[1],
+                                payload[0] + payload[2], payload[1] + payload[3])),
+                      (dst[0], dst[1]))
         else:
             edges, role = payload
-            spec, stripe, chamfer = ROLES[role]
-            paint_cell(px, dst, edges, spec, stripe, chamfer)
-            panels += 1
+            bands, stripe, chamfer = ROLES[role]
+            paint_cell(px, dst, edges, bands, stripe, chamfer)
 
     res = os.path.join(MOD, "firered", "res")
     os.makedirs(res, exist_ok=True)
-    out.save(os.path.join(res, "pokemmo_ui.png"))
-    emit_xml(out_el)
+    out.save(os.path.join(res, os.path.basename(atlas)))
+    emit_xml(out_el, spec["out"])
 
-    print("atlas %dx%d (stock %dx%d) -- %d panels, %d glyphs, %d slots"
-          % (W, H, src.size[0], src.size[1], panels, glyphs, len(jobs)))
+    print("%-26s %dx%d (stock %dx%d)  %d panels, %d glyphs, %d kept"
+          % (os.path.basename(atlas), W, H, src.size[0], src.size[1],
+             counts["panel"], counts["glyph"], counts["keep"]))
     for name, attr, was, now, extent in clamped:
         print("   clamped inherited bad split: %s %s=%s -> %s (rect is %d px)"
               % (name, attr, was, now, extent))
-    if args.report:
-        for grid in out_el.findall("grid"):
-            print("   grid %-40s %s" % (grid.get("name"),
-                                        role_for(grid.get("name").split(".")[0])))
+    if report:
         for a in named:
-            print("   area %-40s %-12s %s" % (a.get("name"),
-                                              role_for(a.get("name")) or "GLYPH",
-                                              a.get("xywh")))
+            print("   %-40s %-12s %s"
+                  % (owning_name(a), role_of(owning_name(a)) or "GLYPH", a.get("xywh")))
 
 
-def emit_xml(images_el):
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--report", action="store_true")
+    args = ap.parse_args()
+    for spec in ATLASES:
+        build(spec, args.report)
+
+
+def emit_xml(images_el, filename):
     ET.indent(images_el, space="    ", level=1)
     inner = ET.tostring(images_el, encoding="unicode").rstrip()
     text = """<?xml version="1.0" encoding="UTF-8"?>
@@ -410,16 +546,16 @@ def emit_xml(images_el):
 
   Slice NAMES match the stock theme exactly: names are what widgets bind to, and
   a typo defines art nothing reads. The xywh deliberately do NOT match. The stock
-  atlas overlaps itself in 129 places, which no repaint can survive, so every
-  slice is repacked into its own rectangle and splitx/splity are rewritten to the
-  band thickness actually painted. Shipping our own slice table is what makes
-  that legal.
+  atlases overlap themselves, which no repaint can survive, so every slice is
+  repacked into its own rectangle and splitx/splity are rewritten to the band
+  thickness actually painted. Shipping our own slice table is what makes that
+  legal.
 -->
 <themes>
     %s
 </themes>
 """ % inner
-    with open(os.path.join(MOD, "firered", "gfx_ui-firered.xml"), "w") as fh:
+    with open(os.path.join(MOD, "firered", filename), "w") as fh:
         fh.write(text)
 
 
