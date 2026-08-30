@@ -14,7 +14,7 @@
     exp-messages: Experience and level-up chatter
     status-battle: Battle status spam: faint, paralysis, burn, sleep, confusion, recoil
     shop-extra: Remaining shop counter lines
-    catch-flow: Ball throw result -- fires on every encounter you throw at
+    catch-flow: Ball throw result - fires on every encounter you throw at
     evolution: Evolution start, finish and cancel
     repel: Repel wear-off and re-apply prompt
     move-learned: Move learned on level-up (not the forget prompt)

@@ -167,6 +167,11 @@ put together.
 * **Enabling a theme is not selecting it.** A theme mod does nothing until you
   pick it in **Settings → Interface → Theme**. Only one theme can be active at
   a time.
+* **A broken mod fails silently at import.** If any file a mod declares does
+  not parse, the client refuses the whole thing and the UI shows nothing at
+  all — the mod simply never appears in the list. The reason is only in the
+  log: `String with path ... is not valid`. Worth knowing that XML forbids
+  `--` inside comments, which is exactly how this bit us.
 * **Check the log rather than guessing.** `log/mods.log` prints
   `<mod> applied.` for each one that loaded, and `is disabled, skipping.` for
   the rest. On Android the same lines go to logcat under the `mod` tag.

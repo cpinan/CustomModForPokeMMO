@@ -163,6 +163,11 @@ arma un mod de textos.
   de SupersStrings.
 * **Activar un tema no es seleccionarlo.** Un mod de tema no hace nada hasta que
   lo eliges en **Ajustes → Interfaz → Tema**. Solo puede haber un tema activo.
+* **Un mod roto falla en silencio al importarlo.** Si alguno de los archivos
+  que declara no se puede leer, el cliente rechaza el mod entero y la interfaz
+  no muestra nada — el mod sencillamente no aparece en la lista. El motivo solo
+  está en el log: `String with path ... is not valid`. Conviene saber que XML
+  prohíbe `--` dentro de los comentarios, que fue justo lo que nos pasó.
 * **Mira el log en vez de adivinar.** `log/mods.log` escribe `<mod> applied.`
   por cada mod cargado y `is disabled, skipping.` por cada uno apagado. En
   Android esas mismas líneas van a logcat con la etiqueta `mod`.
