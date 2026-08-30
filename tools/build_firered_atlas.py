@@ -428,7 +428,7 @@ def build(spec, report=False):
 
     out_el = copy.deepcopy(stock)
     packer = Packer(W)
-    jobs, clamped = [], []
+    jobs, clamped, splits_added = [], [], []
 
     for grid in out_el.findall("grid"):
         role = role_of(grid.get("name").split(".")[0]) or "frame"
@@ -485,11 +485,20 @@ def build(spec, report=False):
                 # since being tinted is the whole point of them.
                 del a.attrib["tint"]
             if role not in (None, "keep") and band_total(role) \
-                    and (a.get("splitx") or a.get("splity")):
-                b = min(band_total(role), max(1, min(dst[2], dst[3]) // 2 - 1))
+                    and min(dst[2], dst[3]) >= 2 * band_total(role) + 1:
+                # EMIT the 9-slice split, do not merely correct an existing one.
+                # A painted panel with no splitx/splity is stretched whole, so
+                # its border scales with the widget instead of staying put: the
+                # fill ends up a floating inset rather than covering the row.
+                # label2.background is a 5x5 with no splits at all, which is
+                # exactly what left the announcement rows looking unfilled.
+                b = band_total(role)
                 a.set("splitx", "L%d,R%d" % (b, b))
                 a.set("splity", "T%d,B%d" % (b, b))
+                splits_added.append(a.get("name") or "")
             else:
+                # too small to hold a border and a middle, or not ours to paint:
+                # leave it stretching whole, but never with overrunning caps
                 clamp_split(a, dst, clamped)
         jobs.append(("glyph" if role is None else
                      "keep" if role == "keep" else "panel",
@@ -520,6 +529,8 @@ def build(spec, report=False):
     print("%-26s %dx%d (stock %dx%d)  %d panels, %d glyphs, %d kept"
           % (os.path.basename(atlas), W, H, src.size[0], src.size[1],
              counts["panel"], counts["glyph"], counts["keep"]))
+    if splits_added:
+        print("   emitted 9-slice splits on %d painted slices" % len(splits_added))
     for name, attr, was, now, extent in clamped:
         print("   clamped inherited bad split: %s %s=%s -> %s (rect is %d px)"
               % (name, attr, was, now, extent))
