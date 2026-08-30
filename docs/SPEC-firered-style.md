@@ -55,16 +55,30 @@ Field labels are rounded capsules, not text on a background:
 
 Used for `No`, `NAME`, `TYPE`, `OT`, `IDNo`, `ITEM`, `TRAINER MEMO`.
 
-## Text is outlined, always
+## Text carries a hard drop shadow, always
 
-Every string in FireRed is a glyph plus a **1 px hard outline** in a darker tone.
-Confirmed on the bag description bar: white `#F8F8F8` glyph, `#606060` outline, on `#0078C0`.
+Every string in FireRed is a glyph plus a **1 px hard drop shadow offset by (+1,+1)**.
 
-The client already supports this. `fonts.xml` documents `border_width` and `border_color`,
-and the stock `main-border` fontDef already uses `border_width="1" border_color="#434343"`.
+It is a shadow, **not an outline** — an earlier draft of this spec said outline, which is
+wrong. The dark pixels sit to the right and below each glyph pixel and never above or left.
+Read a glyph edge, not a colour histogram, and it is unambiguous. Two surfaces agree on the
+shape and differ only in tone:
+
+| surface | glyph | shadow |
+|---|---|---|
+| navy message box `#285068` | `#F8F8F8` | `#685870` |
+| blue item bar `#0078C0` | `#F8F8F8` | `#606060` |
+
+"Hard" means fully opaque and one flat colour. The client's default shadow is `#BF000000`,
+black at 75%, and stock `title-font` ships `#55000000` — both read as a blur beside a GBA
+edge, so `shadow_color` needs an `FF` alpha.
+
+The client supports this directly: `shadow_offset_x`, `shadow_offset_y`, `shadow_color`.
+Two stock faces instead use `border_width` for a full surround, `main-border` and
+`mechabold`; FireRed has no surrounds, so both become shadows.
 
 **This is the single highest identity-per-byte change in the project** — a handful of
-`fontDef` lines, no art at all.
+`fontDef` lines, no art at all. Shipped in P1.
 
 ## Accent bars
 
