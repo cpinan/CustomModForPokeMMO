@@ -149,6 +149,37 @@ put together.
 5. Theme mods also need selecting at **Settings → Interface → Theme**, then one
    more restart.
 
+### Things that will trip you up
+
+* **Updating a mod means deleting it first.** The client refuses an import when
+  a mod of the same name already exists — *"A mod with that name already
+  exists, please delete it before trying to import it again."* Use **Delete
+  Mod**, then import the new build.
+* **The list re-sorts as you toggle.** Disabling a mod drops it toward the
+  bottom, so the row you were aiming at moves under your finger. Re-read the
+  list after each toggle instead of trusting positions.
+* **Order decides who wins.** When two strings mods override the same id, the
+  one *lower* in the list is applied last and takes effect. The up/down arrows
+  set that order. `region-label-unpad` only works if it sits below
+  SupersStrings.
+* **Enabling a theme is not selecting it.** A theme mod does nothing until you
+  pick it in **Settings → Interface → Theme**. Only one theme can be active at
+  a time.
+* **Check the log rather than guessing.** `log/mods.log` prints
+  `<mod> applied.` for each one that loaded, and `is disabled, skipping.` for
+  the rest. On Android the same lines go to logcat under the `mod` tag.
+
+### Which mods go together
+
+| If you run | Also run | Why |
+|---|---|---|
+| SupersStrings | `region-label-unpad` | otherwise the Pokédex loops on Sinnoh and Unova |
+| `bobby-fast-strings` | nothing extra | it never touches the region names |
+| Any Android handheld | `android-layout-fix` | Settings loops without it |
+
+`bobby-fast-strings` and SupersStrings both silence dialogue, so running both is
+redundant rather than harmful — whichever sits lower wins on shared ids.
+
 ## Building from source
 
 Each folder under `mods/` is the archive laid out exactly as the client reads

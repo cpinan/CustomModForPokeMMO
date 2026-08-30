@@ -146,6 +146,36 @@ arma un mod de textos.
 5. Los mods de tema además hay que seleccionarlos en **Ajustes → Interfaz →
    Tema**, y reiniciar otra vez.
 
+### Cosas con las que te vas a tropezar
+
+* **Actualizar un mod obliga a borrarlo antes.** El cliente rechaza la
+  importación si ya existe un mod con el mismo nombre. Usa **Eliminar Mod** y
+  luego importa la versión nueva.
+* **La lista se reordena al activar y desactivar.** Al desactivar un mod, este
+  baja en la lista, así que la fila a la que apuntabas se mueve. Vuelve a leer
+  la lista después de cada toque en vez de fiarte de las posiciones.
+* **El orden decide quién gana.** Cuando dos mods de textos sobrescriben el
+  mismo id, se aplica el que está *más abajo*. Las flechas arriba/abajo
+  establecen ese orden. `region-label-unpad` solo funciona si queda por debajo
+  de SupersStrings.
+* **Activar un tema no es seleccionarlo.** Un mod de tema no hace nada hasta que
+  lo eliges en **Ajustes → Interfaz → Tema**. Solo puede haber un tema activo.
+* **Mira el log en vez de adivinar.** `log/mods.log` escribe `<mod> applied.`
+  por cada mod cargado y `is disabled, skipping.` por cada uno apagado. En
+  Android esas mismas líneas van a logcat con la etiqueta `mod`.
+
+### Qué mods combinan entre sí
+
+| Si usas | Usa también | Por qué |
+|---|---|---|
+| SupersStrings | `region-label-unpad` | si no, la Pokédex se cicla en Sinnoh y Unova |
+| `bobby-fast-strings` | nada más | no toca los nombres de región |
+| Cualquier consola Android | `android-layout-fix` | sin él, Ajustes se cicla |
+
+`bobby-fast-strings` y SupersStrings silencian diálogos los dos, así que usarlos
+juntos es redundante más que dañino — en los ids compartidos gana el que esté
+más abajo.
+
 ## Compilar desde el código
 
 Cada carpeta dentro de `mods/` es el archivo tal y como lo lee el cliente.
