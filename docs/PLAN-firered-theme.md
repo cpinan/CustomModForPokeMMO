@@ -191,6 +191,38 @@ mostly it is the right product answer: the client is PokeMMO, so the plate shoul
 PokeMMO in FireRed's blocky gold-on-blue outlined lettering rather than borrow another
 game's title.
 
+### P3b — The animated login backdrop
+_Requested: replace the 3D checkerboard-and-Reshiram scene with something GBA
+Pokemon. Investigated before planning, because the honest answer constrains it._
+
+**A theme cannot reach it.** Four things were checked:
+
+| checked | result |
+|---|---|
+| `logingui` widget theme | exposes `logo` -> `background-image` and nothing else. No backdrop widget exists. |
+| `themes/default/textures/bg_00..02.png` | ~900x900 painted sky and cloud plates. These are the overworld and battle sky, not the login scene. |
+| client settings | the only background toggle in `strings_en.xml` is **Show Battle Background**. No login or 3D scene option. |
+| `vanbobby_pokemmo3d.mod` | listed in `enabled_mods` but **not installed** in `data/mods/`, and the 3D scene still renders. It is client-native. |
+
+So the scene is drawn by the client from its own region models, and no theme file
+feeds it. Three routes remain, and they are genuinely different in cost:
+
+1. **Cover it with the plate.** `bg.png` is `xywh="*"` and the `logo` widget sizes
+   itself to the image, so a much larger plate, say 1280x720, would occupy most of
+   the screen and read as a GBA title screen with the login window on top. Cheapest
+   by a wide margin and the only one that changes what you actually see at login.
+   Unknowns worth one iteration: whether the widget centres or anchors, whether it
+   scales with the window, and whether it pushes the login window off-centre.
+2. **Restyle the sky plates.** `textures/bg_00..02.png` are theme-owned and
+   replaceable, so they can become flat GBA-style skies. Real work with real
+   payoff, but it lands on the **overworld and battle**, not the login screen.
+   Worth doing; does not answer this request.
+3. **Go after the scene itself.** The models live in `cache/region-models-*.bin`
+   and `data/data.pak`. Whether a mod can substitute either is unknown and would
+   need its own spike. Highest risk, and quite possibly not moddable at all.
+
+Recommended: 1 now, 2 later as its own phase, 3 only if 1 disappoints.
+
 ### P4 — Dialogue box and pill labels
 `text-bubble.png` gets the navy-fill/gold-chamfer treatment. Pill labels (`#788090` capsule,
 white text) are added as a reusable slice for field headers.
