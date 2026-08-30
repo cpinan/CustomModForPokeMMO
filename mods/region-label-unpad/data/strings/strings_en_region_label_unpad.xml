@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<strings lang="en" lang_full="English" is_primary="0">
+  <!--
+    SupersSpeedStrings (and SupersStoryStrings) redefine the five region names as
+    a two-line label padded with 19 U+2581 block characters, e.g.
+
+        <string id="250003">[ Sinnoh ]\n___________________</string>
+
+    to make the region buttons wider. Those ids are not just button labels: the
+    client substitutes them as {STRING_250000}..{STRING_250004} inside ordinary
+    sentences too ("sail between the {STRING_250000} and {STRING_250001}
+    regions"), and the forced width destabilises the Pokedex layout on Android —
+    picking Sinnoh or Unova makes TWL give up with "layout loop detected".
+
+    This file puts the plain names back. Load it AFTER SupersSpeedStrings
+    (Mod Management, the down arrow) so it wins.
+  -->
+  <string id="250000">Kanto</string>
+  <string id="250001">Hoenn</string>
+  <string id="250002">Unova</string>
+  <string id="250003">Sinnoh</string>
+  <string id="250004">Johto</string>
+</strings>

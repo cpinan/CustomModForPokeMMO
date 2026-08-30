@@ -1,0 +1,19 @@
+# Never commit game ROMs — they are copyrighted and belong nowhere near a repo
+*.gba
+*.nds
+*.3ds
+roms/
+
+# OS / editor noise
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+__pycache__/
+
+# Client logs pulled off a device (may contain account details)
+device-logs*/
+*.logcat
+logcat-*.txt

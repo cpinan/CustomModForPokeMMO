@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<strings lang="en" lang_full="English" is_primary="0">
+  <!-- Overrides only these ids; everything else falls through to
+       data/strings/strings_en.xml. Find ids with: pmmod strings find "..." -->
+  <string id="1190">Mod Management [pmmod]</string>
+  <string id="1191">Browse Mods</string>
+</strings>

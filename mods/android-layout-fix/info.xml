@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource name="Android Layout Fix" version="1.0" description="Stops the &quot;UI layout loop&quot; warning on Android/handhelds. Stock android theme only, everything else untouched." author="carlospinan" weblink="https://forums.pokemmo.com/">
+    <themes theme_revision="8">
+        <theme path="theme/" name="Android Layout Fix" is_mobile="true"/>
+    </themes>
+</resource>
