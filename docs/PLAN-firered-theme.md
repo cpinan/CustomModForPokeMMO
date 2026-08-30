@@ -51,7 +51,14 @@ The skill's advice is to vendor `data/themes/default/` into the mod and rewrite 
 ```
 
 Later includes win and there is no cascade, so a re-declared `<images file="res/pokemmo_ui.png">`
-block with identical slice names replaces the stock one wholesale. The mod carries only the
+block with identical slice names replaces the stock one wholesale.
+
+**But "later wins" is only true for widget themes, not for images.** Proven in P0: the
+same override did nothing when included last and worked immediately when moved above
+`init.xml`. TWL binds an `<image>` reference at the moment the widget theme naming it is
+parsed, so an atlas redeclared after `main-widgets.xml` arrives too late. The rule for art
+is **declare before first use**, and it is enforced by
+`test_art_overrides_are_included_before_anything_consumes_them`. The mod carries only the
 art it repaints — target **under 800 KB**, against PARAGON's 20 MB.
 
 ## Archive layout
@@ -105,19 +112,18 @@ That grammar is why the repaint is procedural rather than 142 pieces of hand art
 _Revised after the reference teardown. See `docs/SPEC-firered-style.md` for the measured
 grammar; the ordering below follows identity-per-byte, cheapest and most recognisable first._
 
-### P0 — Spike (ship nothing)
-Three unknowns, each cheap to settle, all blocking:
+### P0 — Spike (ship nothing) — **DONE** (727c76b)
+Three unknowns, all now answered on the macOS client. `Loaded theme "FireRed" in 326`:
 
-1. **Does one mod carry two `<theme>` entries?** `docs/MODDING.md` says names must be unique
-   across mods, which implies plural is allowed, but it is not proven. Fallback: two mods.
-2. **Does `../firered/` resolve inside the archive?** The `../default/` trap was an escape to
-   a path that does not exist in the mod; staying inside the archive should be fine.
-   Fallback: duplicate the XML and art per theme (~2x size).
-3. **Does the desktop client accept absolute `/data/themes/default/...` includes?** Proven on
-   the android theme, unproven on a desktop one.
+1. **Does one mod carry two `<theme>` entries?** **Yes.** `FireRed` and `FireRed Mobile`
+   ship from one archive; the client selects by name.
+2. **Does `../firered/` resolve inside the archive?** **Yes**, for `<include>` and for the
+   `<images file>` attribute alike. One copy of the art serves both themes.
+3. **Does the desktop client accept absolute `/data/themes/default/...` includes?** **Yes.**
+   Nothing is vendored. The spike archive is 12 KB.
 
-Built as a stub theme that tints one frame magenta. If it loads on both slots, the
-architecture holds. Read `log/mods.log`, not the screen.
+Plus the unplanned finding above: art overrides must precede `init.xml`. That cost two
+iterations and produced no error message either time.
 
 ### P1 — Outlined text  *(moved up from P4)*
 FireRed's most recognisable trait is not a window, it is that **every glyph carries a 1 px
