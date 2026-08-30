@@ -78,6 +78,32 @@ funcionando; lo único que pierdes son los botones de región más anchos.
 **Instalación:** tiene que cargarse **después** de SupersStrings — usa la flecha
 hacia abajo en Administración de Mods para colocarlo debajo, y reinicia.
 
+### `only-shiny-sprites` — oculta a todos los que no son shiny en combate
+
+El cliente distingue normal de shiny solo por el nombre del archivo —
+`25-front-n.png` frente a `25-front-s.png` — así que este mod incluye un PNG
+totalmente transparente para cada archivo `-n` de la dex de la gen 1–5, de
+frente y de espalda, incluidas las variantes por género `-m`/`-f`. Son 3.894
+archivos con los mismos pocos bytes transparentes, por eso el archivo final pesa
+menos de 900 KB.
+
+**No** incluye ningún archivo `-s`. Los shiny no se sobrescriben, se toman del
+sprite de la ROM y se ven igual que siempre. Los encuentros normales no dibujan
+nada, así que un shiny es imposible de pasar por alto.
+
+Tu propio Pokémon también queda oculto — borra `*-back-n*.png` y vuelve a
+compilar si prefieres seguir viendo tu lado. Cubre los ids 1–649; las formas
+alternativas y los disfraces de evento usan ids más altos y no se ocultan.
+
+### `shiny-scale-probe` — una prueba desechable
+
+Incluye solo las tres tablas de escala, sin sprites, con valores exagerados a
+propósito para especies comunes de las primeras rutas (algunas en `1`, otras en
+`4`, frente al valor por defecto de `3`). Un solo encuentro salvaje responde si
+las tablas de escala afectan a sprites que el mod **no** ha reemplazado — eso
+decide si "hacer los shiny más grandes" son diez líneas de texto o descargar un
+sprite por especie. Bórralo cuando tengas la respuesta.
+
 ### `stadium-battlesprites` — sprites de combate de Pokémon Stadium 2
 
 299 GIFs animados, de frente y de espalda, con una tabla de escala por especie.

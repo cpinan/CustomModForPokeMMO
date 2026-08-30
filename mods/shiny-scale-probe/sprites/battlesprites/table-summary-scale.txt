@@ -1,0 +1,24 @@
+;Table which determines scales for battle sprites.
+;Lines starting with ; will be ignored
+;Please only include values for overriden sprites!
+;Each entry should be a separate line and contain ID=SCALE, like "1=3" without quotes.
+;
+;PROBE: none of these species have their sprite replaced by this mod.
+;If their size changes in a wild battle, the scale tables work on the ROM's own
+;sprites and "Only Shiny Sprites" can enlarge shinies with a few KB of text.
+;If nothing changes, scaling only applies to sprites a mod actually ships.
+;
+;Deliberately extreme so the answer is obvious at a glance:
+
+;--- shrunk to 1 (should look tiny) ---
+16=1
+19=1
+41=1
+10=1
+;--- grown to 4 (should look oversized) ---
+13=4
+43=4
+396=4
+399=4
+504=4
+261=4

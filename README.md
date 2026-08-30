@@ -17,6 +17,8 @@ eyeballing the UI.
 Each mod has its own README with the full write-up:
 [android-layout-fix](mods/android-layout-fix/README.md) ·
 [region-label-unpad](mods/region-label-unpad/README.md) ·
+[only-shiny-sprites](mods/only-shiny-sprites/README.md) ·
+[shiny-scale-probe](mods/shiny-scale-probe/README.md) ·
 [stadium-battlesprites](mods/stadium-battlesprites/README.md) ·
 [demo-strings](mods/demo-strings/README.md)
 
@@ -81,6 +83,30 @@ working; you only lose the wider region buttons.
 
 **Install:** it must load **after** SupersStrings — use the down arrow in Mod
 Management to place it below, then restart.
+
+### `only-shiny-sprites` — hides every non-shiny in battle
+
+The client tells normal and shiny apart by filename alone — `25-front-n.png`
+versus `25-front-s.png` — so this mod ships a fully transparent PNG for every
+`-n` file across the gen 1–5 dex, front and back, including the `-m`/`-f`
+gendered variants. 3,894 files, all the same handful of transparent bytes, which
+is why the archive is under 900 KB.
+
+It ships **no** `-s` files. Shinies are not overridden, fall back to the ROM
+sprite, and render exactly as they always did. Normal encounters draw nothing at
+all, so a shiny is impossible to miss.
+
+Your own Pokémon is hidden too — delete `*-back-n*.png` and rebuild if you would
+rather keep your side visible. Covers dex ids 1–649; alternate forms and event
+costumes use higher sprite ids and are not blanked.
+
+### `shiny-scale-probe` — a throwaway diagnostic
+
+Ships only the three scale tables, no sprites, with deliberately extreme values
+for common early-route species (some at `1`, some at `4`, against a default of
+`3`). One wild encounter answers whether the scale tables apply to sprites a mod
+has *not* replaced — which decides whether "make shinies bigger" is ten lines of
+text or a per-species asset pull. Delete it once you have the answer.
 
 ### `stadium-battlesprites` — Pokémon Stadium 2 battle sprites
 
