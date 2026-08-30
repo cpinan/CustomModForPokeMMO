@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Every FireRed art override, shared by both the desktop and the mobile theme.
+
+  This file lives outside either theme root and is reached as ../firered/. That
+  works: paths inside the archive resolve fine, both for <include> and for the
+  <images file="..."> attribute, which is relative to THIS file.
+
+  P0 probe: replaces the login screen logo, gfx.xml's "background-image".
+-->
+<themes>
+    <images file="res/bg.png" filter="nearest">
+        <area name="background-image" xywh="*"/>
+    </images>
+</themes>
