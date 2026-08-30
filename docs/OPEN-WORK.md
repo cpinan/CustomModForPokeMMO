@@ -36,15 +36,26 @@ Driving Mod Management over adb is fine; everything past the LOGIN button is not
 
 ## Bugs
 
-### 1. ~~Two mods shipped strings under `data/strings/`~~ — FIXED 2026-08-30
-`vanbobby-demo-strings` and `vanbobby-region-label-unpad` now ship under `strings/`, like
-the generated mod has since 1.7. Both went 1.0 -> 1.1; the version is what tells a fixed
-artifact from an old one, since the change is invisible in game. All seven mods validate
+### 1. `data/strings/` fix is written but never seen working
+**Status:** code fixed 2026-08-30, **awaiting one hardware check.**
+
+`vanbobby-demo-strings` and `vanbobby-region-label-unpad` shipped their strings under
+`data/`, which the client treats as a directory overlay and reports as deprecated on every
+startup — a visible dialog, not just a log line. Both now ship under `strings/` with
+`info.xml` pointing there, matching what the generated mod has done since 1.7, and both went
+1.0 -> 1.1 so a fixed artifact is distinguishable from an old one. All seven mods validate
 with zero warnings.
 
-Not verified on hardware — no device was available. The expected result is simply that the
-client stops showing *"tries to overlay the data/strings/ directory while not requesting it
-in the info.xml"* on startup. If it still appears, the mod is not the cause.
+None of that was run against a client. It is a reasoned fix, not an observed one.
+
+**To close this:** install `dist/vanbobby-demo-strings-1-1.mod` and
+`dist/vanbobby-region-label-unpad-1-1.mod`, restart, and confirm the dialog saying *"tries to
+overlay the data/strings/ directory while not requesting it in the info.xml"* no longer
+appears. If it still does, these two are not the cause and something else ships under
+`data/` — `log/mods.log` names the mod it objects to.
+
+Both were disabled on the device when last seen. Importing re-enables a mod, so check the
+toggles afterwards.
 
 ### 2. The installed Android Layout Fix is not the one in this repo
 The Retroid runs `android-layout-fix-v3-3-0.mod`, display name
