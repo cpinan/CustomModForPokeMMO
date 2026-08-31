@@ -243,8 +243,40 @@ def charizard_frames(count, height):
     return out
 
 
-def plate(W, H, chari=None):
-    """One frame of the login plate."""
+def plate(W, H, chari=None, bands=True):
+    """One frame of the login plate.
+
+    With bands=False this is the TITLE ALONE on transparency. That is the shape
+    it wants now: the FireRed field, the flames and the Charizard all moved to
+    the logingui container background, which covers the whole window, so the
+    plate repeating its own little set of bands would just be a box drawn on top
+    of the real thing."""
+    if not bands:
+        # Title and Charizard on transparency. The whole plate is centred by the
+        # login layout, so composing the pair side by side inside it is what
+        # makes the Charizard read as centred on screen.
+        im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        art_w = chari.width if chari is not None else 0
+        text_w = W - art_w
+        scale = max(3, min(int(text_w / 58), (H - 16) * 3 // 28))
+        s2 = max(2, scale // 3)
+        title_h, sub_h = 7 * scale, 7 * s2
+        gap = max(4, scale // 2)
+        top = max(2, (H - title_h - gap - sub_h) // 2)
+        tw = text_width("POKEMMO", scale, int(scale * 1.2))
+        tx = (text_w - tw) // 2
+        draw_text(im, "POKEMMO", tx, top, scale, face=GOLD,
+                  outline=NAVY, outline_px=max(2, scale // 3),
+                  shadow=SHADOW, shadow_px=max(2, scale // 3),
+                  spacing=int(scale * 1.2))
+        sw = text_width("FIRERED VERSION", s2, max(2, s2))
+        draw_text(im, "FIRERED VERSION", tx + (tw - sw) // 2,
+                  top + title_h + gap, s2, face=WHITE,
+                  outline=SHADOW, outline_px=max(1, s2 // 2), spacing=max(2, s2))
+        if chari is not None:
+            im.alpha_composite(chari, (text_w, H - chari.height))
+        return im
+
     im = Image.new("RGBA", (W, H), TEAL + (255,))
     d = ImageDraw.Draw(im)
 
@@ -307,8 +339,11 @@ def plate(W, H, chari=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--frames", type=int, default=1,
+    ap.add_argument("--frames", type=int, default=0,
                     help="1 for a still plate, >1 to animate, 0 for no Charizard")
+    ap.add_argument("--bands", action="store_true",
+                    help="draw the field on the plate too; off by default, the "
+                         "logingui background carries the field now")
     # 968x286 is 2x the slot the client gives this widget, which measured at
     # exactly 484x143 design pixels: the same size as stock's bg.png. The widget
     # does NOT grow to fit the image. A 1728x946 plate was tried and rendered at
@@ -321,14 +356,16 @@ def main():
 
     W, H = args.width, args.height
 
-    chari = charizard_frames(args.frames, int(H * 0.56)) if args.frames else []
+    chari = charizard_frames(args.frames,
+                             int(H * (0.95 if not args.bands else 0.56))) \
+        if args.frames else []
     if len(chari) <= 1:
         # A still plate, which is what the reference itself is. Sized to the
         # window rather than to the art, because the client's 3D login backdrop
         # cannot be switched off from a theme and covering it is the only lever.
         # It does NOT adapt: the logo widget takes the image's own size, so a
         # different resolution means re-running with --width/--height.
-        im = plate(W, H, chari[0] if chari else None)
+        im = plate(W, H, chari[0] if chari else None, bands=args.bands)
         os.makedirs(os.path.dirname(OUT), exist_ok=True)
         im.save(OUT)
         open(XML_OUT, "w").write(STILL_XML)
@@ -336,7 +373,7 @@ def main():
               % (os.path.relpath(OUT, REPO), W, H, os.path.getsize(OUT) / 1024.0))
         return
 
-    frames = [plate(W, H, c) for c in chari]
+    frames = [plate(W, H, c, bands=args.bands) for c in chari]
     cols = 4
     rows = (len(frames) + cols - 1) // cols
     atlas = Image.new("RGBA", (W * cols, H * rows), (0, 0, 0, 0))

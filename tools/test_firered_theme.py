@@ -135,15 +135,44 @@ class Includes(unittest.TestCase):
                     self.assertTrue(os.path.exists(target), "no such file in mod")
 
     def test_art_overrides_are_included_before_anything_consumes_them(self):
+        # ART must precede init.xml/main-widgets.xml: TWL binds an <image> when
+        # the widget theme naming it is parsed, so an atlas redeclared later is
+        # a no-op.
+        #
+        # WIDGET overrides are the exact opposite. Widget themes are last wins,
+        # so a <theme> override has to come AFTER the stock ones or it is the
+        # override that gets ignored. The two rules pull in opposite directions,
+        # which is why each of our includes is classified by what it contains
+        # rather than by being ours.
         for root in THEME_ROOTS:
-            inc = includes(os.path.join(MOD, root, "theme.xml"))
-            ours = [i for i, f in inc if not f.startswith("/data/themes/")]
+            base = os.path.join(MOD, root)
+            inc = includes(os.path.join(base, "theme.xml"))
             consumers = [i for i, f in inc if f.endswith(CONSUMERS)]
-            self.assertTrue(ours, "%s: no FireRed override included" % root)
             self.assertTrue(consumers, "%s: no consumer include found" % root)
-            with self.subTest(theme=root):
-                self.assertLess(max(ours), min(consumers),
-                                "override lands after init/main-widgets and is a no-op")
+
+            art, widgets = [], []
+            for i, f in inc:
+                if f.startswith("/data/themes/"):
+                    continue
+                target = os.path.normpath(os.path.join(base, f))
+                if not os.path.exists(target):
+                    continue
+                body = strip_comments(read(target))
+                if "<images" in body:
+                    art.append((i, f))
+                elif "<theme " in body or "<theme>" in body:
+                    widgets.append((i, f))
+
+            self.assertTrue(art, "%s: no art override included" % root)
+            with self.subTest(theme=root, kind="art"):
+                self.assertLess(max(i for i, _ in art), min(consumers),
+                                "art override lands after init/main-widgets "
+                                "and is a no-op")
+            for i, f in widgets:
+                with self.subTest(theme=root, widget_override=f):
+                    self.assertGreater(i, max(consumers),
+                                       "widget override lands before the stock "
+                                       "widget themes and is overwritten")
 
     def test_fonts_are_included_before_fontgen(self):
         # A font declared after <fontGen/> is silently ignored.

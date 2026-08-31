@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Widget overrides. Included LATE, after main-widgets.xml and the stock ui/
+  files, because widget themes are last wins. That is the opposite of the art
+  rule, where an atlas has to be declared BEFORE anything consumes it.
+
+  logingui is the login screen's root container. Stock gives it no background
+  param at all, which is why the client's 3D scene shows through, and why the
+  backdrop looked unreachable: the logo widget was the wrong place to look.
+  PARAGON does exactly this in its android.xml, which is the proof it works.
+-->
+<themes>
+    <theme name="logingui">
+        <param name="background"><image>firered-login.background</image></param>
+    </theme>
+</themes>
