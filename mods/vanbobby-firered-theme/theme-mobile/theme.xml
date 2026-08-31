@@ -38,6 +38,7 @@
 	     holds the stock image object. Include order is the cascade for widget
 	     themes, but for images the rule is "declare before first use". -->
 	<include filename="../firered/atlases-firered.xml"/>
+	<include filename="../firered/login-bg-firered.xml"/>
 	<include filename="../firered/overrides.xml"/>
 
 	<include filename="/data/themes/default/init.xml"/>
@@ -93,4 +94,6 @@
   <include filename="/data/themes/android/ui/android-instance.xml"/>
   <include filename="/data/themes/android/ui/android-tt.xml"/>
   <include filename="/data/themes/android/ui/android-encounter.xml"/>
-  <include filename="/data/themes/android/ui/android-incubator.xml"/></themes>
+  <include filename="/data/themes/android/ui/android-incubator.xml"/>	<!-- Widget overrides: LAST, because widget themes are last wins. -->
+	<include filename="../firered/widgets-firered.xml"/>
+</themes>
