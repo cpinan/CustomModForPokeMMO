@@ -23,6 +23,11 @@ CLIENT = os.environ.get("POKEMMO_HOME") or os.path.expanduser(
 THEMES = os.path.join(CLIENT, "data", "themes")
 
 THEME_ROOTS = ["theme", "theme-mobile"]
+# Faces drawn on the theme's two NAVY surfaces: the battle message box and the
+# NPC dialogue popup. They must stay LIGHT. Mirrors NAVY_TEXT/KEEP_LIGHT in
+# tools/build_firered_fonts.py.
+NAVY_FACES = {"battle", "battle-small", "messagebox", "main-battle"}
+
 # Faces drawn over the game world; they keep an outline. Mirrors WORLD_FACES in
 # tools/build_firered_fonts.py.
 WORLD_FACES = {"pb-dark", "mechabold", "main-border", "main-small",
@@ -229,6 +234,24 @@ class Fonts(unittest.TestCase):
                 self.assertIsNotNone(col, "shadow_color must be 8 hex digits (ARGB)")
                 self.assertEqual("FF", col.group(1)[:2].upper(),
                                  "shadow alpha must be FF; anything less is a blur")
+
+    def test_faces_on_the_navy_surfaces_stay_light(self):
+        # The battle message box and the NPC popup are deliberately dark, so
+        # their text has to be light. This is easy to break from a distance: a
+        # refactor of the colour branches silently darkened "battle" to #404040
+        # once, which puts dark text on a navy box and reads as nothing at all.
+        for xml, name, tag in self.our_fontdefs():
+            if name not in NAVY_FACES:
+                continue
+            m = re.search(r'color="#?([0-9A-Fa-f]{6})"', tag)
+            if not m:
+                continue          # a ref= clone inherits its base
+            v = m.group(1)
+            r, g, b = int(v[0:2], 16), int(v[2:4], 16), int(v[4:6], 16)
+            lum = (r * 299 + g * 587 + b * 114) // 1000
+            with self.subTest(font=name, color="#" + v):
+                self.assertGreater(lum, 140,
+                                   "face on a navy surface must stay light")
 
     def test_theme_includes_exactly_one_font_entry_point_before_fontgen(self):
         for root in THEME_ROOTS:

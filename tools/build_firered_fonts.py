@@ -48,6 +48,16 @@ FONT_DIR = "/data/themes/default/res/fonts/"
 KEEP_LIGHT = {"battle", "battle-small", "braille", "marquee",
               "main-battle", "tooltip-font", "tooltip-font-markup"}
 
+# Faces drawn on one of the theme's two NAVY surfaces: the battle message box
+# (battle-area) and the NPC dialogue popup (text-bubble). Both are deliberately
+# dark, because that is the FireRed window, so their text must be white.
+#
+# "battle" was already white and needed nothing. "messagebox" was NOT: stock's
+# text-bubble is a LIGHT box, so its face is dark, and painting the box navy
+# without touching the face left dark text on navy.
+NAVY_TEXT = {"messagebox"}
+NAVY_GLYPH = "#F8F8F8"
+
 # Faces drawn straight onto the game world, with no panel behind them: the
 # overworld HUD (route, money, clock) and the battle name and HP labels. They
 # are the SAME faces the cream panels use, so no single colour serves both -- a
@@ -151,7 +161,10 @@ def main():
             el.set("filename", FONT_DIR + os.path.basename(el.get("filename")))
 
         colour = el.get("color")
-        if name in KEEP_LIGHT:
+        if name in NAVY_TEXT:
+            el.set("color", NAVY_GLYPH)
+            kept += 1
+        elif name in KEEP_LIGHT:
             kept += 1
         elif colour:
             rgb = parse_colour(colour)
