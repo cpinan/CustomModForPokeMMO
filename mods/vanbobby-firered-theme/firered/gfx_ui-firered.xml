@@ -110,18 +110,18 @@
             <area xywh="451,30,10,5" />
         </grid>
         <grid name="ui-inner-frame-inverted.background" weightsX="0,1,0" weightsY="0,0,1,0">
-            <area xywh="0,60,10,-5" />
-            <area xywh="11,60,10,-5" />
-            <area xywh="22,60,10,-5" />
+            <area xywh="0,60,10,5" />
+            <area xywh="11,60,10,5" />
+            <area xywh="22,60,10,5" />
             <area xywh="33,60,10,28" />
             <area xywh="44,60,10,29" tiled="true" />
             <area xywh="55,60,10,29" />
             <area xywh="66,60,10,4" />
             <area xywh="77,60,10,4" />
             <area xywh="88,60,10,4" />
-            <area xywh="99,60,11,-11" />
-            <area xywh="111,60,11,-11" tiled="true" />
-            <area xywh="123,60,11,-11" />
+            <area xywh="99,60,11,11" />
+            <area xywh="111,60,11,11" tiled="true" />
+            <area xywh="123,60,11,11" />
         </grid>
         <grid name="ui-inner-roundedframe.background" weightsX="0,1,0" weightsY="0,0,1,0">
             <area xywh="135,60,10,11" />
@@ -133,9 +133,9 @@
             <area xywh="201,60,10,4" />
             <area xywh="212,60,10,4" />
             <area xywh="223,60,10,4" />
-            <area xywh="234,60,10,-11" />
-            <area xywh="245,60,10,-11" tiled="true" />
-            <area xywh="256,60,10,-11" />
+            <area xywh="234,60,10,11" />
+            <area xywh="245,60,10,11" tiled="true" />
+            <area xywh="256,60,10,11" />
         </grid>
         <grid name="ui-inner-frame-t.background" weightsX="0,1,0" weightsY="0,0,1,0" inset="-2,0,0,0">
             <area xywh="267,60,10,11" />

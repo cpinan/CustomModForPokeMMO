@@ -37,9 +37,7 @@
 	     redefined after main-widgets.xml is simply too late: the widget already
 	     holds the stock image object. Include order is the cascade for widget
 	     themes, but for images the rule is "declare before first use". -->
-	<include filename="../firered/gfx_ui-firered.xml"/>
-	<include filename="../firered/gfx-firered.xml"/>
-	<include filename="../firered/mainhud-firered.xml"/>
+	<include filename="../firered/atlases-firered.xml"/>
 	<include filename="../firered/overrides.xml"/>
 
 	<include filename="/data/themes/default/init.xml"/>
