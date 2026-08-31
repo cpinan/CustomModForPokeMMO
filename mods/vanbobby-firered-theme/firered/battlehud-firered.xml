@@ -84,7 +84,7 @@
         <area name="battle-button-switch.hover" xywh="210,166,209,52" splitx="L5,R5" splity="T5,B5" />
         <area name="battle-button-switch.disabled" xywh="420,166,209,52" splitx="L4,R4" splity="T4,B4" />
         <area name="battle-button-switch.disabledhover" xywh="630,166,209,52" splitx="L4,R4" splity="T4,B4" />
-        <area name="battle-area" xywh="0,50,800,115" splitx="L5,R5" splity="T5,B5" />
+        <area name="battle-area" xywh="0,50,800,115" splitx="L7,R7" splity="T7,B7" />
         <select name="battle-button-switch.background">
             <alias ref="battle-button-switch.disabledhover" if="disabled + (targeted | keyboardFocus)" />
             <alias ref="battle-button-switch.hover" if="keyboardFocus" />
