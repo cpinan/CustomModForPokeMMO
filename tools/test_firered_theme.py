@@ -23,6 +23,10 @@ CLIENT = os.environ.get("POKEMMO_HOME") or os.path.expanduser(
 THEMES = os.path.join(CLIENT, "data", "themes")
 
 THEME_ROOTS = ["theme", "theme-mobile"]
+# Faces drawn over the game world; they keep an outline. Mirrors WORLD_FACES in
+# tools/build_firered_fonts.py.
+WORLD_FACES = {"pb-dark", "mechabold", "main-border", "main-small",
+               "mechabold-large", "listbox-display"}
 # An <images> block redefined after these has no effect: TWL binds an <image>
 # reference when the widget theme naming it is parsed, so the widget is already
 # holding the stock image object. Proven on the P0 spike -- the same override
@@ -201,8 +205,16 @@ class Fonts(unittest.TestCase):
             if 'filename="' not in tag:
                 continue                      # ref= clone, shares the base atlas
             with self.subTest(font=name):
-                self.assertNotIn("border_width", tag,
-                                 "surround outline; FireRed uses a drop shadow")
+                if name in WORLD_FACES:
+                    # These are drawn straight onto the game world, where the
+                    # ground is not ours to control. An outline is the only
+                    # thing that reads on both the dark overworld and a cream
+                    # panel, which is why stock ships main-border.
+                    self.assertIn("border_width", tag,
+                                  "world face must keep an outline")
+                else:
+                    self.assertNotIn("border_width", tag,
+                                     "surround outline; FireRed uses a drop shadow")
                 for axis in ("x", "y"):
                     m = re.search(r'shadow_offset_%s="([^"]+)"' % axis, tag)
                     self.assertIsNotNone(m, "no shadow_offset_%s" % axis)

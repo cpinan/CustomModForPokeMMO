@@ -48,6 +48,21 @@ FONT_DIR = "/data/themes/default/res/fonts/"
 KEEP_LIGHT = {"battle", "battle-small", "braille", "marquee",
               "main-battle", "tooltip-font", "tooltip-font-markup"}
 
+# Faces drawn straight onto the game world, with no panel behind them: the
+# overworld HUD (route, money, clock) and the battle name and HP labels. They
+# are the SAME faces the cream panels use, so no single colour serves both -- a
+# dark glyph vanishes on the dark world, a light one vanishes on cream.
+#
+# An outline is the tool for text on an unknown ground, which is exactly why
+# stock ships main-border. A dark glyph with a LIGHT surround reads on the world
+# and disappears into cream, so both contexts work from one definition.
+#
+# A ref= clone shares its base's atlas and cannot carry its own border, so these
+# are expanded to an explicit filename first.
+WORLD_FACES = {"pb-dark", "mechabold", "main-border", "main-small",
+               "mechabold-large", "listbox-display"}
+WORLD_OUTLINE = "#F8F0E8"
+
 NAMED = {"white": "#FFFFFF", "black": "#000000", "red": "#FF0000"}
 
 
@@ -98,12 +113,39 @@ def main():
     src = re.sub(r"<!--.*?-->", "", open(STOCK_FONTS, encoding="utf-8").read(), flags=re.S)
     root = ET.fromstring(src)
 
-    out, remapped, kept = [], 0, 0
+    by_name = {fd.get("name"): fd for fd in root.findall("fontDef")}
+
+    def resolve_filename(fd, seen=()):
+        """Walk the ref chain until something names a file."""
+        if fd.get("filename"):
+            return fd.get("filename"), fd
+        ref = fd.get("ref")
+        if not ref or ref in seen or ref not in by_name:
+            return None, fd
+        return resolve_filename(by_name[ref], seen + (ref,))
+
+    out, remapped, kept, outlined = [], 0, 0, 0
     for fd in root.findall("fontDef"):
         name = fd.get("name")
         el = ET.Element("fontDef")
         for k, v in fd.attrib.items():
             el.set(k, v)
+
+        if name in WORLD_FACES and not el.get("filename"):
+            # expand the clone so it can carry its own outline
+            fn, base = resolve_filename(fd)
+            if fn:
+                el.set("filename", fn)
+                del el.attrib["ref"]
+                # default="true" and unique_atlas belong to the BASE face only.
+                # Copying default onto a clone gives the theme two default fonts.
+                for k, v in base.attrib.items():
+                    if k in ("name", "ref", "color", "default", "unique_atlas"):
+                        continue
+                    if k not in el.attrib:
+                        el.set(k, v)
+                el.attrib.pop("default", None)
+                el.attrib.pop("unique_atlas", None)
 
         if el.get("filename"):
             el.set("filename", FONT_DIR + os.path.basename(el.get("filename")))
@@ -117,11 +159,16 @@ def main():
                 el.set("color", darken(rgb))
                 remapped += 1
 
-        # FireRed shadows, never outlines
+        # FireRed shadows rather than outlines, except where a face has to
+        # survive on a ground we do not control.
         if "border_width" in el.attrib:
             del el.attrib["border_width"]
         if "border_color" in el.attrib:
             del el.attrib["border_color"]
+        if name in WORLD_FACES and el.get("filename"):
+            el.set("border_width", "1")
+            el.set("border_color", WORLD_OUTLINE)
+            outlined += 1
         # The shadow tone follows the GLYPH, not the face's name: FireRed pairs
         # a dark glyph with a light shadow and a light glyph with a dark one.
         # Either way it is hard, so the alpha is always FF. Stock ships soft
@@ -171,8 +218,9 @@ def main():
 ''' % body
     with open(OUT, "w") as fh:
         fh.write(text)
-    print("wrote %s: %d fonts, %d darkened, %d left light on purpose"
-          % (os.path.relpath(OUT, REPO), len(out), remapped, kept))
+    print("wrote %s: %d fonts, %d darkened, %d outlined for the world, "
+          "%d left light on purpose"
+          % (os.path.relpath(OUT, REPO), len(out), remapped, outlined, kept))
 
 
 if __name__ == "__main__":
