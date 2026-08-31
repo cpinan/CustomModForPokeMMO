@@ -16,4 +16,5 @@
     <include filename="caught-firered.xml"/>
     <include filename="breed-firered.xml"/>
     <include filename="preview-firered.xml"/>
+    <include filename="textbubble-firered.xml"/>
 </themes>
