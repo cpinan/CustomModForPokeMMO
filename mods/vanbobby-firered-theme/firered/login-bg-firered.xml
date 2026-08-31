@@ -19,15 +19,15 @@
 <themes>
     <images file="res/login-bg.png" filter="nearest">
         <grid name="firered-login.background" weightsX="0,1,0" weightsY="0,1,0">
-            <area xywh="0,0,28,46"/>
-            <area xywh="28,0,28,46" tiled="true"/>
-            <area xywh="56,0,28,46"/>
-            <area xywh="0,46,28,2" tiled="true"/>
-            <area xywh="28,46,28,2" tiled="true"/>
-            <area xywh="56,46,28,2" tiled="true"/>
-            <area xywh="0,48,28,118"/>
-            <area xywh="28,48,28,118" tiled="true"/>
-            <area xywh="56,48,28,118"/>
+            <area xywh="0,0,32,46"/>
+            <area xywh="32,0,32,46" tiled="true"/>
+            <area xywh="64,0,32,46"/>
+            <area xywh="0,46,32,16" tiled="true"/>
+            <area xywh="32,46,32,16" tiled="true"/>
+            <area xywh="64,46,32,16" tiled="true"/>
+            <area xywh="0,62,32,122"/>
+            <area xywh="32,62,32,122" tiled="true"/>
+            <area xywh="64,62,32,122"/>
         </grid>
     </images>
 </themes>
