@@ -321,6 +321,22 @@ class Art(unittest.TestCase):
                             self.fail("%s: %s partially overlaps %s"
                                       % (os.path.basename(ref), a, b))
 
+    def test_no_emitted_slice_has_a_negative_extent(self):
+        # Stock uses a negative extent as "mirror this slice". Ours are painted
+        # per slice, so a mirrored duplicate buys nothing -- and a negative width
+        # fed to a packer walks the cursor backwards, which silently piles later
+        # slices on top of earlier ones.
+        import xml.etree.ElementTree as ETree
+        for xml in mod_xml_files():
+            for el in ETree.parse(xml).getroot().iter():
+                v = el.get("xywh")
+                if not v or v.strip() == "*":
+                    continue
+                x, y, w, h = (int(n) for n in v.split(","))
+                with self.subTest(name=el.get("name"), xywh=v):
+                    self.assertGreater(w, 0, "negative or zero width")
+                    self.assertGreater(h, 0, "negative or zero height")
+
     def test_nine_slice_splits_fit_inside_their_rect(self):
         # splitx/splity say where a 9-slice stops stretching. A split wider than
         # half the rect makes the middle band negative and the art smears.

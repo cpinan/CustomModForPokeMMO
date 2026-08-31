@@ -186,10 +186,14 @@ ROLE_BY_PREFIX_IF = [
     ("tab-area",               "inner"),
     ("row-header.background",  "row-header"),
     ("row.background",         "row"),
-    ("chat-bubble",            "dialogue"),
-    ("chat-npc-bubble",        "dialogue"),
-    ("bubble",                 "dialogue"),
-    ("tooltip-left",           "dialogue"),
+    # These were navy "dialogue". Their text is drawn with main/tooltip faces,
+    # which are dark now, so a dark ground made them unreadable. FireRed's one
+    # genuinely navy surface is the battle message box (text-bubble.png), whose
+    # text uses the battle face and stays light. Everything else goes light.
+    ("chat-bubble",            "inner"),
+    ("chat-npc-bubble",        "inner"),
+    ("bubble",                 "inner"),
+    ("tooltip-left",           "inner"),
     ("label-bg-",              "pill"),
     ("label-hbg-",             "pill"),
     ("label-area",             "pill"),
@@ -244,6 +248,47 @@ def role_for(name, table=None, glyphs=GLYPH_PREFIXES, keep=()):
     return best[1] if best else None
 
 
+def role_ingame(name):
+    """The in-game atlases: monster-info, battle-hud, pc_slots and the smaller
+    windows. Shipped stock-dark through 0.7 while the fonts went dark globally,
+    which is what made the Summary, Trainer Card and battle HP labels unreadable.
+
+    Anything not recognised falls through to a glyph recolour, which preserves
+    the shape. That is the safe default for an atlas full of icons."""
+    n = name.lower()
+    base = n.split(".")[0]
+    if any(k in n for k in ("icon", "sprite", "marking", "shiny", "gender",
+                            "arrow", "star", "particle", "cursor")):
+        return None
+    if "progressimage" in n:
+        return "bar-green" if "green" in n else "bar"
+    if "hpbar" in n or "expbar" in n or n.endswith("-bar"):
+        return "bar-green" if "green" in n else "bar"
+    if "label-title" in n or "nameplate" in n:
+        return "row-header"
+    if "label" in n:
+        return "row"
+    if base.endswith(("-bg",)) or "background" in n and "overlay" in n:
+        return "inner"
+    if "slot" in n or "inner" in n:
+        return "box"
+    if "border" in n:
+        return "box"
+    if "tab" in n:
+        return "tab-off" if ".default" in n or "empty" in n else "tab"
+    if "button" in n:
+        if ".disabled" in n:
+            return "button-off"
+        if ".hover" in n or ".selected" in n:
+            return "button-hi"
+        return "button"
+    if "frame" in n or base.endswith("-bg") or base.endswith("bg"):
+        return "frame"
+    if "area" in n or "window" in n or "panel" in n or "skill" in n:
+        return "inner"
+    return None
+
+
 def role_generic(name):
     """res/main-hud.png is misnamed: it is the primary generic widget atlas.
     frame.background, 38 button.* states, table-row, table-header, label1..7 and
@@ -279,6 +324,22 @@ ATLASES = [
          keep=KEEP_PREFIXES_IF),
     dict(file="res/main-hud.png", source="gfx.xml", out="mainhud-firered.xml",
          table=None, glyphs=(), keep=(), resolver=role_generic),
+] + [
+    # Everything else the UI draws from. Unrecognised names fall through to a
+    # glyph recolour, so an atlas of icons survives being listed here.
+    dict(file=f, source="gfx.xml", out=out, table=None, glyphs=(), keep=(),
+         resolver=role_ingame)
+    for f, out in [
+        ("res/monster-info.png",  "monsterinfo-firered.xml"),
+        ("res/battle-hud.png",    "battlehud-firered.xml"),
+        ("res/pc_slots.png",      "pcslots-firered.xml"),
+        ("res/pc-window.png",     "pcwindow-firered.xml"),
+        ("res/MainTCTexture.png", "traincard-firered.xml"),
+        ("res/contestgui.png",    "contest-firered.xml"),
+        ("res/caught-window.png", "caught-firered.xml"),
+        ("res/breedwindow.png",   "breed-firered.xml"),
+        ("res/preview-field.png", "preview-firered.xml"),
+    ]
 ]
 
 
@@ -295,7 +356,16 @@ def load_block(path, atlas):
 
 
 def rect_of(el):
-    return tuple(int(v) for v in el.get("xywh").split(","))
+    """Stock uses a NEGATIVE extent to mean "mirror this slice" -- battle-hud's
+    battle-ability-flip is 136 wide as -136. Fed to a packer unnoticed, a
+    negative width walks the cursor BACKWARDS and every later slice lands on top
+    of an earlier one.
+
+    We generate art per slice, so a mirrored duplicate buys nothing: the flipped
+    copy is painted the same as its twin. Extents are normalised to positive
+    here and stay positive in the emitted table."""
+    x, y, w, h = (int(v) for v in el.get("xywh").split(","))
+    return x, y, abs(w), abs(h)
 
 
 def band_total(role):
@@ -428,7 +498,7 @@ def build(spec, report=False):
 
     out_el = copy.deepcopy(stock)
     packer = Packer(W)
-    jobs, clamped, splits_added = [], [], []
+    jobs, clamped, splits_added, flipped = [], [], [], []
 
     for grid in out_el.findall("grid"):
         role = role_of(grid.get("name").split(".")[0]) or "frame"
@@ -448,6 +518,9 @@ def build(spec, report=False):
                 edges.add("T")
             if row == rows - 1:
                 edges.add("B")
+            raw = area.get("xywh")
+            if "-" in raw:
+                flipped.append(grid.get("name"))
             w, h = rect_of(area)[2:]
             dst = packer.place(w, h)
             area.set("xywh", "%d,%d,%d,%d" % dst)
@@ -474,6 +547,9 @@ def build(spec, report=False):
         groups[(rect_of(a), role_of(owning_name(a)))].append(a)
 
     for (rect, role), els in sorted(groups.items(), key=lambda kv: -kv[0][0][3]):
+        for a in els:
+            if "-" in a.get("xywh"):
+                flipped.append(a.get("name") or owning_name(a))
         dst = packer.place(rect[2], rect[3])
         for a in els:
             a.set("xywh", "%d,%d,%d,%d" % dst)
@@ -507,6 +583,9 @@ def build(spec, report=False):
     H = packer.height() + 1
     out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     px = out.load()
+    if flipped:
+        print("   normalised %d mirrored slices (negative extents): %s"
+              % (len(flipped), ", ".join(sorted(set(flipped))[:4])))
     counts = defaultdict(int)
     for kind, dst, payload in jobs:
         counts[kind] += 1
@@ -546,6 +625,23 @@ def main():
     args = ap.parse_args()
     for spec in ATLASES:
         build(spec, args.report)
+    emit_index()
+
+
+def emit_index():
+    """One include for theme.xml to carry, so adding an atlas here does not mean
+    remembering to edit two theme files as well. Forgetting that is how an atlas
+    gets generated and then never loaded."""
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>', "<!--",
+             "  Generated by tools/build_firered_atlas.py. Do not hand edit.",
+             "  Every repainted atlas, in one include.",
+             "-->", "<themes>"]
+    for spec in ATLASES:
+        lines.append('    <include filename="%s"/>' % spec["out"])
+    lines += ["</themes>", ""]
+    with open(os.path.join(MOD, "firered", "atlases-firered.xml"), "w") as fh:
+        fh.write("\n".join(lines))
+    print("index: %d atlases" % len(ATLASES))
 
 
 def emit_xml(images_el, filename):
