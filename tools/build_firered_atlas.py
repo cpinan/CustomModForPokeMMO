@@ -90,6 +90,16 @@ TAN      = (0xE0, 0xD8, 0xC0)
 TEAL     = (0x30, 0x98, 0x90)
 TEAL_LT  = (0x50, 0xC8, 0xB0)
 DISABLED = (0xC0, 0xB0, 0x88)
+# Read straight off the HP Bars kit in PokemonFireRedRef/001/, which agrees
+# pixel for pixel with what was measured from the screenshots earlier.
+HP_SHADOW = (0x50, 0x68, 0x60)   # the plate's drop shadow
+HP_OLIVE  = (0x20, 0x38, 0x00)   # its dark outline
+HP_BEVEL  = (0xD8, 0xD0, 0xB0)
+HP_FILL   = (0xF8, 0xF8, 0xD8)
+HP_TRACK  = (0x50, 0x68, 0x58)   # the bar capsule
+HP_GREEN  = (0x58, 0xD0, 0x80)
+HP_GREEN2 = (0x70, 0xF8, 0xA8)
+HP_GOLD   = (0xF8, 0xD0, 0x50)   # the "HP" label
 
 # A role is (accent bands outer->in, fill stripe pair, chamfer).
 # Fill is a 1:1 horizontal scanline: FireRed never uses a flat fill.
@@ -127,6 +137,13 @@ ROLES = {
     "bar":        ([],                                    (GOLD_LT, GOLD),  False),
     "bar-green":  ([],                                    (TEAL_LT, TEAL),  False),
     "solid-cream":([],                                    (CREAM, CREAM),   False),
+    # The battle HP plate, exactly as the kit builds it: a one pixel shadow, a
+    # one pixel dark olive outline, a one pixel warm bevel, then pale fill. Much
+    # thinner than the window frames because the plate itself is only ~26px tall.
+    "hpbox":      ([(HP_SHADOW, 1), (HP_OLIVE, 1), (HP_BEVEL, 1)],
+                                                          (HP_FILL, HP_FILL), False),
+    "hpbar":      ([(HP_TRACK, 1)],                       (HP_GREEN, HP_GREEN2), False),
+    "hpbar-gold": ([(HP_TRACK, 1)],                       (HP_GOLD, HP_GOLD), False),
 }
 
 # name prefix -> role. Longest prefix wins, so specific beats general.
@@ -275,9 +292,16 @@ def role_ingame(name):
                             "arrow", "star", "particle", "cursor")):
         return None
     if "progressimage" in n:
-        return "bar-green" if "green" in n else "bar"
-    if "hpbar" in n or "expbar" in n or n.endswith("-bar"):
-        return "bar-green" if "green" in n else "bar"
+        return "hpbar" if ("hp" in n or "green" in n) else "bar"
+    if "hpbar" in n or "health" in n:
+        return "hpbar"
+    if "expbar" in n or "exp" in n:
+        return "hpbar-gold"
+    if n.endswith("-bar"):
+        return "bar"
+    # the battle name/level plates and the HUD floats are all the same object
+    if n.startswith("battle-ui-") or "float" in n or "enemy" in n or "boss" in n:
+        return "hpbox"
     if "label-title" in n or "nameplate" in n:
         return "row-header"
     if "label" in n:

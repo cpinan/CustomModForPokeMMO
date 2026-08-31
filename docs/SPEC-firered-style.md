@@ -131,14 +131,33 @@ dark    #624D4E   fairy  #EF70EF
 Bulbapedia did not return poison, psychic, rock or steel — take those from the client's
 own existing type colours rather than inventing them.
 
-## What the references could not tell us
+## The reference set
 
-`spriters-resource.com` returns **HTTP 403** to automated fetches, so the raw UI sheet
-(asset 3853) was not obtained. The rpgfan gallery has 49 screenshots but no captions, so
-the specific menu screens could not be picked out programmatically.
+`spriters-resource.com` returns **HTTP 403** to automated fetches, so the sheets could not
+be pulled directly; they were supplied locally instead, in `PokemonFireRedRef/001/`:
 
-The six local screenshots therefore cover: battle, bag, summary, trainer card, dex. They do
-**not** cover: party list, PC storage, shop, start menu, options. Those PokeMMO screens will
-be styled by applying the grammar above rather than copied from a reference — which is
-fine, because the grammar is consistent enough to extrapolate, but it is an extrapolation
-and should be called out in the mod description.
+| file | drives |
+|---|---|
+| `splash-login.jpg` | the login plate: band proportions at native 240x160 |
+| `battle-system.jpg` | the battle screen in situ |
+| `HP Bars & In-battle Menu.png` | the HP plate, the FIGHT menu box, and the GBA font |
+| `Menu Elements - Pokemon Summary Menu.png` | summary panels, grey pill labels, type badges |
+| `Menu Elements - Interface & Bag Screens.png` | bag pockets, list panel, description bar |
+| `Menu Elements - PC Interface.png` | PC boxes and slots |
+| `Menu Elements - Pokedex.png` | dex list and entry |
+| `Menu Elements - Type _ Status Icons.png` | type badges and status icons |
+
+The kits **confirm the measurements taken from the screenshots**, pixel for pixel. The
+battle HP plate reads `#506860` shadow, `#203800` olive outline, `#D8D0B0` bevel,
+`#F8F8D8` fill; the FIGHT menu box reads `#283030` x2, `#8888C8`, `#706880` x2, `#D8D0D8`,
+white fill. Both match the earlier table exactly, so the grammar was right.
+
+The HP Bars sheet also contains **the GBA font itself**, in three palettes with full
+upper case, lower case, digits and punctuation. That is the highest fidelity option for
+the pixel-font phase and also the most legally exposed thing in the project: it is
+Nintendo's typeface. The recommendation remains an OFL face; the sheet is a reference for
+letterform proportions, not something to ship.
+
+Still not covered by any reference: the party list, shop, start menu and options. Those
+PokeMMO screens are extrapolated from the grammar rather than copied, which the mod
+description should say.
