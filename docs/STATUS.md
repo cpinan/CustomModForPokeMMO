@@ -1,16 +1,15 @@
 # STATUS — FireRed theme for PokeMMO
 
-_Last updated: 2026-08-30 · branch `main` · clean · shipped `dist/vanbobby-firered-theme-0-24.mod` (1.3 MB)_
+_Last updated: 2026-08-31 · branch `main` · clean · shipped `dist/vanbobby-firered-theme-0-24.mod` (1.3 MB)_
 
 ## Next action
 
-**Log in on the desktop client and eyeball the three new screens** — 0.24 is installed and
-enabled there, smoke-tested only to "theme loads, no errors" (375 ms, clean log). Open the
-bag (gold list panel, gold pocket tab with the orange underline, white item squares), the
-trainer card (teal ground, blue header, scanlined body, badge row — the whole 454x287
-texture is now painted, stretched by the widget) and the dex (taupe frame). Screenshot
-anything wrong; every one of these is a role or painter in `build_firered_atlas.py`, so
-fixes are palette-cheap.
+**Session goal set by the user 2026-08-31: make the bag read like FireRed's bag, layouts
+included.** Start by having the user log in on the desktop client (0.24 is installed and
+enabled) and open the bag; screenshot it, then iterate — art in the bag roles/painter in
+`tools/build_firered_atlas.py`, layout in PARAGON-style param overrides (border, gaps,
+min/max, alignment) as merge-blocks in `firered/widgets-firered.xml`, against the kit
+`PokemonFireRedRef/001/...Interface & Bag Screens.png`.
 
 ## State
 
@@ -34,10 +33,22 @@ fixes are palette-cheap.
 
 ## In flight
 
-Nothing half-written in the repo. Bag, trainer card and dex shipped a first pass in 0.24
-(see State); what remains on them is whatever the logged-in test turns up, plus the pieces
-deliberately not done (dashed separators, blue description bar, dex title clip). The stock
-ANDROID theme comments out `monster-dex.xml`, so the mobile dex is a separate problem.
+**Bag parity is the open piece of work.** 0.24 shipped the art first pass; the layout half
+has not started. The knobs, all verified to exist:
+
+- `mods/vanbobby-firered-theme/firered/widgets-firered.xml` — add merge-blocks re-declaring
+  `inventory-tabbedframe` (and its nested `dialoglayout > tabbedpane > tabbox`) and
+  `inventory-tab-empty`. Stock blocks to mirror are in the client's
+  `data/themes/default/ui/inventory.xml` (188 lines, read it fresh — tab band `border
+  0,0,15,0`, tabs `border 20,0`, pane min 530x378).
+- `tools/build_firered_atlas.py` — `bag-list` role, `paint_bag_tab`, and the `bag`/`card`
+  palette constants; iterate colours per screenshot.
+- The bag's dashed row separators and `#0078C0` description bar need the real bag on screen
+  first: no stock theme in `ui/inventory.xml` names a row-separator or description surface,
+  so the owning widget has to be identified visually before it can be themed.
+
+Trainer card and dex shipped the same untested first pass; they wait behind the bag. The
+stock ANDROID theme comments out `monster-dex.xml`, so the mobile dex is a separate problem.
 
 ## Verify
 
