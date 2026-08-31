@@ -282,6 +282,36 @@ class Fonts(unittest.TestCase):
                 self.assertEqual(["/data/themes/%s/fonts.xml" % want[root], "fonts-common.xml"],
                                  incs, "wrong base set or wrong order")
 
+class LoginPlate(unittest.TestCase):
+    """The animated login plate. Only bg.png: every area there IS a frame, which
+    is not true of the other atlases, so the strict rule applies only here."""
+
+    def test_the_animation_is_wired_up(self):
+        # Two silent failures. The bound name "background-image" disappears and
+        # the widget quietly falls back to stock art; or a frame area is declared
+        # that nothing plays, so part of the loop never shows.
+        import xml.etree.ElementTree as ETree
+        for xml in mod_xml_files():
+            for images in ETree.parse(xml).getroot().iter("images"):
+                if os.path.basename(images.get("file") or "") != "bg.png":
+                    continue
+                anims = list(images.iter("animation"))
+                if not anims:
+                    continue            # a still plate is a valid choice
+                names = {a.get("name") for a in anims}
+                refs = {f.get("ref") for a in anims for f in a.iter("frame")}
+                refs.discard("none")    # stock idiom for a blank frame
+                declared = {a.get("name") for a in images.iter("area") if a.get("name")}
+                with self.subTest(atlas="bg.png"):
+                    self.assertIn("background-image", names,
+                                  "the name the login widget binds to is gone")
+                    self.assertEqual(refs, declared,
+                                     "frame areas and animation refs disagree")
+                    for a in anims:
+                        self.assertEqual("enabled", a.get("timeSource"),
+                                         "a looping animation needs timeSource=enabled")
+
+
 class InfoXml(unittest.TestCase):
     def setUp(self):
         self.root = ET.parse(os.path.join(MOD, "info.xml")).getroot()
@@ -435,7 +465,14 @@ class Art(unittest.TestCase):
             stock = stock_area_names(ref)
             if not stock:
                 continue
+            # A name we invent is fine IF nothing outside this file binds to it.
+            # The animated login plate declares bg-frame-NN areas purely so an
+            # <animation> can reference them; the name widgets bind to is still
+            # the stock "background-image".
+            internal = set(re.findall(r'ref="([^"]+)"', body))
             for name in re.findall(r'name="([^"]+)"', body):
+                if name in internal:
+                    continue
                 with self.subTest(atlas=os.path.basename(ref), slice=name):
                     self.assertIn(name, stock, "not a slice the stock theme defines")
 
