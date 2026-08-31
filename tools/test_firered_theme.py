@@ -206,6 +206,10 @@ class Fonts(unittest.TestCase):
                 continue                      # ref= clone, shares the base atlas
             with self.subTest(font=name):
                 if name in WORLD_FACES:
+                    # outline instead of shadow: never both, or every glyph
+                    # gets two rings and the text reads as fringing
+                    self.assertNotIn("shadow_offset_x", tag,
+                                     "outlined face must not also carry a shadow")
                     # These are drawn straight onto the game world, where the
                     # ground is not ours to control. An outline is the only
                     # thing that reads on both the dark overworld and a cream
@@ -215,6 +219,8 @@ class Fonts(unittest.TestCase):
                 else:
                     self.assertNotIn("border_width", tag,
                                      "surround outline; FireRed uses a drop shadow")
+                if name in WORLD_FACES:
+                    continue
                 for axis in ("x", "y"):
                     m = re.search(r'shadow_offset_%s="([^"]+)"' % axis, tag)
                     self.assertIsNotNone(m, "no shadow_offset_%s" % axis)

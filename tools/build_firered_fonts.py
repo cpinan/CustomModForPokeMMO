@@ -165,7 +165,8 @@ def main():
             del el.attrib["border_width"]
         if "border_color" in el.attrib:
             del el.attrib["border_color"]
-        if name in WORLD_FACES and el.get("filename"):
+        outline_face = name in WORLD_FACES and el.get("filename")
+        if outline_face:
             el.set("border_width", "1")
             el.set("border_color", WORLD_OUTLINE)
             outlined += 1
@@ -173,7 +174,14 @@ def main():
         # a dark glyph with a light shadow and a light glyph with a dark one.
         # Either way it is hard, so the alpha is always FF. Stock ships soft
         # ones (#CC000000 on battle, #20FFFFFF on tooltips) that read as blur.
-        if not el.get("ref"):
+        # A face gets EITHER an outline OR a shadow, never both. Stacking them
+        # puts two rings around every antialiased glyph and the text reads as
+        # noisy fringing rather than as crisp pixel text. FireRed never stacks
+        # them either.
+        if outline_face:
+            for k in ("shadow_offset_x", "shadow_offset_y", "shadow_color"):
+                el.attrib.pop(k, None)
+        elif not el.get("ref"):
             final = parse_colour(el.get("color") or "#FFFFFF")
             dark_glyph = final is not None and luminance(final) <= 140
             el.set("shadow_offset_x", "1")
