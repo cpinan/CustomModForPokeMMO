@@ -70,10 +70,19 @@ no login.
 
 ## Do not redo
 
-- **A theme CANNOT restructure the widget tree.** It changes appearance and geometry —
-  background, font, border, gaps, min/max size, alignment. It cannot reparent or reorder. FireRed
-  puts the Pokémon's name inside the HP plate; PokeMMO makes it a sibling with no background. We
-  can give that sibling a plate; we cannot move it inside.
+- **Layout IS heavily changeable, so do not talk yourself out of it.** An earlier read of this
+  called it near-impossible. Measured against PARAGON, that was wrong: its bag redesign adds and
+  removes ZERO theme blocks in `ui/inventory.xml` and still changes 374 lines, all of them
+  `border`, `background`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight`, `alignment`,
+  `textAlignment`, `spacing` and the gap params. Its dex changes 853 lines and adds one generic
+  block while dropping 15. That is enough control to resize panels, re-pad them, re-align their
+  contents and drop backgrounds entirely.
+
+  The one real limit: a theme cannot ADD, REMOVE or REPARENT a widget in the tree. FireRed puts
+  the Pokémon's name inside the HP plate; PokeMMO makes it a sibling with no background. Give the
+  sibling a plate and pad it so the pair reads as one unit; it still cannot be moved inside.
+  Dropping a `<theme>` block from a VENDORED file is also a technique, as the dex shows: the
+  widget survives, it just falls back to default styling.
 - **The login backdrop IS reachable** — via `logingui`'s own `background` param, which stock
   leaves unset. This was called impossible three times before PARAGON's `android.xml` disproved
   it. Check the CONTAINER, not just the leaf widgets.
