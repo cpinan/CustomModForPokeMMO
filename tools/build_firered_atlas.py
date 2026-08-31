@@ -248,6 +248,20 @@ def role_for(name, table=None, glyphs=GLYPH_PREFIXES, keep=()):
     return best[1] if best else None
 
 
+def role_dialogue(name):
+    """res/text-bubble.png: THE FireRed window, the navy battle message box with
+    a gold chamfered frame.
+
+    It is the one surface in the theme that stays dark, because the text drawn on
+    it uses the battle face, which is white. Leaving this atlas stock shipped
+    white text on a light bubble, which is invisible. The little advance arrow is
+    kept as stock pixels: it sits ON the navy box, so inverting it to dark would
+    hide it."""
+    if "arrow" in name:
+        return "keep"
+    return "dialogue"
+
+
 def role_ingame(name):
     """The in-game atlases: monster-info, battle-hud, pc_slots and the smaller
     windows. Shipped stock-dark through 0.7 while the fonts went dark globally,
@@ -340,6 +354,9 @@ ATLASES = [
         ("res/breedwindow.png",   "breed-firered.xml"),
         ("res/preview-field.png", "preview-firered.xml"),
     ]
+] + [
+    dict(file="res/text-bubble.png", source="gfx.xml", out="textbubble-firered.xml",
+         table=None, glyphs=(), keep=(), resolver=role_dialogue),
 ]
 
 
