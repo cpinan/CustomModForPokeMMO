@@ -444,21 +444,32 @@ def paint_cell(px, rect, edges, spec, stripe, chamfer):
 
 
 def recolour_glyph(dst_px, src, rect, dest):
-    """Arrows, ticks and status icons are shapes, not panels. Redrawing them as
-    frames destroys them, so keep the stock pixels and move the tones onto the
-    FireRed ramp."""
+    """Arrows, ticks, icons and any slice no rule recognised.
+
+    INVERTED, and opaque. Two reasons, both learned from screenshots:
+
+      * The stock art is built for a DARK UI, so its light pixels are the
+        foreground and its dark pixels are the panel. Mapping light to light
+        kept the Trainer Card dark and its labels unreadable, and left every
+        white arrow invisible on cream. Inverting puts the foreground dark on a
+        light ground, which is what the rest of the theme now is.
+      * Stock leans on partial alpha for depth. Carried onto a cream panel that
+        reads as a grey haze, which is the "too much opacity" in the report. A
+        pixel is either there or it is not here: below the threshold it is fully
+        transparent, above it fully opaque. FireRed has no antialiasing either,
+        so this is on-theme rather than a compromise."""
     sx, sy, w, h = rect
     dx, dy = dest[0], dest[1]
     ramp = [OUTER, NAVY, GREY, BEVEL_C, CREAM, WHITE]
     for yy in range(h):
         for xx in range(w):
             r, g, b, a = src.getpixel((sx + xx, sy + yy))
-            if a < 40:
+            if a < 90:
                 dst_px[dx + xx, dy + yy] = (0, 0, 0, 0)
                 continue
             lum = (r * 299 + g * 587 + b * 114) // 1000
-            dst_px[dx + xx, dy + yy] = ramp[min(len(ramp) - 1,
-                                                lum * len(ramp) // 256)] + (a,)
+            idx = (255 - lum) * len(ramp) // 256
+            dst_px[dx + xx, dy + yy] = ramp[min(len(ramp) - 1, idx)] + (255,)
 
 
 # ----------------------------------------------------------------- packing --
