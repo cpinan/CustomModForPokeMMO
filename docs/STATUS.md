@@ -4,10 +4,11 @@ _Last updated: 2026-08-30 · branch `main` · clean · shipped `dist/vanbobby-fi
 
 ## Next action
 
-Spike one nested widget override — put a `border` on `trainercard`'s `dialoglayout`
-(`main-widgets.xml:1144`) via `firered/widgets-firered.xml` — to settle whether re-declaring a
-NESTED `<theme>` merges into the stock one or replaces it wholesale. That answer decides whether
-the bag/card/dex work is small overrides or vendored files, and everything else waits on it.
+Start the **bag** (`data/themes/default/ui/inventory.xml`) as a small override block in
+`firered/widgets-firered.xml` — the spike settled that nested overrides merge, so no
+vendoring. Kit: `PokemonFireRedRef/001/...Interface & Bag Screens.png`. Wants the tan pocket
+tabs with the orange underline, the pale-yellow list panel with dashed row separators, and
+the solid `#0078C0` description bar with a white rounded item square.
 
 ## State
 
@@ -53,12 +54,17 @@ no login.
 
 ## Open questions
 
-- **Layer or vendor?** PARAGON does NOT layer: it vendors whole `default/ui/*.xml` files and
-  edits them in place — 374 changed lines in `inventory.xml`, 853 in `monster-dex.xml`, 502 in
-  `customization.xml` — and its `theme.xml` includes 20 of its own copies. We layer, via absolute
-  includes plus a late override file. Layering survives client updates; vendoring gives full
-  control over deeply nested widgets. The spike in "Next action" decides which is actually
-  needed. Vendoring only the three files in flight is the likely middle.
+- ~~**Layer or vendor?**~~ **Answered 2026-08-30: layer. Nested `<theme>` re-declaration
+  MERGES into the stock block — it does not replace it wholesale.** Spiked on the login
+  screen, no login needed: re-declared `logingui > login-window` with only
+  `minWidth 620` in `widgets-firered.xml`. The window rendered 620 wide and kept its stock
+  title bar, background, `minHeight` and the nested `dialoglayout`'s `60,20,20,20` title
+  inset — under wholesale replacement all of that styling would have vanished. The shipped
+  `logingui` background override making the login dialog keep all its nested styling is the
+  same behaviour one level up. So bag/card/dex are small override blocks in
+  `widgets-firered.xml`; vendoring stays available for the dex's block-DROP trick only
+  (removing a `<theme>` needs a vendored file — an override can set params, not delete
+  blocks).
 - **Chat.** Dark and translucent by design, and its text is dark now. Lighten the frame, which
   breaks see-through-to-world, or keep chat fonts light, which splits the font rule. Asked
   2026-08-30, undecided.
