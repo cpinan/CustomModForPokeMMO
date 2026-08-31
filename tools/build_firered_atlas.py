@@ -302,6 +302,13 @@ def role_ingame(name):
     # the battle name/level plates and the HUD floats are all the same object
     if n.startswith("battle-ui-") or "float" in n or "enemy" in n or "boss" in n:
         return "hpbox"
+    # battle-area is the battle MESSAGE BOX, the 800x115 panel across the bottom
+    # that battle-panel-dark draws. Its text uses the battle face, which is
+    # white, so it has to be the navy window: painted pale, "A wild Poochyena
+    # appeared!" was white on cream. This is the FireRed dialogue box, and the
+    # one place in the theme where the dark pairing is correct.
+    if n.startswith("battle-area"):
+        return "dialogue"
     if "label-title" in n or "nameplate" in n:
         return "row-header"
     if "label" in n:
