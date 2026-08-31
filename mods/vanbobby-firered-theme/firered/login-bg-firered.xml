@@ -18,7 +18,7 @@
     <images file="res/login-bg.png" filter="nearest">
         <grid name="firered-login.background" weightsX="1" weightsY="1,0">
             <area xywh="0,0,1536,8"/>
-            <area xywh="0,8,1536,592"/>
+            <area xywh="0,8,1536,652"/>
         </grid>
     </images>
 </themes>
