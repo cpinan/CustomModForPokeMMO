@@ -20,8 +20,22 @@ up, gold face, navy outline, hard shadow. Nintendo's Pokemon wordmark is not
 traced and the Charizard is not reused. The client is PokeMMO, so the plate says
 PokeMMO.
 
-Band structure and palette measured off PokemonFireRedRef/splash.jpg, which is
-720x480, the GBA's 240x160 at 3x.
+LAYOUT
+Measured off PokemonFireRedRef/001/splash-login.jpg, which is the real thing at
+its native 240x160. Band heights are taken as PERCENTAGES of that and scaled, so
+the proportions survive whatever size the plate is drawn at:
+
+    orange rule   5.6%     #E05400
+    black        13.1%
+    teal field   45.0%     #38A88C, scanlined
+    flame row     4.4%     #E0E0A8 over the teal
+    black        23.8%
+    dark red      6.2%     #700000
+
+Drawn at 3x, 720x480, which is also the largest the login plate can usefully be:
+bg.png is xywh="*" and the logo widget sizes itself to the image, so a bigger
+plate covers more of the client's 3D backdrop. That backdrop is not reachable
+from a theme at all, so covering it is the only lever there is.
 """
 import os
 
@@ -129,32 +143,44 @@ def flame_row(d, y, width, height):
 
 
 def main():
-    W, H = 560, 184
+    W, H = 720, 384
     im = Image.new("RGBA", (W, H), TEAL + (255,))
     d = ImageDraw.Draw(im)
 
-    # bands, top to bottom, in the proportions the reference uses
-    d.rectangle([0, 0, W, 7], fill=ORANGE)
-    d.rectangle([0, 8, W, 25], fill=BLACK)
-    d.rectangle([0, 26, W, 150], fill=TEAL)
-    for y in range(26, 151, 2):                 # the teal field is scanlined too
-        d.rectangle([0, y, W, y], fill=TEAL_DK)
-    flame_row(d, 133, W, 18)
-    d.rectangle([0, 151, W, 168], fill=BLACK)
-    d.rectangle([0, 169, W, H], fill=DARKRED)
+    def band(frac_from, frac_to):
+        return int(H * frac_from), int(H * frac_to)
 
-    # spacing has to clear the outline on BOTH neighbours or the letters weld
-    # into one navy slab. outline is one scale unit each side, so >= 2*scale.
-    title, scale, spacing = "POKEMMO", 8, 10
+    # Reference proportions, with ONE deliberate change: its lower black band is
+    # 24% because that is where Charizard stands. We are not reusing the
+    # Charizard, so a quarter of the plate would be dead space -- and the plate
+    # pushes the login window down the screen, so dead space costs twice. That
+    # band is trimmed and the teal field takes the room.
+    o0, o1 = band(0.000, 0.056)      # orange rule
+    b0, b1 = band(0.056, 0.187)      # black
+    t0, t1 = band(0.187, 0.740)      # teal field
+    f0, f1 = band(0.740, 0.810)      # flame row
+    k0, k1 = band(0.810, 0.920)      # black
+    r0, r1 = band(0.920, 1.000)      # dark red rule
+
+    d.rectangle([0, o0, W, o1], fill=ORANGE)
+    d.rectangle([0, b0, W, b1], fill=BLACK)
+    d.rectangle([0, t0, W, f1], fill=TEAL)
+    for y in range(t0, f1, 2):
+        d.rectangle([0, y, W, y], fill=TEAL_DK)
+    flame_row(d, f0 - 6, W, (f1 - f0) + 6)
+    d.rectangle([0, k0, W, k1], fill=BLACK)
+    d.rectangle([0, r0, W, H], fill=DARKRED)
+
+    title, scale, spacing = "POKEMMO", 11, 13
     tw = text_width(title, scale, spacing)
-    draw_text(im, title, (W - tw) // 2, 38, scale, face=GOLD,
-              outline=NAVY, outline_px=3, shadow=SHADOW, shadow_px=3,
+    draw_text(im, title, (W - tw) // 2, t0 + 34, scale, face=GOLD,
+              outline=NAVY, outline_px=4, shadow=SHADOW, shadow_px=4,
               spacing=spacing)
 
-    sub, s2, sp2 = "FIRERED VERSION", 3, 4
+    sub, s2, sp2 = "FIRERED VERSION", 4, 5
     sw = text_width(sub, s2, sp2)
-    draw_text(im, sub, (W - sw) // 2, 112, s2, face=WHITE,
-              outline=SHADOW, outline_px=2, spacing=sp2)
+    draw_text(im, sub, (W - sw) // 2, t0 + 136, s2, face=WHITE,
+              outline=SHADOW, outline_px=3, spacing=sp2)
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     im.save(OUT)
