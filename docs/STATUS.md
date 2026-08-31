@@ -1,14 +1,16 @@
 # STATUS — FireRed theme for PokeMMO
 
-_Last updated: 2026-08-30 · branch `main` · clean · shipped `dist/vanbobby-firered-theme-0-23.mod` (1.3 MB)_
+_Last updated: 2026-08-30 · branch `main` · clean · shipped `dist/vanbobby-firered-theme-0-24.mod` (1.3 MB)_
 
 ## Next action
 
-Start the **bag** (`data/themes/default/ui/inventory.xml`) as a small override block in
-`firered/widgets-firered.xml` — the spike settled that nested overrides merge, so no
-vendoring. Kit: `PokemonFireRedRef/001/...Interface & Bag Screens.png`. Wants the tan pocket
-tabs with the orange underline, the pale-yellow list panel with dashed row separators, and
-the solid `#0078C0` description bar with a white rounded item square.
+**Log in on the desktop client and eyeball the three new screens** — 0.24 is installed and
+enabled there, smoke-tested only to "theme loads, no errors" (375 ms, clean log). Open the
+bag (gold list panel, gold pocket tab with the orange underline, white item squares), the
+trainer card (teal ground, blue header, scanlined body, badge row — the whole 454x287
+texture is now painted, stretched by the widget) and the dex (taupe frame). Screenshot
+anything wrong; every one of these is a role or painter in `build_firered_atlas.py`, so
+fixes are palette-cheap.
 
 ## State
 
@@ -16,31 +18,26 @@ the solid `#0078C0` description bar with a white rounded item square.
   rebuild every asset from the stock client plus the references. A client update is a re-run.
 - **The login screen is done**: the client's 3D backdrop is covered, a painted scene fills the
   window, the POKEMMO/FIRERED plate and Charizard sit on top. 25 tests, all green.
-- **The widget layer exists but has exactly one entry in it** —
-  `firered/widgets-firered.xml`, which sets `logingui`'s background. The mechanism is proven;
-  nothing else uses it yet.
-- **Screen layouts are still generic.** Bag, trainer card and dex get their look from
-  prefix-matched roles in `build_firered_atlas.py`, not from their own kits. That is the gap
-  between "FireRed palette" and "looks like the game".
+- **The widget layer has two entries** in `firered/widgets-firered.xml`: `logingui`'s
+  background and `inventory-button`'s item square (`ui-box.background`). Overrides merge, so
+  each block names only what it changes.
+- **Bag, trainer card and dex have their own screens as of 0.24** — `bag-list` and
+  `dex-frame` roles, a `paint_bag_tab` painter for the open-pocket underline, and a
+  `paint_trainer_card` painter for the whole card texture. The builder now takes a per-atlas
+  `special={name: painter}` hook for slices that are compositions, not panels. **None of it
+  has been seen in game yet.** Not done from the kits: the bag's dashed row separators and
+  `#0078C0` description bar (no stock widget maps to either — the row and description
+  surfaces are shared or absent), and the dex title clip (BACKLOG 2, needs eyes on it).
 - **Mobile has never been launched.** `theme-mobile/` is wired and generated but unverified.
 - Deliberately not built: the pixel font (P7, licensing undecided), chat readability (needs a
   decision, see below), `<constants>` for FireRed/LeafGreen colour swap.
 
 ## In flight
 
-Nothing half-written in the repo. The next three pieces of work, in the priority the user set:
-
-- **Bag** — `data/themes/default/ui/inventory.xml`. Kit:
-  `PokemonFireRedRef/001/...Interface & Bag Screens.png`. Wants the tan pocket tabs with the
-  orange underline, the pale-yellow list panel with dashed row separators, and the solid
-  `#0078C0` description bar with a white rounded item square.
-- **Trainer card** — `<theme name="trainercard">` at `main-widgets.xml:1144`, whose
-  `dialoglayout` draws `trainer-card.background` with `border 25`. Kit:
-  `...Trainer Card Kit.png`. Wants the blue header band, the gold outlined title, the
-  scanlined light-blue body and the badge row of rounded slots.
-- **Pokédex** — `data/themes/default/ui/monster-dex.xml`. Kit: `...Pokedex.png`. Also fixes the
-  clipped title in `docs/BACKLOG-firered.md`. Note the stock ANDROID theme comments this file
-  out, so the mobile dex is a separate problem.
+Nothing half-written in the repo. Bag, trainer card and dex shipped a first pass in 0.24
+(see State); what remains on them is whatever the logged-in test turns up, plus the pieces
+deliberately not done (dashed separators, blue description bar, dex title clip). The stock
+ANDROID theme comments out `monster-dex.xml`, so the mobile dex is a separate problem.
 
 ## Verify
 
