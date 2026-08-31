@@ -59,16 +59,16 @@
             <area xywh="141,0,1,6" />
             <area xywh="143,0,2,6" />
         </grid>
-        <area name="battle-ui-green-label" xywh="606,284,18,18" splitx="L1,R1" splity="T1,B1" />
-        <area name="battle-ui-orangered-label" xywh="625,284,18,18" splitx="L1,R1" splity="T1,B1" />
-        <area name="battle-ui-purple-label" xywh="644,284,18,18" splitx="L1,R1" splity="T1,B1" />
-        <area name="battle-ui-yellow-label" xywh="663,284,18,18" splitx="L1,R1" splity="T1,B1" />
-        <area name="battle-ui-blue-label" xywh="682,284,18,18" splitx="L1,R1" splity="T1,B1" />
-        <area name="battle-ui-enemy" xywh="0,284,306,20" />
-        <area name="battle-ui-float" xywh="582,253,239,28" />
-        <area name="battle-ui-self" xywh="0,219,298,33" />
-        <area name="battle-ui-self-slim" xywh="307,284,298,20" />
-        <area name="battle-ui-boss" xywh="299,219,309,30" />
+        <area name="battle-ui-green-label" xywh="606,284,18,18" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-orangered-label" xywh="625,284,18,18" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-purple-label" xywh="644,284,18,18" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-yellow-label" xywh="663,284,18,18" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-blue-label" xywh="682,284,18,18" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-enemy" xywh="0,284,306,20" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-float" xywh="582,253,239,28" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-self" xywh="0,219,298,33" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-self-slim" xywh="307,284,298,20" splitx="L3,R3" splity="T3,B3" />
+        <area name="battle-ui-boss" xywh="299,219,309,30" splitx="L3,R3" splity="T3,B3" />
         <area name="battle-ability" xywh="701,284,136,9" />
         <area name="battle-ability-flip" xywh="701,284,136,9" />
         <area name="battle-button.default" xywh="609,219,96,30" splitx="L5,R5" splity="T5,B5" />

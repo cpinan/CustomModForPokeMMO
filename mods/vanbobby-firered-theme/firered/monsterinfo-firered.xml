@@ -95,25 +95,25 @@
             <area xywh="512,266,1,8" />
             <area xywh="514,266,1,8" />
         </grid>
-        <area name="mi-hpbar-orange.progressImage" xywh="172,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" />
+        <area name="mi-hpbar-orange.progressImage" xywh="172,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" splitx="L1,R1" splity="T1,B1" />
         <grid name="mi-hpbar-orange.background" weightsX="0,1,0" weightsY="1">
             <area xywh="516,266,1,8" />
             <area xywh="518,266,1,8" />
             <area xywh="520,266,1,8" />
         </grid>
-        <area name="mi-hpbar.progressImage" xywh="178,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" />
+        <area name="mi-hpbar.progressImage" xywh="178,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" splitx="L1,R1" splity="T1,B1" />
         <grid name="mi-hpbar.background" weightsX="0,1,0" weightsY="1">
             <area xywh="522,266,1,8" />
             <area xywh="524,266,1,8" />
             <area xywh="526,266,1,8" />
         </grid>
-        <area name="mi-hpbar-green.progressImage" xywh="184,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" />
+        <area name="mi-hpbar-green.progressImage" xywh="184,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" splitx="L1,R1" splity="T1,B1" />
         <grid name="mi-hpbar-green.background" weightsX="0,1,0" weightsY="1">
             <area xywh="528,266,1,8" />
             <area xywh="530,266,1,8" />
             <area xywh="532,266,1,8" />
         </grid>
-        <area name="mi-hpbar-violet.progressImage" xywh="190,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" />
+        <area name="mi-hpbar-violet.progressImage" xywh="190,937,5,4" repeatX="true" inset="1,1,3,1" sizeOverwriteH="0" splitx="L1,R1" splity="T1,B1" />
         <grid name="mi-hpbar-violet.background" weightsX="0,1,0" weightsY="1">
             <area xywh="534,266,1,8" />
             <area xywh="536,266,1,8" />
