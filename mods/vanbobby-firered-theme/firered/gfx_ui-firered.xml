@@ -659,7 +659,7 @@
             <alias ref="ui-tab-vertical.active" if="selected" />
             <alias ref="ui-tab-vertical.default" />
         </select>
-        <area name="ui-tab.active.color" xywh="96,162,40,26" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
+        <area name="ui-tab.active.color" xywh="96,162,40,26" splitx="L12,R12" inset="0,0,0,0" />
         <area name="ui-tab.active" xywh="137,162,40,26" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
         <area name="ui-tab.inactive" xywh="215,162,40,22" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
         <area name="ui-tab.default" xywh="215,162,40,22" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />

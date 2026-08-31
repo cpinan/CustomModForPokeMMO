@@ -11,10 +11,10 @@
     <include filename="battlehud-firered.xml"/>
     <include filename="pcslots-firered.xml"/>
     <include filename="pcwindow-firered.xml"/>
-    <include filename="traincard-firered.xml"/>
     <include filename="contest-firered.xml"/>
     <include filename="caught-firered.xml"/>
     <include filename="breed-firered.xml"/>
     <include filename="preview-firered.xml"/>
+    <include filename="traincard-firered.xml"/>
     <include filename="textbubble-firered.xml"/>
 </themes>

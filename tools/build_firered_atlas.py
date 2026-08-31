@@ -90,6 +90,16 @@ TAN      = (0xE0, 0xD8, 0xC0)
 TEAL     = (0x30, 0x98, 0x90)
 TEAL_LT  = (0x50, 0xC8, 0xB0)
 DISABLED = (0xC0, 0xB0, 0x88)
+# The bag list panel and pocket tabs, off the Interface & Bag kit.
+BAG_GREY  = (0x68, 0x68, 0x68)   # its outer ring is grey, not #283030
+BAG_BEVEL = (0xE8, 0xE0, 0xA8)
+ORANGE_UL = (0xD8, 0x88, 0x48)   # the open-pocket underline
+# The trainer card, off the Trainer Card Kit.
+CARD_GREY   = (0x60, 0x60, 0x70)
+CARD_ACC    = (0xA0, 0xA0, 0xA0)
+HEADER_BLUE = (0x68, 0xA0, 0xD8)
+HEADER_EDGE = (0x48, 0x78, 0xA8)
+CARD_ICE    = (0xE0, 0xF0, 0xF0)
 # Read straight off the HP Bars kit in PokemonFireRedRef/001/, which agrees
 # pixel for pixel with what was measured from the screenshots earlier.
 HP_SHADOW = (0x50, 0x68, 0x60)   # the plate's drop shadow
@@ -144,6 +154,12 @@ ROLES = {
                                                           (HP_FILL, HP_FILL), False),
     "hpbar":      ([(HP_TRACK, 1)],                       (HP_GREEN, HP_GREEN2), False),
     "hpbar-gold": ([(HP_TRACK, 1)],                       (HP_GOLD, HP_GOLD), False),
+    # The bag list panel, measured off the Interface & Bag kit: grey outer,
+    # double gold band, warm bevel, pale-yellow fill. Square corners.
+    "bag-list":   ([(BAG_GREY, 2), (GOLD_LT, 3), (GOLD_DK, 2), (BAG_BEVEL, 1)],
+                                                          (PALE, PALE_2),   False),
+    # The dex frame: taupe over tan, the one screen FireRed keeps earthy.
+    "dex-frame":  ([(OUTER, 2), (DISABLED, 2), (TAN, 1)], (CREAM, WHITE),   False),
 }
 
 # name prefix -> role. Longest prefix wins, so specific beats general.
@@ -152,7 +168,9 @@ ROLE_BY_PREFIX = [
     ("ui-frame-green",            "frame-green"),
     ("ui-frame",                  "frame"),
     ("ui-inner-frame-inverted",   "inverted"),
+    ("ui-inner-frame-tabbed-dex", "dex-frame"),
     ("ui-inner-frame-tabbed",     "inner"),
+    ("ui-inner-frame-tab2",       "bag-list"),
     ("ui-inner-frame-tab",        "tab"),
     ("ui-inner-tab",              "tab"),
     ("ui-inner-roundedframe",     "inner"),
@@ -334,6 +352,82 @@ def role_ingame(name):
     return None
 
 
+def paint_bag_tab(px, rect):
+    """The bag's selected pocket tab, off the Interface & Bag kit: flat
+    light-gold face, dark-gold ring, and the orange underline FireRed uses to
+    mark the open pocket. Flat is correct here -- accent bars are the one
+    surface the spec leaves unstriped. Stock splits (L12,R12, no splity)
+    stretch the middle, and the underline spans the full width so it
+    survives the stretch."""
+    x0, y0, w, h = rect
+    for yy in range(h):
+        for xx in range(w):
+            if yy >= h - 3:
+                c = ORANGE_UL
+            elif xx == 0 or xx == w - 1 or yy == 0:
+                c = GOLD_DK
+            else:
+                c = GOLD_LT
+            px[x0 + xx, y0 + yy] = c + (255,)
+
+
+def _rounded_depth(xx, yy, x0, y0, x1, y1, r):
+    """How many pixels inside a rounded rect (>=1), or 0 if outside."""
+    if xx < x0 or xx > x1 or yy < y0 or yy > y1:
+        return 0
+    dx = min(xx - x0, x1 - xx)
+    dy = min(yy - y0, y1 - yy)
+    if dx >= r or dy >= r:
+        return min(dx, dy) + 1
+    ex, ey = r - dx, r - dy
+    d = r - (ex * ex + ey * ey) ** 0.5
+    return max(0, int(d) + 1)
+
+
+def paint_trainer_card(px, rect):
+    """The whole trainer card in one texture, as the kit draws it: the teal
+    1:3 striped ground, a rounded white card with a grey double ring, the
+    #68A0D8 header band, a 1:1 scanlined body and a row of eight rounded badge
+    slots along the bottom. Stock is a single 454x287 area with no splits, so
+    the widget stretches it whole and every band scales with it."""
+    x0, y0, w, h = rect
+    inset, r = 4, 10
+    cx0, cy0, cx1, cy1 = inset, inset, w - 1 - inset, h - 1 - inset
+    header_h = 46
+    badge, gap = 34, (w - 2 * inset - 8 * 34) // 9
+    badge_y0 = h - inset - 14 - badge
+    for yy in range(h):
+        for xx in range(w):
+            d = _rounded_depth(xx, yy, cx0, cy0, cx1, cy1, r)
+            if d == 0:                       # the striped ground outside
+                c = TEAL if yy % 4 == 0 else TEAL_LT
+            elif d <= 2:
+                c = CARD_GREY
+            elif d == 3:
+                c = CARD_ACC
+            elif yy - cy0 < 3 + header_h:    # the header band
+                c = HEADER_EDGE if yy - cy0 == 2 + header_h else HEADER_BLUE
+            else:
+                c = WHITE if yy % 2 else CARD_ICE
+                if badge_y0 <= yy < badge_y0 + badge:
+                    slot = -1
+                    for i in range(8):
+                        bx = inset + gap + i * (badge + gap)
+                        if bx <= xx < bx + badge:
+                            slot = i
+                            break
+                    if slot >= 0:
+                        bx = inset + gap + slot * (badge + gap)
+                        sd = _rounded_depth(xx, yy, bx, badge_y0,
+                                            bx + badge - 1,
+                                            badge_y0 + badge - 1, 8)
+                        if sd == 1:
+                            c = CARD_ACC
+                        elif sd > 1:
+                            c = CARD_ICE
+            px[x0 + xx, y0 + yy] = c + (255,)
+
+
 def role_generic(name):
     """res/main-hud.png is misnamed: it is the primary generic widget atlas.
     frame.background, 38 button.* states, table-row, table-header, label1..7 and
@@ -363,7 +457,8 @@ def role_generic(name):
 
 ATLASES = [
     dict(file="res/pokemmo_ui.png", source="gfx_ui.xml", out="gfx_ui-firered.xml",
-         table=None, glyphs=GLYPH_PREFIXES, keep=()),
+         table=None, glyphs=GLYPH_PREFIXES, keep=(),
+         special={"ui-tab.active.color": paint_bag_tab}),
     dict(file="res/user-interface.png", source="gfx.xml", out="gfx-firered.xml",
          table=ROLE_BY_PREFIX_IF, glyphs=("progressbar.progressImage_never",),
          keep=KEEP_PREFIXES_IF),
@@ -379,12 +474,18 @@ ATLASES = [
         ("res/battle-hud.png",    "battlehud-firered.xml"),
         ("res/pc_slots.png",      "pcslots-firered.xml"),
         ("res/pc-window.png",     "pcwindow-firered.xml"),
-        ("res/MainTCTexture.png", "traincard-firered.xml"),
         ("res/contestgui.png",    "contest-firered.xml"),
         ("res/caught-window.png", "caught-firered.xml"),
         ("res/breedwindow.png",   "breed-firered.xml"),
         ("res/preview-field.png", "preview-firered.xml"),
     ]
+] + [
+    # The trainer card is one 454x287 texture, so it gets a bespoke painter
+    # rather than a role: the glyph recolour that handled it through 0.23 kept
+    # the stock composition, which is not FireRed's card at all.
+    dict(file="res/MainTCTexture.png", source="gfx.xml", out="traincard-firered.xml",
+         table=None, glyphs=(), keep=(), resolver=role_ingame,
+         special={"trainer-card.background": paint_trainer_card}),
 ] + [
     dict(file="res/text-bubble.png", source="gfx.xml", out="textbubble-firered.xml",
          table=None, glyphs=(), keep=(), resolver=role_dialogue),
@@ -601,15 +702,32 @@ def build(spec, report=False):
 
     named = [a for a in out_el.iter("area")
              if a.get("xywh") and id(a) not in in_grid]
+    special = spec.get("special") or {}
+
+    def key_of(name):
+        # A bespoke painter beats any role. The tuple key keeps two specials
+        # sharing a rect from collapsing into one slot.
+        if name in special:
+            return ("special", name)
+        return role_of(name)
+
     groups = defaultdict(list)
     for a in named:
-        groups[(rect_of(a), role_of(owning_name(a)))].append(a)
+        groups[(rect_of(a), key_of(owning_name(a)))].append(a)
 
     for (rect, role), els in sorted(groups.items(), key=lambda kv: -kv[0][0][3]):
         for a in els:
             if "-" in a.get("xywh"):
                 flipped.append(a.get("name") or owning_name(a))
         dst = packer.place(rect[2], rect[3])
+        if isinstance(role, tuple):
+            for a in els:
+                a.set("xywh", "%d,%d,%d,%d" % dst)
+                if a.get("tint"):
+                    del a.attrib["tint"]   # painted outright, same as panels
+                clamp_split(a, dst, clamped)
+            jobs.append(("special", dst, special[role[1]]))
+            continue
         for a in els:
             a.set("xywh", "%d,%d,%d,%d" % dst)
             if role not in (None, "keep") and a.get("tint"):
@@ -648,7 +766,9 @@ def build(spec, report=False):
     counts = defaultdict(int)
     for kind, dst, payload in jobs:
         counts[kind] += 1
-        if kind == "glyph":
+        if kind == "special":
+            payload(px, dst)
+        elif kind == "glyph":
             recolour_glyph(px, src, payload, dst)
         elif kind == "keep":
             out.paste(src.crop((payload[0], payload[1],

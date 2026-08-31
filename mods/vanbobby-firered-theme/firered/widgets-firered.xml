@@ -13,4 +13,14 @@
     <theme name="logingui">
         <param name="background"><image>firered-login.background</image></param>
     </theme>
+
+    <!-- Bag: the item square becomes the white FireRed box, which already
+         carries a selected state from the box/box-on roles. The list panel,
+         pocket tabs and open-pocket underline are art-level: the bag-list role
+         and the paint_bag_tab painter in build_firered_atlas.py. Re-declaring
+         a theme MERGES into stock (settled 2026-08-30), so the stock font,
+         border and alignment params survive this block. -->
+    <theme name="inventory-button" ref="-defaults" allowWildcard="true">
+        <param name="background"><image>ui-box.background</image></param>
+    </theme>
 </themes>
