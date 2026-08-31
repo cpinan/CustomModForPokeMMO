@@ -46,13 +46,24 @@ startup — a visible dialog, not just a log line. Both now ship under `strings/
 1.0 -> 1.1 so a fixed artifact is distinguishable from an old one. All seven mods validate
 with zero warnings.
 
-None of that was run against a client. It is a reasoned fix, not an observed one.
+**Desktop check passed 2026-08-30.** Both 1.1 mods installed and enabled on the macOS
+client: `mods.log` shows both applied, `console.log` shows both string containers populate
+from `strings/…` (Classpath) rather than a `data/` directory overlay, and no dialog appears.
+One caveat: the macOS client shows no dialog even with the old
+`pmmod-demo-strings-1-0.mod` enabled — its info.xml declares the `data/strings/…` path, so
+either the declaration counts as "requesting it" or the dialog is Android-only. Desktop
+therefore cannot reproduce the failure, and the fix still needs the Retroid to be **seen**
+closing it.
+
+Found while checking: the 1.0 -> 1.1 bump had rewritten both info.xml declarations to
+`<?xml version="1.1"?>`. Fixed in source and dist, and `pmmod validate` now warns on any
+non-1.0 XML declaration (XMLDECL).
 
 **To close this:** install `dist/vanbobby-demo-strings-1-1.mod` and
-`dist/vanbobby-region-label-unpad-1-1.mod`, restart, and confirm the dialog saying *"tries to
-overlay the data/strings/ directory while not requesting it in the info.xml"* no longer
-appears. If it still does, these two are not the cause and something else ships under
-`data/` — `log/mods.log` names the mod it objects to.
+`dist/vanbobby-region-label-unpad-1-1.mod` on the Retroid, restart, and confirm the dialog
+saying *"tries to overlay the data/strings/ directory while not requesting it in the
+info.xml"* no longer appears. If it still does, these two are not the cause and something
+else ships under `data/` — `log/mods.log` names the mod it objects to.
 
 Both were disabled on the device when last seen. Importing re-enables a mod, so check the
 toggles afterwards.
