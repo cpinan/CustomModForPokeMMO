@@ -65,7 +65,7 @@
     <fontDef name="pb-dark-orange" ref="pb-dark" color="#5E5E5E" />
     <fontDef name="noto-8pt" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc" faces="sc,tc,jp" color="#404040" size="8" incremental="false" characters="0123456789ABCDEF" shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FFD8D8C0" />
     <fontDef name="noto-bold-large-white" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#404040" hinting="Medium" kerning="false" size="16" shadow_color="#FFD8D8C0" shadow_offset_x="1" shadow_offset_y="1" />
-    <fontDef name="messagebox" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#222222" hinting="Medium" kerning="false" size="24" shadow_color="#FFD8D8C0" shadow_offset_x="1" shadow_offset_y="1" />
+    <fontDef name="messagebox" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#F8F8F8" hinting="Medium" kerning="false" size="24" shadow_color="#FF283030" shadow_offset_x="1" shadow_offset_y="1" />
     <fontDef name="mechabold" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#404040" hinting="Medium" kerning="false" size="14" border_width="1" border_color="#F8F0E8" />
     <fontDef name="mechabold-red" ref="mechabold" color="#6B3636" />
     <fontDef name="mechabold-orange" ref="mechabold" color="#6B4000" />
