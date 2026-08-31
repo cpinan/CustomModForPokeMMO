@@ -38,37 +38,65 @@ ORANGE = (0xE0, 0x54, 0x00)
 BLACK = (0x18, 0x18, 0x18)
 TEAL = (0x30, 0xA8, 0x90)
 TEAL_DK = (0x28, 0x90, 0x7C)
-FLAME = (0xF0, 0xC0, 0x30)
-FLAME_LT = (0xF0, 0xF0, 0xA8)
+CLOUD = (0xF8, 0xF8, 0xD0)      # the dome body
+CLOUD_E = (0xF0, 0xD8, 0x90)    # its gold edge and the dither at the base
+CLOUD_HI = (0xF8, 0xF8, 0xF0)   # top left highlight
 DARKRED = (0x70, 0x00, 0x00)
 
 # Proportions from PokemonFireRedRef/001/splash-login.jpg: a thin orange rule,
 # black under it, and a deep black footer above the dark red rule.
 TOP = [(ORANGE, 12), (BLACK, 34)]
 FOOT = [(BLACK, 76), (DARKRED, 20)]
-FLAME_H = 22
-MID_H = 2                 # ONE scanline pair, TILED rather than stretched
-EDGE_W = 28               # one flame's worth, tiled across
+CLOUD_H = 26
+MID_H = 16                # a whole pattern tile, TILED rather than stretched
+EDGE_W = 32               # one cloud's worth, tiled across
 CHARI_H = 300
 
 
-def scanlined(d, x0, y0, w, h):
+def field(d, x0, y0, w, h):
+    """The teal ground.
+
+    Scanlines alone read as flat at this size, so it also carries a sparse
+    diagonal dither, which is how a GBC era background gets depth out of two
+    tones. The pattern repeats on EDGE_W by MID_H so it survives being tiled."""
     d.rectangle([x0, y0, x0 + w - 1, y0 + h - 1], fill=TEAL)
     for y in range(y0, y0 + h, 2):
         d.rectangle([x0, y, x0 + w - 1, y], fill=TEAL_DK)
+    for y in range(y0, y0 + h):
+        for x in range(x0, x0 + w):
+            if (x * 3 + y * 5) % 16 == 0:
+                d.point((x, y), fill=TEAL_DK)
+            elif (x * 3 - y * 5) % 32 == 0:
+                d.point((x, y), fill=(0x38, 0xB4, 0x9C))
 
 
-def flames(d, x0, y0, w, h):
-    for x in range(x0 + EDGE_W // 2, x0 + w + EDGE_W, EDGE_W):
+def clouds(d, x0, y0, w, h):
+    """The row of pale domes along the top of the black footer.
+
+    These were triangles until someone pointed at them and said "pyramids".
+    Magnifying the reference settles it: rounded cloud domes with a gold edge
+    and a dither of the same gold at the base, not flames and not spikes."""
+    import math
+    for cx in range(x0 + EDGE_W // 2, x0 + w + EDGE_W, EDGE_W):
+        rx, ry = EDGE_W // 2 + 1, h - 2
         for i in range(h):
-            t = i / float(h - 1)
-            half = max(0, int(t * 8))
-            lean = int((1.0 - t) * 2)
-            d.rectangle([x - half + lean, y0 + i, x + half + lean, y0 + i], fill=FLAME)
-        for i in range(h // 2, h):
-            t = (i - h // 2) / float(max(h - h // 2 - 1, 1))
-            half = max(0, int(t * 4))
-            d.rectangle([x - half, y0 + i, x + half, y0 + i], fill=FLAME_LT)
+            dy = (h - 1 - i) / float(ry)          # 1 at the top, 0 at the base
+            if dy > 1:
+                continue
+            half = int(rx * math.sqrt(max(0.0, 1.0 - dy * dy)))
+            if half <= 0:
+                continue
+            y = y0 + i
+            d.rectangle([cx - half, y, cx + half, y], fill=CLOUD)
+            d.point((cx - half, y), fill=CLOUD_E)
+            d.point((cx + half, y), fill=CLOUD_E)
+            if i < h // 3:
+                d.rectangle([cx - half + 1, y, cx - half // 2, y], fill=CLOUD_HI)
+        # the gold dither that fades the dome into the black band
+        for i in range(h - h // 3, h):
+            for x in range(cx - rx, cx + rx + 1):
+                if (x + i) % 3 == 0 and (x * 2 + i) % 5 < 2:
+                    d.point((x, y0 + i), fill=CLOUD_E)
 
 
 def main():
@@ -83,8 +111,8 @@ def main():
 
     top_h = sum(h for _, h in TOP)
     foot_h = sum(h for _, h in FOOT)
-    bot_h = (CHARI_H + FLAME_H + foot_h) if chari else (FLAME_H + foot_h)
-    corner_w = (chari.width + 40) if chari else EDGE_W
+    bot_h = CLOUD_H + foot_h
+    corner_w = EDGE_W
 
     W = EDGE_W + EDGE_W + corner_w
     H = top_h + MID_H + bot_h
@@ -97,12 +125,12 @@ def main():
         d.rectangle([0, y, W, y + h - 1], fill=c)
         y += h
     # middle row: the one stretchable slice
-    scanlined(d, 0, y, W, MID_H)
+    field(d, 0, y, W, MID_H)
     y += MID_H
     # bottom row: teal, then flames, then the footer rules
     bot0 = y
-    scanlined(d, 0, bot0, W, bot_h)
-    flames(d, 0, bot0 + bot_h - foot_h - FLAME_H, W, FLAME_H)
+    field(d, 0, bot0, W, bot_h)
+    clouds(d, 0, bot0 + bot_h - foot_h - CLOUD_H, W, CLOUD_H)
     y = bot0 + bot_h - foot_h
     for c, h in FOOT:
         d.rectangle([0, y, W, y + h - 1], fill=c)

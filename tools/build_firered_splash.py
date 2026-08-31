@@ -42,8 +42,10 @@ import os
 
 from PIL import Image, ImageDraw, ImageFilter, ImageSequence
 
-GIF = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                   "..", "PokemonFireRedRef", "splash-charizard.gif")
+REF = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                   "..", "PokemonFireRedRef")
+GIF = os.path.join(REF, "splash-charizard.gif")
+SPRITE = os.path.join(REF, "charizard-sprite.png")
 XML_OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                        "mods", "vanbobby-firered-theme", "firered", "overrides.xml")
 
@@ -204,13 +206,28 @@ def flame_row(d, y, width, height):
             d.rectangle([x - half, y + i, x + half, y + i], fill=FLAME_LT)
 
 
-def key_white(im, thresh=232):
-    """The GIF is rendered on solid white, not on transparency. Anything that
-    bright at the edges is background; the Charizard's own highlights are inside
-    the silhouette, so a flood from the border keeps them."""
+def key_white(im, thresh=232, checker=False):
+    """Remove the background by flooding in from the border.
+
+    Neither source is actually transparent. The GIF is rendered on solid white.
+    charizard-sprite.png LOOKS transparent and is not: its checkerboard is baked
+    in as real pixels, #FFFFFF and #E6E6E6, with no alpha channel at all, so
+    pasting it straight down puts a grey chequer on the plate.
+
+    Flooding from the border rather than replacing colours globally is what
+    keeps the Charizard's own white highlights: they are enclosed by its
+    outline, so the flood never reaches them."""
     im = im.convert("RGBA")
     w, h = im.size
     px = im.load()
+
+    def is_bg(r, g, b):
+        if checker:
+            # both chequer squares, and nothing of the Charizard, which is
+            # saturated everywhere it is bright
+            return min(r, g, b) >= 224 and (max(r, g, b) - min(r, g, b)) <= 14
+        return r >= thresh and g >= thresh and b >= thresh
+
     stack = [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]
     seen = set()
     while stack:
@@ -219,7 +236,7 @@ def key_white(im, thresh=232):
             continue
         seen.add((x, y))
         r, g, b, a = px[x, y]
-        if r < thresh or g < thresh or b < thresh:
+        if not is_bg(r, g, b):
             continue
         px[x, y] = (0, 0, 0, 0)
         stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
@@ -227,7 +244,23 @@ def key_white(im, thresh=232):
 
 
 def charizard_frames(count, height):
-    """Evenly sampled frames of the GIF, keyed and scaled to `height`."""
+    """The Charizard, scaled to `height`.
+
+    One frame comes from charizard-sprite.png. That file only LOOKS transparent:
+    its checkerboard is baked in as real #FFFFFF and #E6E6E6 pixels and it has
+    no alpha channel, so it needs keying just as much as the GIF does, only
+    against two colours instead of one. More than one frame falls back to the
+    GIF, which is 131 frames rendered on solid white."""
+    if count <= 1:
+        if os.path.exists(SPRITE):
+            im = key_white(Image.open(SPRITE), checker=True)
+            bb = im.getbbox()
+            if bb:
+                im = im.crop(bb)
+            w = max(1, round(im.width * height / im.height))
+            return [im.resize((w, height), Image.LANCZOS)]
+        if not os.path.exists(GIF):
+            return []
     if not os.path.exists(GIF):
         return []
     src = [f.convert("RGB").copy() for f in ImageSequence.Iterator(Image.open(GIF))]
@@ -339,8 +372,9 @@ def plate(W, H, chari=None, bands=True):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--frames", type=int, default=0,
-                    help="1 for a still plate, >1 to animate, 0 for no Charizard")
+    ap.add_argument("--frames", type=int, default=1,
+                    help="1 uses charizard-sprite.png, >1 animates from the "
+                         "GIF, 0 draws no Charizard at all")
     ap.add_argument("--bands", action="store_true",
                     help="draw the field on the plate too; off by default, the "
                          "logingui background carries the field now")
