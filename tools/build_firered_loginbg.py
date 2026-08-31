@@ -144,13 +144,23 @@ def from_scene(src):
     im = Image.open(src).convert("RGBA")
     w, h = im.size
 
-    def lightest(y):
-        return max(sum(im.getpixel((x, y))[:3]) / 3 for x in range(0, w, 5))
+    # Find the first row that is not sky. Scanning for the first BRIGHT row
+    # instead finds the CLOUDS, and anything dark that rises above them gets
+    # sliced: the big tree's canopy is dark green and starts about 80 rows
+    # higher, so the first version cut its top off.
+    sky = im.getpixel((2, 2))[:3]
+
+    def differs(y):
+        for x in range(0, w, 3):
+            r, g, b = im.getpixel((x, y))[:3]
+            if abs(r - sky[0]) + abs(g - sky[1]) + abs(b - sky[2]) > 24:
+                return True
+        return False
 
     horizon = 0
-    for y in range(0, h, 8):
-        if lightest(y) > 180:
-            horizon = max(0, y - 16)
+    for y in range(0, h):
+        if differs(y):
+            horizon = max(0, y - 8)     # a few rows of clean sky to blend into
             break
     if not horizon:
         horizon = h // 3
