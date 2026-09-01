@@ -84,14 +84,16 @@ Quita el texto de las interacciones que repites todo el día — el mostrador de
 curación, la tienda, la guardería y los huevos, los mensajes de experiencia, los
 avisos de movimientos de campo y la pesca — para que el cuadro avance al
 instante — más los mensajes de estado en combate, los resultados de captura, las
-evoluciones y los avisos de Repelente. Son 463 entradas repartidas en doce
-reglas. Las indicaciones de misión y los diálogos de la historia se quedan
+evoluciones y los avisos de Repelente, el ferry entre regiones y la megafonía
+de la Zona Safari. Son 705 entradas repartidas en treinta y cuatro reglas, que cubren
+Kanto, Hoenn, Sinnoh, Johto y Teselia. Las indicaciones de misión y los diálogos
+de la historia se quedan
 intactos, y una salvaguarda global mantiene fuera de alcance las descripciones
 de objetos y movimientos (966 entradas, unos 96.000 caracteres).
 
 Está **generado, no escrito a mano**: `pmmod strings fasttext` lee los volcados
-de tu propio cliente (`Ajustes → Utilidades`) y aplica seis expresiones
-regulares desde `rules.json`. No se copia nada del mod de otra persona, sobrevive
+de tu propio cliente (`Ajustes → Utilidades`) y aplica las reglas de
+`rules.json`. No se copia nada del mod de otra persona, sobrevive
 a los parches porque se vuelve a generar en lugar de arreglarse a mano, y
 cualquier idioma que traiga el cliente sale gratis.
 

@@ -1,6 +1,6 @@
 # Open work
 
-Everything known to be wrong or unfinished, as of 2026-08-30, written for someone
+Everything known to be wrong or unfinished, as of 2026-09-01, written for someone
 picking this up cold. Ordered by what will bite you first.
 
 Read `docs/FINDING-string-call-sites.html` before touching any strings rule. It
@@ -28,6 +28,40 @@ went into learning this.
 `MODEXAMPLES/SupersSpeedStrings-*.mod` has an opinion about an address, thousands
 of people are running it. Where it is silent about a whole table, that silence is
 data too — it was silent about every address 1.9 broke.
+
+**The regions are each other's oracle, and the comparison has to reach a
+fixpoint.** The same game text ships five times over -- Kanto and Hoenn as plain
+ids, Sinnoh, Johto and the two Unova archives as NDS coordinates. A line
+silenced in one and drawing in another means one of the two is wrong, and no
+external mod can tell you that. `tools/region_parity.py` groups all 166,867
+entries and reports the disagreements; `test_region_parity.py` fails the build
+on one. Run it again after fixing: closing a gap gives the next one a silenced
+twin to disagree with, and two tutor tables only surfaced on the second pass.
+
+**A guard written for one region is a guard for one region.** `never_ds_tables`
+fenced the Unova battle engine and nothing else for a week, while Sinnoh and
+Johto shipped the same engine unfenced and Unova 13 -- 1,680 `{00} used {01}!`
+lines -- was fenced nowhere. Derive the twins from the corpus, do not guess
+them.
+
+**The reference is one oracle, not the only one.** SupersSpeedStrings has holes
+too, and where it does, comparing against it proves nothing. Teleport's
+confirmation prompt drew a full box for six releases with a green parity suite,
+because the reference does not silence it either. What found it was the game's
+own redundancy: every region ships the same field-move script in its own archive
+(Unova-1 table 280, Sinnoh 381, Johto 211), so the three copies check each other.
+`tools/fieldmove_parity.py` and `test_fieldmove_parity.py` do that comparison.
+Look for the same redundancy before trusting a green parity run anywhere else.
+
+**The parity suite's `IN_SCOPE` is a whitelist, and a green run only means the
+families it names are covered.** It classifies the reference's own section
+comments by regex. A family it does not name scores as out of scope and vanishes
+from the report. Four repeated interactions hid there until 2026-09-01 — the
+Route 209 rest house, the Great Marsh interior, the Safari PA and the ferry —
+none of which shares a word with anything the regex listed. When adding a rule,
+add the reference's spelling of its section name to `IN_SCOPE` as well. Watch the
+spellings: a bare `Marsh` also matches `Marshal`, which silently pulled the whole
+Elite Four into scope.
 
 **Never automate PokeMMO login or gameplay.** The account can be banned for it.
 Driving Mod Management over adb is fine; everything past the LOGIN button is not.
@@ -112,10 +146,25 @@ If you do try it: enable only `probe-faint-ds`, nothing else, and win one wild
 battle. `test_the_table_14_probe_is_a_single_address` enforces that it stays one
 address.
 
-### 5. Does `modkit/` ship?
-It is not in this repo. Without it nobody can regenerate the mod or run the 99
-tests, so the published `rules.json` is inert — a reader can see the rules but not
-apply them. Deferred on 2026-08-30, still undecided.
+### 5. `modkit/` ships. The dumps do not. — closed 2026-09-01
+Decided: `modkit/`, `strings-work/rules.json` and the tools are in this repo, so
+a reader can regenerate the mod and run all 110 tests.
+
+`strings-work/dumps/` stays out and is in `.gitignore`. It is ~166,000 entries of
+the game's own text, and generating the mod from *your* install's dumps rather
+than shipping a corpus is the entire reason this is a generator. Produce them
+with Settings > Utilities. Without them the corpus, cross-region and parity
+suites skip and say so; the rule-engine tests, validation and every build still
+run.
+
+Also deliberately absent: `MODEXAMPLES/`, which holds SupersSpeedStrings as a
+local reference. It is someone else's mod and is not ours to redistribute —
+`test_supers_parity.py` skips when it is not there.
+
+Three stray directories inside `modkit/src/pmmod/` are ignored rather than
+shipped: `log/` and `config/` are a copy of one client install, and
+`device-logs/` is a 2.3 MB logcat carrying a device serial. None of them is
+source; the toolkit reads those files from the client's own path.
 
 ### 6. Workspace and repo hold duplicate trees
 The working directory has `mods/` and `dist/` that duplicate
@@ -126,12 +175,36 @@ silently drifts — bug 2 above may already be an instance of it.
 **Fix:** one canonical location, then update `tools/verify.sh` and the
 `--dumps`/`--rules` defaults in `modkit/src/pmmod/cli.py:660`.
 
-### 7. Johto parity is close but not complete
+### 7. The Move Relearner (Unova 204) is fenced, not decided
+It reads like an NPC counter -- POWER/ACCURACY/PP/TEACH menu labels, a Heart
+Scale exchange, `Which move should {00} remember?` -- and on 2026-09-01 a tutor
+rule was written for it on exactly that reasoning.
+`test_only_proven_addresses_are_silenced_in_a_battle_engine` refused it and the
+rule was withdrawn. 204 is the relearner's copy of the move-learn state machine,
+and that machine is the one place hardware already proved `{09}` does not work:
+157/38, 40 and 41 all had to become a blank line.
+
+It is worth revisiting, because the relearner is used constantly. **To close
+this:** build with `move-tutor-ds-unova` restored (204/3, 5, 6, 8, 14, 16, 17,
+19, 20), relearn one move, and watch whether the box disappears, empties, or
+sticks. If it empties, the token is `blank`, not `skip`, exactly as at 157. Until
+someone does that, it stays fenced in both `never_ds_tables` and
+`DS_BATTLE_ENGINES`.
+
+### 7. Elite Four and Gym Leader dialogue is still out of scope
 `counters-ds-johto` covers 57 addresses. SupersStrings covers 104 in that archive;
 the other 47 are Gym Leader and Elite Four dialogue, deliberately out of scope
 here. Two more are deliberate keeps (`211/16`, `211/23` — errors explaining why a
-move did nothing). Nothing to do unless the scope changes; recorded so the gap is
-not mistaken for an oversight.
+move did nothing).
+
+The same call holds across every archive. As of 2026-09-01 the reference silences
+162 NDS entries this mod does not, and roughly all of them are trainer dialogue:
+the on-cooldown speeches at Sinnoh 185-188, Johto 523-527 and Unova 147/149/189.
+It is the largest remaining difference and it is a *scope* decision, not an
+oversight — but it is the one worth revisiting, because PokeMMO's Elite Four is
+re-run daily and that dialogue is as repeated as a Pokecenter visit. Reconsidered
+and kept out on 2026-09-01; the four counter families found in the same pass were
+closed instead.
 
 ### 8. Bug report to PokeMMO not filed
 Two findings worth reporting, both with evidence in this repo:

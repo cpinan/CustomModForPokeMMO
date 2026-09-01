@@ -88,14 +88,16 @@ Management to place it below, then restart.
 ### `vanbobby-fast-strings` — faster text, English and Spanish
 
 Removes the text from the interactions you repeat all day — healing counter,
-shop flow, day-care and eggs, EXP chatter, field-move prompts, fishing casts —
-so the box advances instantly — plus battle status spam, catch results, evolution
-and Repel prompts. 463 entries across twelve rules. Quest directions and story
+shop flow, day-care and eggs, EXP chatter, field-move prompts, fishing casts,
+the ferry between regions and the Safari PA — so the box advances instantly —
+plus battle status spam, catch results, evolution and Repel prompts. 705 entries
+across thirty-four rules, covering Kanto, Hoenn, Sinnoh, Johto and Unova. Quest
+directions and story
 dialogue are left alone, and a global guard keeps item and move descriptions
 (966 entries, ~96k characters) off limits no matter what a rule matches.
 
 It is **generated, not hand-written**: `pmmod strings fasttext` reads your own
-client's `Settings → Utilities` dumps and applies six regexes from `rules.json`.
+client's `Settings → Utilities` dumps and applies the rules in `rules.json`.
 Nothing is copied from anyone else's mod, it survives client patches by being
 re-run rather than hand-fixed, and any language the client ships comes free.
 
@@ -196,6 +198,48 @@ redundant rather than harmful — whichever sits lower wins on shared ids.
 Each folder under `mods/` is the archive laid out exactly as the client reads
 it. Zip the **contents** of a folder — not the folder itself, or `info.xml` ends
 up one level too deep and the client will not list the mod.
+
+`modkit/` does it for you, and rather more besides:
+
+```bash
+modkit/bin/pmmod validate mods/vanbobby-fast-strings   # what the client will complain about
+modkit/bin/pmmod build    mods/vanbobby-fast-strings -o dist
+tools/verify-strings.sh                                # every mod + 110 tests
+tools/verify.sh                                        # the FireRed theme's own checks
+```
+
+### Regenerating the strings mod
+
+`vanbobby-fast-strings` is generated, not written. It needs the client's string
+dumps, and **those are not in this repository** — `strings-work/dumps/` is about
+166,000 entries of the game's own text, and generating from *your* install
+instead of shipping a corpus is the entire reason this is a generator.
+
+Produce them with `Settings → Utilities`, drop them in `strings-work/dumps/`, then:
+
+```bash
+modkit/bin/pmmod strings fasttext mods/vanbobby-fast-strings \
+    --dumps strings-work/dumps --rules strings-work/rules.json --langs en,es \
+    --name "VanBobby Fast Strings" --mod-version 1.13
+```
+
+Without the dumps the corpus, cross-region and parity suites skip and say so.
+The rule-engine tests, validation and every build still run.
+
+### The two checks worth knowing about
+
+```bash
+tools/fieldmove_parity.py   # the three copies of the field-move script, vs each other
+tools/region_parity.py      # all 166,867 entries, vs their duplicates in other regions
+```
+
+PokeMMO ships the same text five times over — Kanto and Hoenn as plain ids,
+Sinnoh, Johto and the two Unova archives as NDS coordinates. A line silenced in
+one region and still drawing in another means one of the two is wrong, and no
+comparison against somebody else's mod can tell you that: the reference has its
+own holes in the same places. That is how Teleport's confirmation prompt drew a
+box for six releases with a green test suite. Run them to a fixpoint — closing a
+gap gives the next one a silenced twin to disagree with.
 
 ## Compatibility
 

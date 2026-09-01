@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resource name="VanBobby Fast Strings" version="1.10" description="Faster text, generated from the client&#x27;s own strings." author="carlospinan" weblink="https://forums.pokemmo.com/">
+<resource name="VanBobby Fast Strings" version="1.13" description="Faster text, generated from the client&#x27;s own strings." author="carlospinan" weblink="https://forums.pokemmo.com/">
     <strings string_revision="1">
         <string path="strings/strings_en_fasttext.xml"/>
         <string path="strings/strings_es_fasttext.xml"/>

@@ -15,18 +15,23 @@
     move-learn-result-ds: Move learned / forgotten / not learned at the end of a battle, live client
     hm-prompts-ds-sinnoh: Sinnoh archive: every HM obstacle prompt and the `used <move>` line that follows
     hm-prompts-ds-unova1: Unova storyline archive: the same obstacle prompts plus Flash, Teleport and Dig
-    counters-ds-sinnoh: Sinnoh archive: Great Marsh gate, Elite Four door, Pokecenter and shop desk, Day Care
+    counters-ds-sinnoh: Sinnoh archive: Great Marsh gate and tram, Elite Four door, Pokecenter and shop desk, Day Care, the rest house that heals
     counters-ds-johto: Johto archive: HM prompts, Pokecenter, Safari Zone, Day Care, Kurt, shops, league door
+    counters-ds-unova1: Unova storyline archive: Day Care and the shop farewell
     battle-end: The end-of-battle run: faint, EXP, level-up, move learned, winnings, capture
     field-moves: Overworld move use - Teleport, Sweet Scent, Cut, Fly, Dig, Flash, Headbutt, all of them
     field-move-prompts: Cut / Rock Smash / Surf / Dive confirmations before the move fires
     hm-field-prompts: Every HM obstacle prompt: tree, boulder, rock, waterfall, dive, surf
     fossil-reviver: Fossil revival counter, used in every region
     move-tutor: Move Master, Move Maniac and the Special Move Tutor
+    move-tutor-ds-unova1: Unova1 archive: move tutor, deleter and TM results
+    move-tutor-ds-sinnoh: Sinnoh archive: move tutor, deleter and TM results
+    move-tutor-ds-johto: Johto archive: move tutor, deleter and TM results
     breeder: Day-care Breeder trade-in and egg hand-off
     berry-farming: Soil, planting, watering and picking
     stylist: Personal stylist and the bike-skin counter
-    safari-gate: Safari Zone entry and sign-out counters
+    safari-gate: Safari Zone entry, sign-out counter and the PA that ends a run
+    ferry: The ferry that moves you between regions: the greeting, the boarding line and the cancel
     elite-four-door: The Elite Four door guards, re-read on every league run
     battle-frontier: Battle Tower / Palace / Arena / Factory reception counters
     status-battle: Per-turn battle status chatter
@@ -186,6 +191,7 @@
   <string id="1832746">{09}</string>
   <string id="1832789">{09}</string>
   <string id="1832932">{09}</string>
+  <string id="1833017">{09}</string>
   <string id="1833056">{09}</string>
   <string id="1833119">{09}</string>
   <string id="1833238">{09}</string>
@@ -194,6 +200,8 @@
   <string id="1833575">{09}</string>
   <string id="1833605">{09}</string>
   <string id="1833838">{09}</string>
+  <string id="1834011">{09}</string>
+  <string id="1834067">{09}</string>
   <string id="16777413">{09}</string>
   <string id="16779000">{09}</string>
   <string id="16779003">{09}</string>
@@ -218,6 +226,9 @@
   <string id="16779086">{09}</string>
   <string id="16779087">{09}</string>
   <string id="16779098">{09}</string>
+  <string id="16780100">{09}</string>
+  <string id="16780103">{09}</string>
+  <string id="16780104">{09}</string>
   <string id="16780135">{09}</string>
   <string id="16780170">{09}</string>
   <string id="16780171">{09}</string>
@@ -251,15 +262,18 @@
   <string id="17000163">{09}</string>
   <string id="270445812">{09}</string>
   <string id="270482830">{09}</string>
+  <string id="270585803">{09}</string>
   <string id="270594493">{09}</string>
   <string id="270594555">{09}</string>
   <string id="270594607">{09}</string>
   <string id="270594756">{09}</string>
   <string id="270599465">{09}</string>
+  <string id="270657693">{09}</string>
   <string id="270658623">{09}</string>
   <string id="270692404">{09}</string>
   <string id="270702312">{09}</string>
   <string id="270702575">{09}</string>
+  <string id="270784843">{09}</string>
   <string id="270793991">{09}</string>
   <string id="270794043">{09}</string>
   <string id="270794791">{09}</string>
@@ -344,6 +358,7 @@
   <string id="271131044">{09}</string>
   <string id="271131087">{09}</string>
   <string id="271131380">{09}</string>
+  <string id="271131465">{09}</string>
   <string id="271131504">{09}</string>
   <string id="271131567">{09}</string>
   <string id="271131670">{09}</string>
@@ -352,6 +367,7 @@
   <string id="271132021">{09}</string>
   <string id="271132051">{09}</string>
   <string id="271207219">{09}</string>
+  <string id="271207462">{09}</string>
   <string id="271208006">{09}</string>
   <string id="271208097">{09}</string>
   <string id="271208308">{09}</string>
@@ -364,4 +380,5 @@
   <string id="271209032">{09}</string>
   <string id="271209131">{09}</string>
   <string id="271217822">{09}</string>
+  <string id="271342245">{09}</string>
 </strings>
