@@ -31,9 +31,9 @@ MODEXAMPLES/
 modkit/src/pmmod/log/
 modkit/src/pmmod/config/
 
-# theme-iterate.sh archives every build here. They are local scratch and the
-# only copy of some intermediate states, so they are kept on disk but never
-# committed -- 26 of them is 35 MB that git could never shed again. The shipped
-# version is the exception.
+# theme-iterate.sh writes every build here, so dist/ fills with superseded
+# archives -- 26 of them was 35 MB that git could never have shed again. Only
+# the released version is committed, and dist/ is pruned to one artifact per mod.
+# BUMP THE EXCEPTION BELOW when the theme ships a new version.
 dist/vanbobby-firered-theme-0-*.mod
 !dist/vanbobby-firered-theme-0-50.mod

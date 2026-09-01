@@ -3,8 +3,10 @@
 Eight mods share this repository and version independently, so entries are grouped by date
 and named by mod. Newest first.
 
-`dist/` always carries the current build of each mod. `vanbobby-fast-strings-1-10.mod` is
-kept alongside 1.13 because 1.10 is the last version confirmed on hardware.
+`dist/` carries exactly one artifact per mod: the current build, nothing else. Older
+releases are reachable through this file and `git log` — for example
+`git show eeebf9a:dist/vanbobby-fast-strings-1-10.mod > 1-10.mod` recovers 1.10, the last
+version confirmed on hardware.
 
 ---
 
@@ -123,15 +125,15 @@ tools/region_parity.py      # all 166,867 entries, against their duplicates in o
 Test count 99 → **110**. `test_fieldmove_parity.py` (4) and `test_region_parity.py` (6) are
 new. Both were checked against deliberate regressions rather than trusted for passing.
 
-### `dist/` pruned
+### `dist/` holds one artifact per mod
 
-Twenty-six superseded artifacts removed: six built before every mod took the `vanbobby-`
-prefix, and the FireRed theme's 0.2 through 0.24. All reachable in history.
+Fifty-three superseded artifacts removed in two passes: six built before every mod took
+the `vanbobby-` prefix, the FireRed theme's 0.2 through 0.49, and Fast Strings 1.10.
 
-The theme's later intermediate builds stay on disk and out of git — `theme-iterate.sh`
-archives every version, and twenty-six of them is 35 MB git could never shed again.
-`.gitignore` keeps `dist/vanbobby-firered-theme-0-*.mod` with an exception for the shipped
-release.
+`theme-iterate.sh` writes every build here, so `.gitignore` keeps
+`dist/vanbobby-firered-theme-0-*.mod` out of git with an exception for the released
+version — **bump that exception when the theme ships a new one.** The intermediate builds
+accumulate silently and are worth pruning again when they do.
 
 ---
 

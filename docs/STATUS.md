@@ -17,8 +17,10 @@ blocked on the font.
 ## State
 
 - **`vanbobby-fast-strings` is 1.13.** 705 entries across 34 rules, covering
-  Kanto, Hoenn, Sinnoh, Johto and both Unova archives. 1.10 is kept in `dist/`
-  as the last version confirmed on hardware.
+  Kanto, Hoenn, Sinnoh, Johto and both Unova archives. `dist/` holds one artifact
+  per mod and nothing else; recover an older one from git, e.g.
+  `git show eeebf9a:dist/vanbobby-fast-strings-1-10.mod > 1-10.mod` for the last
+  build confirmed on hardware.
 - **`modkit/` ships now** (OPEN-WORK 5, closed). A reader can regenerate the mod
   and run all 110 tests. `strings-work/dumps/` deliberately does not ship — it is
   the game's own text, and generating from your own dumps is the whole design.
