@@ -12,6 +12,8 @@ eyeballing the UI.
 
 ---
 
+Version history for every mod is in **[CHANGELOG.md](CHANGELOG.md)**.
+
 ## The mods
 
 Each mod has its own README with the full write-up:

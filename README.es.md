@@ -12,6 +12,8 @@ mirando la interfaz a ojo.
 
 ---
 
+El historial de versiones de cada mod está en **[CHANGELOG.md](CHANGELOG.md)**.
+
 ## Los mods
 
 ### `vanbobby-android-layout-fix` — elimina el aviso de "UI layout loop"
