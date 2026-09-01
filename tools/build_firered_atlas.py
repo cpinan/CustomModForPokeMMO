@@ -90,16 +90,29 @@ TAN      = (0xE0, 0xD8, 0xC0)
 TEAL     = (0x30, 0x98, 0x90)
 TEAL_LT  = (0x50, 0xC8, 0xB0)
 DISABLED = (0xC0, 0xB0, 0x88)
-# The bag list panel and pocket tabs, off the Interface & Bag kit.
-BAG_GREY  = (0x68, 0x68, 0x68)   # its outer ring is grey, not #283030
-BAG_BEVEL = (0xE8, 0xE0, 0xA8)
-ORANGE_UL = (0xD8, 0x88, 0x48)   # the open-pocket underline
+# The Pokedex, measured off the Pokedex kit at 1:1.
+DEX_DARK  = (0x7B, 0x63, 0x39)   # its outlines and the rule under the title
+DEX_TAUPE = (0xC6, 0xB5, 0x8C)   # the frame and the title bar
+DEX_LIGHT = (0xE7, 0xDE, 0xC6)   # the description band and the inner bevel
+# The bag list panel and pocket tabs. Sampled off the Interface & Bag kit,
+# which draws the bag screen at 1:1 GBA pixels (the panel is exactly 240x160),
+# so these are the game's own values and not an eyeball match. The band stack,
+# outer to inner, is grey 2 / cream 1 / light gold 2 / dark gold 2 / fill.
+BAG_GREY  = (0x6B, 0x6B, 0x6B)   # its outer ring is grey, not #283030
+BAG_BEVEL = (0xEF, 0xE7, 0xAD)
+BAG_GOLD  = (0xF7, 0xCE, 0x73)   # the tab face and the panel's light band
+BAG_GOLD2 = (0xD6, 0xB5, 0x52)   # the closed-tab face and the dark band
+BAG_FILL  = (0xFF, 0xFF, 0xCE)   # the list ground
+ORANGE_UL = (0xDE, 0x8C, 0x4A)   # the open-pocket underline
 # The trainer card, off the Trainer Card Kit.
 CARD_GREY   = (0x60, 0x60, 0x70)
 CARD_ACC    = (0xA0, 0xA0, 0xA0)
 HEADER_BLUE = (0x68, 0xA0, 0xD8)
-HEADER_EDGE = (0x48, 0x78, 0xA8)
 CARD_ICE    = (0xE0, 0xF0, 0xF0)
+BADGE_BAND  = (0x80, 0xB8, 0xE0)   # the badges band across the card's foot
+BAND_EDGE   = (0x38, 0x70, 0x98)   # the ring pixel where a band meets the card
+SWOOSH      = (0xC0, 0xD0, 0xE0)   # the card's arc, behind the trainer sprite
+SWOOSH_LT   = (0xD0, 0xE0, 0xF0)
 # Read straight off the HP Bars kit in PokemonFireRedRef/001/, which agrees
 # pixel for pixel with what was measured from the screenshots earlier.
 HP_SHADOW = (0x50, 0x68, 0x60)   # the plate's drop shadow
@@ -119,8 +132,14 @@ ROLES = {
     "frame-green":([(OUTER, 2), (TEAL, 3), (BEVEL_W, 2)], (CREAM, WHITE),   True),
     "inner":      ([(OUTER, 2), (GOLD_LT, 2), (GOLD_DK, 1)], (PALE, PALE_2), False),
     "inverted":   ([(OUTER, 2), (GOLD, 2), (BEVEL_C, 1)], (NAVY, NAVY),     False),
-    "tab":        ([(OUTER, 2), (GOLD_LT, 2)],            (PALE, PALE_2),   False),
-    "tab-off":    ([(OUTER, 2), (GOLD_DK, 2)],            (TAN, TAN),       False),
+    # The pocket tabs, off the same kit as bag-list and ringed the same way:
+    # grey outer, a cream hairline, then the gold face. The open pocket takes
+    # the light gold and a pale ground; a closed one takes the dark gold and a
+    # tan ground, so which pocket is open reads from across the window.
+    "tab":        ([(BAG_GREY, 2), (BAG_BEVEL, 1), (BAG_GOLD, 2)],
+                                                          (PALE, PALE_2),   False),
+    "tab-off":    ([(BAG_GREY, 2), (BAG_BEVEL, 1), (BAG_GOLD2, 2)],
+                                                          (TAN, TAN),       False),
     "button":     ([(OUTER, 2), (GOLD, 2), (BEVEL_W, 1)], (PALE, PALE_2),   False),
     "button-hi":  ([(OUTER, 2), (GOLD_LT, 2), (BEVEL_W, 1)], (WHITE, PALE), False),
     "button-down":([(OUTER, 2), (GOLD_DK, 2), (BEVEL_C, 1)], (TAN, TAN),    False),
@@ -154,12 +173,86 @@ ROLES = {
                                                           (HP_FILL, HP_FILL), False),
     "hpbar":      ([(HP_TRACK, 1)],                       (HP_GREEN, HP_GREEN2), False),
     "hpbar-gold": ([(HP_TRACK, 1)],                       (HP_GOLD, HP_GOLD), False),
-    # The bag list panel, measured off the Interface & Bag kit: grey outer,
-    # double gold band, warm bevel, pale-yellow fill. Square corners.
-    "bag-list":   ([(BAG_GREY, 2), (GOLD_LT, 3), (GOLD_DK, 2), (BAG_BEVEL, 1)],
-                                                          (PALE, PALE_2),   False),
-    # The dex frame: taupe over tan, the one screen FireRed keeps earthy.
-    "dex-frame":  ([(OUTER, 2), (DISABLED, 2), (TAN, 1)], (CREAM, WHITE),   False),
+    # The bag list panel, measured off the Interface & Bag kit at 1:1: grey 2,
+    # a one pixel cream hairline, light gold 2, dark gold 2, pale-yellow fill.
+    # 0.24 had the cream INNERMOST, which put the lightest band against the
+    # fill where it disappeared and left the panel edge reading as one slab.
+    "bag-list":   ([(BAG_GREY, 2), (BAG_BEVEL, 1), (BAG_GOLD, 2), (BAG_GOLD2, 2)],
+                                                          (BAG_FILL, PALE), False),
+    # The Pokedex. Sampled off the Pokedex kit, which like the bag kit draws at
+    # 1:1 GBA pixels, so these are the game's own three taupes. It is the one
+    # screen FireRed paints earthy rather than gold or blue, and 0.30's guess at
+    # it (#283030 over #C0B088 over #E0D8C0) was close in feel and wrong in
+    # every value.
+    "dex-frame":  ([(DEX_DARK, 2), (DEX_TAUPE, 3), (DEX_LIGHT, 1)],
+                                                          (CREAM, WHITE),   False),
+    # The dex's own label plates: a title in taupe, its value on white. Both
+    # slices are dex-only, which is what makes repainting them safe.
+    "dex-title":  ([(DEX_DARK, 1), (DEX_TAUPE, 2)],  (DEX_TAUPE, DEX_TAUPE), False),
+    "dex-value":  ([(DEX_DARK, 1)],                  (WHITE, DEX_LIGHT),     False),
+    # The entry panel. FireRed's dex draws its Pokemon on a plain WHITE card
+    # ringed in dark taupe, with no scanline: the one light surface in the theme
+    # that stays flat, because a sprite sits on it.
+    "dex-panel":  ([(DEX_DARK, 2), (DEX_LIGHT, 1)],  (WHITE, WHITE),         False),
+}
+
+# Stock slice GEOMETRY we deliberately override, name -> {attribute: value}.
+# Rare, and every entry has to earn itself: the emitted table otherwise mirrors
+# stock, which is what keeps a client update from silently breaking us.
+GEOMETRY = {
+    # Settings' vertical tabs. Stock draws the SELECTED tab 18px wider on the
+    # left (inset="0,-18,0,0") and leaves the rest flush, so an unselected tab's
+    # background starts 18px right of the tab's own left edge -- and its label,
+    # which tabbutton pads by 0 on the left, hangs outside its box. Stock hides
+    # that because its tab art is a soft left-pinned shape; ours is a complete
+    # ringed box, so an unselected tab reads as a small floating box with the
+    # text spilling out of it. Give every tab the same inset. Which one is open
+    # is already legible from the colour: light gold on pale versus dark on tan.
+    "ui-tab-vertical.default": {"inset": "0,-18,0,0"},
+    # A translucent plate for the overworld HUD, and label4 is the slice that
+    # can carry it: nothing in the stock theme tree references it, so a tint
+    # here reaches the HUD and nothing else. Painted slices normally lose their
+    # tint outright, colour and alpha together; this one is put back by hand
+    # with the colour neutralised to white, so the multiply is the identity and
+    # only the 0xB4 alpha survives.
+    "label4.background": {"tint": "#B4FFFFFF"},
+    # FireRed's battle HUD is ONE cream box holding the name and the bar
+    # together. PokeMMO splits them: battle-gui-enemy/self draw the bar, and the
+    # name is a separate redlabel above it. A theme cannot merge two widgets,
+    # but it CAN draw one widget's background outside its own bounds, which is
+    # the same trick the dex entry card uses.
+    #
+    # 26 is measured off a battle screenshot: the name plate's top sits 50
+    # screenshot pixels above the bar, and the shot is 2x. Expanding the bar's
+    # plate up by that much puts the name inside it, so the pair reads as the
+    # single box the reference draws.
+    "battle-ui-enemy": {"inset": "-26,0,0,0"},
+    "battle-ui-self": {"inset": "-26,0,0,0"},
+    "battle-ui-self-slim": {"inset": "-26,0,0,0"},
+}
+
+# Extra band edges for grid cells whose POSITION does not earn them one.
+GRID_EDGES = {
+    # The Summary frame's bottom band is where "Item Held" lives, and stock
+    # gives that widget background "none": the dark grid cell behind it WAS the
+    # box. On a cream frame there is no box at all. Handing the widget a plate
+    # of its own is not the answer either -- the client sizes and places it in
+    # code, so the plate overhung the frame's bottom edge and still stopped
+    # short of its right. Band the TOP of both bottom cells instead. The rule
+    # spans the full width by construction and lands exactly on the frame's own
+    # edge, because it IS the frame's own edge.
+    # Right cell only. Banding the LEFT one too drew a rule straight through
+    # "What are EVs?" and "What are IVs?", which the client lays out just above
+    # the band on those tabs. The rule exists to box the held item, and the held
+    # item is on the right.
+    ("mi-frame-grid", 2, 1): "T",
+}
+
+# Roles that keep the stock SHAPE and stamp it in ONE flat colour, alpha
+# preserved. See stamp_glyph for why the ordinary glyph recolour cannot serve.
+STAMPS = {
+    "stamp-dark": OUTER,
+    "stamp-grey": GREY,
 }
 
 # name prefix -> role. Longest prefix wins, so specific beats general.
@@ -215,7 +308,11 @@ ROLE_BY_PREFIX_IF = [
     ("popup.background",       "inner"),
     ("chatframe",              "inner"),
     ("inner-dialog-text",      "inner"),
-    ("inner-area",             "inner"),
+    # inner-area backs monsterdex-box and nothing else in the whole stock theme,
+    # which is what makes it safe to give the dex its own panel. It is NOT the
+    # sprite box, which is monstergear-pic.background; 0.32 and 0.33 both aimed
+    # here by mistake.
+    ("inner-area",             "dex-panel"),
     ("game-shop-area",         "inner"),
     ("movetutor-area",         "inner"),
     ("tab-area",               "inner"),
@@ -229,6 +326,9 @@ ROLE_BY_PREFIX_IF = [
     ("chat-npc-bubble",        "inner"),
     ("bubble",                 "inner"),
     ("tooltip-left",           "inner"),
+    # Longest prefix wins, so these two beat the generic label-bg- below.
+    ("label-bg-title-dex",     "dex-title"),
+    ("label-bg-value-dex",     "dex-value"),
     ("label-bg-",              "pill"),
     ("label-hbg-",             "pill"),
     ("label-area",             "pill"),
@@ -327,6 +427,13 @@ def role_ingame(name):
     # one place in the theme where the dark pairing is correct.
     if n.startswith("battle-area"):
         return "dialogue"
+    # The nine Summary page tabs. They are ICONS on transparent -- a monitor, a
+    # ruler, a bar chart, a DNA helix -- not panels, and the "tab" rule below
+    # would swallow them on the name alone. 0.24 did exactly that and painted
+    # nine opaque boxes over nine icons, which is the blank strip in the top
+    # left of the Summary screen. Selected is the dark glyph, default the grey.
+    if n.startswith("mi-tab"):
+        return "stamp-dark" if "selected" in n else "stamp-grey"
     if "label-title" in n or "nameplate" in n:
         return "row-header"
     if "label" in n:
@@ -352,22 +459,30 @@ def role_ingame(name):
     return None
 
 
-def paint_bag_tab(px, rect):
-    """The bag's selected pocket tab, off the Interface & Bag kit: flat
-    light-gold face, dark-gold ring, and the orange underline FireRed uses to
-    mark the open pocket. Flat is correct here -- accent bars are the one
-    surface the spec leaves unstriped. Stock splits (L12,R12, no splity)
-    stretch the middle, and the underline spans the full width so it
-    survives the stretch."""
+def paint_bag_tab(px, rect, src=None, srect=None):
+    """The bag's OPEN pocket tab, off the Interface & Bag kit.
+
+    The kit draws it grey-ringed with a one pixel cream hairline inside, a flat
+    light-gold face, and the orange bar FireRed slides under the pocket name.
+    That bar sits three pixels clear of the bottom edge, not flush on it: flush
+    reads as a shadow, inset reads as an underline. Flat is correct here --
+    accent bars are the one surface the spec leaves unstriped.
+
+    Stock splits are L12,R12 with no splity, so the middle stretches
+    horizontally and the underline has to span the full width to survive it."""
     x0, y0, w, h = rect
+    ul_lo, ul_hi = h - 6, h - 3          # the underline, inset from the bottom
     for yy in range(h):
         for xx in range(w):
-            if yy >= h - 3:
+            d = min(xx, w - 1 - xx, yy, h - 1 - yy)
+            if d < 2:
+                c = BAG_GREY
+            elif d < 3:
+                c = BAG_BEVEL
+            elif ul_lo <= yy < ul_hi:
                 c = ORANGE_UL
-            elif xx == 0 or xx == w - 1 or yy == 0:
-                c = GOLD_DK
             else:
-                c = GOLD_LT
+                c = BAG_GOLD
             px[x0 + xx, y0 + yy] = c + (255,)
 
 
@@ -384,7 +499,21 @@ def _rounded_depth(xx, yy, x0, y0, x1, y1, r):
     return max(0, int(d) + 1)
 
 
-def paint_trainer_card(px, rect):
+# The eight badge slots in the stock 454x287 card texture, measured off it:
+# first slot at x=39, 48 apart, 38 wide, y=233 and 35 tall.
+#
+# These are NOT free geometry. The client lays its badge sprites out in code
+# against the stock texture, and the texture carries no splitx/splity, so it is
+# drawn whole and any slot pitch but the stock one drifts. 0.24 spaced its slots
+# evenly across the card instead, 53 apart starting at x=23; by the eighth badge
+# the sprite had walked 35px clear of the slot painted for it, which is the
+# misalignment on the card. Positions are kept as fractions of the stock size so
+# a differently sized rect still lands them right.
+TC_REF_W, TC_REF_H = 454, 287
+TC_BADGE = (39, 233, 38, 35, 48)   # x0, y0, w, h, pitch
+
+
+def paint_trainer_card(px, rect, src=None, srect=None):
     """The whole trainer card in one texture, as the kit draws it: the teal
     1:3 striped ground, a rounded white card with a grey double ring, the
     #68A0D8 header band, a 1:1 scanlined body and a row of eight rounded badge
@@ -393,10 +522,47 @@ def paint_trainer_card(px, rect):
     x0, y0, w, h = rect
     inset, r = 4, 10
     cx0, cy0, cx1, cy1 = inset, inset, w - 1 - inset, h - 1 - inset
-    header_h = 46
-    badge, gap = 34, (w - 2 * inset - 8 * 34) // 9
-    badge_y0 = h - inset - 14 - badge
+    # FireRed's header does NOT cap the card. Five of the reference's 160 rows
+    # of white body sit above it, so the blue band floats inside the card, and
+    # the badges band leaves the same five rows under it at the foot. That gap
+    # is most of what separated this from the real card.
+    #
+    # Its height does not scale as cleanly: 20 of 160 rows comes to 36 here, and
+    # 36 collides, because the client draws "Issued" at texture row 52 and the
+    # band would end exactly on it. 26 keeps the float and keeps the date's air.
+    # The trainer name occupies rows 22 to 37, which 26 still contains.
+    gap = max(1, int(round(5 / 160.0 * h)))
+    header_h = 26
+    hdr_lo = inset + 3 + gap
+    hdr_hi = hdr_lo + header_h
+    fx, fy = w / float(TC_REF_W), h / float(TC_REF_H)
+    bx0, by0, bw, bh, pitch = TC_BADGE
+    slots = [(int(round((bx0 + i * pitch) * fx)), int(round(by0 * fy)),
+              max(1, int(round(bw * fx))), max(1, int(round(bh * fy))))
+             for i in range(8)]
+    # FireRed stands its badges on their own light blue band across the foot of
+    # the card -- 26 of that card's 160 rows -- not loose on the body, and its
+    # slots are circles rather than rounded squares. The band is derived from
+    # the slots so it stays centred on positions the client fixes, and the slot
+    # radius is half the short side, which turns a 38x35 rect into an ellipse
+    # that reads as FireRed's circle.
+    band_y0 = min(s[1] for s in slots) - 4
+    band_y1 = max(s[1] + s[3] for s in slots) + 4
+    # The pale arc behind the trainer. Fitting its left boundary row by row in
+    # the reference gives a circle, centre (0.95w, 0.72h) and radius 0.47h, with
+    # everything inside it painted #C0D0E0/#D0E0F0 instead of the white body.
+    # MIRRORED here: FireRed stands its trainer on the right and PokeMMO stands
+    # ours on the left, and the arc belongs behind the sprite, not behind the
+    # stats. The badges band and the header both paint over it, as they do
+    # there.
+    sw_cx, sw_cy, sw_r2 = 0.05 * w, 0.72 * h, (0.47 * h) ** 2
     for yy in range(h):
+        # Neither band carries an edge line: the reference is flat #68A0D8 and
+        # flat #80B8E0 top to bottom. Where a band reaches the card's inner ring
+        # that one grey pixel takes the band's own dark shade instead, which is
+        # the only place the ring is not grey.
+        in_header = hdr_lo <= yy < hdr_hi
+        in_band = band_y0 <= yy < band_y1
         for xx in range(w):
             d = _rounded_depth(xx, yy, cx0, cy0, cx1, cy1, r)
             if d == 0:                       # the striped ground outside
@@ -404,27 +570,28 @@ def paint_trainer_card(px, rect):
             elif d <= 2:
                 c = CARD_GREY
             elif d == 3:
-                c = CARD_ACC
-            elif yy - cy0 < 3 + header_h:    # the header band
-                c = HEADER_EDGE if yy - cy0 == 2 + header_h else HEADER_BLUE
+                c = BAND_EDGE if (in_header or in_band) else CARD_ACC
+            elif in_header:
+                c = HEADER_BLUE
             else:
-                c = WHITE if yy % 2 else CARD_ICE
-                if badge_y0 <= yy < badge_y0 + badge:
-                    slot = -1
-                    for i in range(8):
-                        bx = inset + gap + i * (badge + gap)
-                        if bx <= xx < bx + badge:
-                            slot = i
-                            break
-                    if slot >= 0:
-                        bx = inset + gap + slot * (badge + gap)
-                        sd = _rounded_depth(xx, yy, bx, badge_y0,
-                                            bx + badge - 1,
-                                            badge_y0 + badge - 1, 8)
+                # The band is a GROUND, not a branch of its own: the slot loop
+                # below still has to run over it, or the eight badge slots
+                # vanish into flat blue.
+                if in_band:
+                    c = BADGE_BAND
+                elif (xx - sw_cx) ** 2 + (yy - sw_cy) ** 2 <= sw_r2:
+                    c = SWOOSH_LT if yy % 2 else SWOOSH
+                else:
+                    c = WHITE if yy % 2 else CARD_ICE
+                for sx, sy, sw, sh in slots:
+                    if sx <= xx < sx + sw and sy <= yy < sy + sh:
+                        sd = _rounded_depth(xx, yy, sx, sy, sx + sw - 1,
+                                            sy + sh - 1, min(sw, sh) // 2)
                         if sd == 1:
-                            c = CARD_ACC
+                            c = CARD_GREY
                         elif sd > 1:
-                            c = CARD_ICE
+                            c = WHITE if yy % 2 else CARD_ICE
+                        break
             px[x0 + xx, y0 + yy] = c + (255,)
 
 
@@ -517,6 +684,16 @@ def rect_of(el):
     return x, y, abs(w), abs(h)
 
 
+def grid_cells(grid):
+    """Every POSITIONAL child of a <grid>, areas and aliases alike.
+
+    A cell may be an <alias> reusing a slice declared elsewhere. Enumerating
+    only the areas slides every later cell one position back and the builder
+    bands them from the wrong edges. Named so a test can hold the builder to it.
+    """
+    return [c for c in grid if c.tag in ("area", "alias")]
+
+
 def band_total(role):
     return sum(w for _, w in ROLES[role][0])
 
@@ -546,14 +723,34 @@ def clamp_split(el, rect, log):
 
 
 # ---------------------------------------------------------------- painting --
-def bands_for(size, spec):
-    """Shrink the band stack so a small slice still shows every band."""
-    total = sum(w for _, w in spec)
-    if size >= total * 2:
+def bands_for(w, h, spec, edges=()):
+    """Shrink the band stack so a small slice still shows every band.
+
+    Room is needed PER AXIS, and only on the axes the cell actually bands from.
+    A standalone slice bands left and right, so it needs twice the stack across
+    with fill between, or it comes out pure border. A grid's left-edge cell
+    bands from one side only, so the stack alone is enough -- and its HEIGHT
+    does not constrain a vertical band at all.
+
+    Measuring one number against min(w, h) got both wrong and is what flattened
+    the bag. bag-list is a seven pixel FireRed border, ui-inner-frame-tab2 is a
+    grid of 10px cells, and the cell that carries most of the panel's height is
+    10 wide by 4 tall: min() called that 4, shrank the stack to a two pixel
+    hairline, and the panel shipped with no visible edge at all."""
+    total = sum(bw for _, bw in spec)
+
+    def need(a, b):
+        if a in edges and b in edges:
+            return total * 2        # bands from both sides, plus fill between
+        if a in edges or b in edges:
+            return total            # one side only; the rest of the axis fills
+        return 0                    # this axis is not banded
+
+    if w >= need("L", "R") and h >= need("T", "B"):
         return spec
-    if size >= len(spec) * 2 + 2:
-        return [(c, max(1, w // 2)) for c, w in spec]
-    return [(c, 1) for c, w in spec]
+    if max(w, h) >= len(spec) * 2 + 2:
+        return [(c, max(1, bw // 2)) for c, bw in spec]
+    return [(c, 1) for c, bw in spec]
 
 
 def paint_cell(px, rect, edges, spec, stripe, chamfer):
@@ -564,7 +761,7 @@ def paint_cell(px, rect, edges, spec, stripe, chamfer):
     "outside" on the edges it actually sits on, so a middle cell is pure fill
     and a top-left cell bands from both left and top."""
     x0, y0, w, h = rect
-    spec = bands_for(min(w, h) if edges else max(w, h), spec)
+    spec = bands_for(w, h, spec, edges)
     ramp = []
     for colour, width in spec:
         ramp.extend([colour] * width)
@@ -621,6 +818,23 @@ def recolour_glyph(dst_px, src, rect, dest):
             dst_px[dx + xx, dy + yy] = ramp[min(len(ramp) - 1, idx)] + (255,)
 
 
+def stamp_glyph(dst_px, src, rect, dest, colour):
+    """Keep the stock SHAPE, paint every opaque pixel one flat colour, and keep
+    the transparency around it.
+
+    recolour_glyph INVERTS luminance, which is right for art drawn for a dark UI
+    where the light pixels are the foreground. A slice that is ALREADY a dark
+    glyph on transparent is the opposite case: inverting it paints the glyph
+    white, and white on cream is nothing at all. Stamping keeps the icon and
+    keeps the hole around it, so whatever the widget sits on shows through."""
+    sx, sy, w, h = rect
+    dx, dy = dest[0], dest[1]
+    for yy in range(h):
+        for xx in range(w):
+            a = src.getpixel((sx + xx, sy + yy))[3]
+            dst_px[dx + xx, dy + yy] = colour + (255,) if a >= 90 else (0, 0, 0, 0)
+
+
 # ----------------------------------------------------------------- packing --
 class Packer:
     """Shelf packer: rows of slots, one pixel of gutter so no two slices touch."""
@@ -662,13 +876,22 @@ def build(spec, report=False):
 
     for grid in out_el.findall("grid"):
         role = role_of(grid.get("name").split(".")[0]) or "frame"
-        if role in ("keep", None):
+        if role in ("keep", None) or role in STAMPS:
             role = "frame"
         cols = len(grid.get("weightsX", "0,1,0").split(","))
-        areas = grid.findall("area")
-        rows = (len(areas) + cols - 1) // cols
-        for i, area in enumerate(areas):
+        # EVERY positional child, not just the <area>s. A grid cell may be an
+        # <alias> where it reuses a slice declared elsewhere: mi-frame-grid
+        # aliases mi-bg for its middle-right cell, ui-checkbox.checked does the
+        # same. findall("area") skipped those and slid every later cell one
+        # place back, so the Summary frame painted its bottom-LEFT cell as if it
+        # were middle-right -- that corner shipped with no left and no bottom
+        # border at all, and the panel simply ended against the world.
+        cells = grid_cells(grid)
+        rows = (len(cells) + cols - 1) // cols
+        for i, area in enumerate(cells):
             col, row = i % cols, i // cols
+            if area.tag != "area":
+                continue          # an alias owns a cell but no pixels of its own
             edges = set()
             if col == 0:
                 edges.add("L")
@@ -678,6 +901,7 @@ def build(spec, report=False):
                 edges.add("T")
             if row == rows - 1:
                 edges.add("B")
+            edges |= set(GRID_EDGES.get((grid.get("name"), row, col), ""))
             raw = area.get("xywh")
             if "-" in raw:
                 flipped.append(grid.get("name"))
@@ -726,18 +950,28 @@ def build(spec, report=False):
                 if a.get("tint"):
                     del a.attrib["tint"]   # painted outright, same as panels
                 clamp_split(a, dst, clamped)
-            jobs.append(("special", dst, special[role[1]]))
+            # the stock rect rides along so a painter can read stock pixels
+            jobs.append(("special", dst, (special[role[1]], rect)))
             continue
+        painted = role not in (None, "keep") and role not in STAMPS
         for a in els:
             a.set("xywh", "%d,%d,%d,%d" % dst)
-            if role not in (None, "keep") and a.get("tint"):
+            if painted and a.get("tint"):
                 # A tint MULTIPLIES the art. label2.background ships
                 # tint="#99949494", 60% grey, which is what kept the login
-                # announcements dark and unreadable after the repaint. Anything
-                # we paint outright must lose its tint; glyphs keep theirs,
-                # since being tinted is the whole point of them.
+                # announcements dark and unreadable after the repaint.
+                #
+                # The tint's ALPHA goes with it, and that is deliberate. 0.28
+                # tried keeping the alpha and neutralising only the colour, to
+                # rescue the sheet behind the quit prompt: label1..7 and
+                # table-row are ONE 5x5 stock slice told apart purely by tint,
+                # and label1's 0x95 is what made that sheet a dim rather than a
+                # wall. It worked, and it also made the login announcements 58%
+                # transparent, because they are the same slice. The sheet has
+                # its own widget -- confirm-widget, in widgets-firered.xml --
+                # so it is fixed there instead and the plates stay opaque.
                 del a.attrib["tint"]
-            if role not in (None, "keep") and band_total(role) \
+            if painted and band_total(role) \
                     and min(dst[2], dst[3]) >= 2 * band_total(role) + 1:
                 # EMIT the 9-slice split, do not merely correct an existing one.
                 # A painted panel with no splitx/splity is stretched whole, so
@@ -754,8 +988,16 @@ def build(spec, report=False):
                 # leave it stretching whole, but never with overrunning caps
                 clamp_split(a, dst, clamped)
         jobs.append(("glyph" if role is None else
-                     "keep" if role == "keep" else "panel",
-                     dst, rect if role in (None, "keep") else ({"L", "R", "T", "B"}, role)))
+                     "keep" if role == "keep" else
+                     "stamp" if role in STAMPS else "panel",
+                     dst,
+                     rect if role in (None, "keep") else
+                     (rect, STAMPS[role]) if role in STAMPS else
+                     ({"L", "R", "T", "B"}, role)))
+
+    for a in named:
+        for attr, val in GEOMETRY.get(a.get("name") or "", {}).items():
+            a.set(attr, val)
 
     H = packer.height() + 1
     out = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -767,9 +1009,11 @@ def build(spec, report=False):
     for kind, dst, payload in jobs:
         counts[kind] += 1
         if kind == "special":
-            payload(px, dst)
+            payload[0](px, dst, src, payload[1])
         elif kind == "glyph":
             recolour_glyph(px, src, payload, dst)
+        elif kind == "stamp":
+            stamp_glyph(px, src, payload[0], dst, payload[1])
         elif kind == "keep":
             out.paste(src.crop((payload[0], payload[1],
                                 payload[0] + payload[2], payload[1] + payload[3])),
@@ -784,9 +1028,9 @@ def build(spec, report=False):
     out.save(os.path.join(res, os.path.basename(atlas)))
     emit_xml(out_el, spec["out"])
 
-    print("%-26s %dx%d (stock %dx%d)  %d panels, %d glyphs, %d kept"
+    print("%-26s %dx%d (stock %dx%d)  %d panels, %d glyphs, %d stamped, %d kept"
           % (os.path.basename(atlas), W, H, src.size[0], src.size[1],
-             counts["panel"], counts["glyph"], counts["keep"]))
+             counts["panel"], counts["glyph"], counts["stamp"], counts["keep"]))
     if splits_added:
         print("   emitted 9-slice splits on %d painted slices" % len(splits_added))
     for name, attr, was, now, extent in clamped:

@@ -13,27 +13,27 @@
     <images file="res/user-interface.png" filter="nearest">
         <area name="white.background" xywh="257,140,1,1" />
         <area name="interface.background" xywh="243,33,61,44" splitx="L7,R7" splity="T7,B7" inset="-25" />
-        <area name="popup-button.default" xywh="154,78,34,22" splitx="L2,R2" splity="T1,B1" />
-        <area name="popup-button.hover" xywh="189,78,34,22" splitx="L2,R2" splity="T1,B1" />
+        <area name="popup-button.default" xywh="180,78,34,22" splitx="L2,R2" splity="T1,B1" />
+        <area name="popup-button.hover" xywh="215,78,34,22" splitx="L2,R2" splity="T1,B1" />
         <select name="popup-button.background">
             <alias ref="popup-button.hover" if="hover | keyboardFocus" />
             <alias ref="popup-button.default" />
         </select>
         <area name="input.background" xywh="0,103,45,19" splitx="L4,R4" splity="T4,B4" border="3,0" />
-        <area name="chat-input.background" xywh="26,78,37,23" splitx="L4,R4" splity="T4,B4" border="3" />
+        <area name="chat-input.background" xywh="52,78,37,23" splitx="L4,R4" splity="T4,B4" border="3" />
         <area name="ui-red-button.default" xywh="46,103,39,19" splitx="L7,R7" splity="T6,B8" />
         <area name="ui-red-button.hover" xywh="86,103,39,19" splitx="L7,R7" splity="T6,B8" />
         <area name="ui-blue-button.default" xywh="126,103,39,19" splitx="L7,R7" splity="T6,B8" />
         <area name="ui-blue-button.hover" xywh="166,103,39,19" splitx="L7,R7" splity="T6,B8" />
         <area name="ui-green-button.default" xywh="206,103,39,19" splitx="L7,R7" splity="T6,B8" />
         <area name="ui-green-button.hover" xywh="246,103,39,19" splitx="L7,R7" splity="T6,B8" />
-        <area name="ui-bg-button.default" xywh="64,78,44,23" splitx="L15,R16" splity="T8,B10" inset="-2,0,-2,0" />
-        <area name="ui-bg-button.hover" xywh="109,78,44,23" splitx="L15,R16" splity="T8,B10" inset="-2,0,-2,0" />
+        <area name="ui-bg-button.default" xywh="90,78,44,23" splitx="L15,R16" splity="T8,B10" inset="-2,0,-2,0" />
+        <area name="ui-bg-button.hover" xywh="135,78,44,23" splitx="L15,R16" splity="T8,B10" inset="-2,0,-2,0" />
         <area name="ui-bg2-button.default" xywh="422,103,37,17" splitx="L4,R4" splity="T4,B4" inset="0,0,2,5" />
         <area name="ui-bg2-button.hover" xywh="460,103,37,17" splitx="L4,R4" splity="T4,B4" inset="0,0,0,5" />
-        <area name="ui-tab-button.default" xywh="299,78,40,21" splitx="L4,R4" splity="T4,B4" inset="-5,-5,0,-5" />
-        <area name="ui-tab-button.hover" xywh="340,78,40,21" splitx="L4,R4" splity="T4,B4" inset="-5,-5,0,-5" />
-        <area name="ui-tab-button.disabled" xywh="381,78,40,21" splitx="L4,R4" splity="T4,B4" inset="-5,-5,0,-5" />
+        <area name="ui-tab-button.default" xywh="325,78,40,21" splitx="L5,R5" splity="T5,B5" inset="-5,-5,0,-5" />
+        <area name="ui-tab-button.hover" xywh="366,78,40,21" splitx="L5,R5" splity="T5,B5" inset="-5,-5,0,-5" />
+        <area name="ui-tab-button.disabled" xywh="407,78,40,21" splitx="L5,R5" splity="T5,B5" inset="-5,-5,0,-5" />
         <area name="ui-violet-button.default" xywh="286,103,39,19" splitx="L7,R7" splity="T6,B8" />
         <area name="ui-violet-button.hover" xywh="326,103,39,19" splitx="L7,R7" splity="T6,B8" />
         <area name="ui-violet-button.pressed" xywh="366,103,37,19" splitx="L6,R6" splity="T6,B8" />
@@ -48,9 +48,9 @@
         <area name="tab-area" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="25,0,0,-5" />
         <area name="tab-area2" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="25,0,0,-7" />
         <area name="tab-area3" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="15,0,0,-17" />
-        <area name="inner-area" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="0,5,0,0" />
+        <area name="inner-area" xywh="26,78,25,24" splitx="L3,R3" splity="T3,B3" inset="0,5,0,0" />
         <area name="movetutor-area" xywh="0,78,25,24" splitx="L5,R5" splity="T5,B5" inset="0,5,0,-5" />
-        <area name="label-area.background" xywh="224,78,24,22" splitx="L2,R2" splity="T2,B2" />
+        <area name="label-area.background" xywh="250,78,24,22" splitx="L2,R2" splity="T2,B2" />
         <grid name="xp-monster-frame.background" weightsX="0,1,0" weightsY="1" inset="-1,0,0,0">
             <area xywh="0,0,22,6" />
             <area xywh="23,0,1,6" />
@@ -70,25 +70,25 @@
         </grid>
         <area name="progressbar-green.progressImage" xywh="181,140,1,8" inset="0,2,0,0" />
         <area name="monster-frame-nameplate" xywh="305,33,7,34" splitx="L2,R3" inset="0,-5,0,0" />
-        <area name="inner-tab" xywh="86,123,14,14" splitx="L4,R4" splity="T4,B4" />
-        <area name="inner-tab-orange" xywh="101,123,14,14" splitx="L4,R4" splity="T4,B4" />
+        <area name="inner-tab" xywh="105,123,14,14" splitx="L5,R5" splity="T5,B5" />
+        <area name="inner-tab-orange" xywh="120,123,14,14" splitx="L5,R5" splity="T5,B5" />
         <area name="label-hbg-title" xywh="153,140,15,10" splitx="L2,R2" splity="T2,B2" inset="-2,-2" />
         <area name="label-hbg-value" xywh="183,140,15,8" splitx="L2,R2" splity="T2,B2" inset="-3,-2,-2,-2" />
         <area name="label-hbg-vai-value" xywh="183,140,15,8" splitx="L2,R2" splity="T2,B2" inset="-3,-2,-2,-2" />
         <area name="label-bg-title" xywh="22,123,9,15" splitx="L2,R2" splity="T2,B2" inset="0,-2" />
-        <area name="label-bg-title-dex" xywh="22,123,9,15" splitx="L2,R2" splity="T2,B2" inset="-2,0,-2,0" />
-        <area name="label-bg-value-dex" xywh="32,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-2,0" />
-        <area name="label-bg-value" xywh="32,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-2,-17" />
-        <area name="label-bg-value-arrow" xywh="32,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-3,-17" />
-        <area name="label-bg-value2" xywh="32,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-2,-70" />
-        <area name="label-bg-value-type" xywh="32,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-4,-70" />
-        <area name="label-bg-value3" xywh="32,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,0,-3,-14" />
-        <area name="label-bg-value4" xywh="249,78,24,22" splitx="L2,R2" splity="T2,B2" inset="0" />
-        <area name="label-bg-value5" xywh="41,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,0,-2,0" />
+        <area name="label-bg-title-dex" xywh="32,123,9,15" splitx="L3,R3" splity="T3,B3" inset="-2,0,-2,0" />
+        <area name="label-bg-value-dex" xywh="42,123,8,15" splitx="L1,R1" splity="T1,B1" inset="-2,-5,-2,0" />
+        <area name="label-bg-value" xywh="51,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-2,-17" />
+        <area name="label-bg-value-arrow" xywh="51,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-3,-17" />
+        <area name="label-bg-value2" xywh="51,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-2,-70" />
+        <area name="label-bg-value-type" xywh="51,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-4,-70" />
+        <area name="label-bg-value3" xywh="51,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,0,-3,-14" />
+        <area name="label-bg-value4" xywh="275,78,24,22" splitx="L2,R2" splity="T2,B2" inset="0" />
+        <area name="label-bg-value5" xywh="60,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,0,-2,0" />
         <area name="inner-dialog-text" xywh="313,33,24,32" splitx="L5,R5" splity="T5,B5" tiled="true" border="6,0,0,0" />
-        <area name="label-bg-settings-value" xywh="32,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-2,0" />
+        <area name="label-bg-settings-value" xywh="51,123,8,15" splitx="L2,R2" splity="T2,B2" inset="-2,-5,-2,0" />
         <area name="friends-list-bg" xywh="430,33,27,26" splitx="L5,R5" splity="T5,B5" inset="0" />
-        <area name="trade-slot-normal" xywh="274,78,24,22" splitx="L4,R4" splity="T4,B4" inset="0" />
+        <area name="trade-slot-normal" xywh="300,78,24,22" splitx="L4,R4" splity="T4,B4" inset="0" />
         <area name="trade-slot-shiny" xywh="458,33,28,26" splitx="L4,R4" splity="T4,B4" inset="-2" />
         <grid name="chatframe.background" weightsX="0,0,1,0" weightsY="0,0,1,0" border="0,5,5,5" tint="#FFFFFF">
             <area xywh="46,0,4,4" />
@@ -140,9 +140,9 @@
             <area xywh="307,0,3,7" />
             <area xywh="311,0,5,7" />
         </grid>
-        <area name="input-black.default" xywh="434,123,28,12" splitx="L4,R4" splity="T4,B4" inset="0,2" />
-        <area name="input-black.inactive" xywh="434,123,28,12" splitx="L4,R4" splity="T4,B4" inset="0,2" />
-        <area name="monster-preview-bg" xywh="463,123,28,12" splitx="L4,R4" splity="T4,B4" inset="0,0" />
+        <area name="input-black.default" xywh="453,123,28,12" splitx="L4,R4" splity="T4,B4" inset="0,2" />
+        <area name="input-black.inactive" xywh="453,123,28,12" splitx="L4,R4" splity="T4,B4" inset="0,2" />
+        <area name="monster-preview-bg" xywh="482,123,28,12" splitx="L4,R4" splity="T4,B4" inset="0,0" />
         <select name="input-black.background">
             <alias ref="input-black.default" if="selected | keyboardFocus" />
             <alias ref="input-black.inactive" />
@@ -297,30 +297,30 @@
             <area if="hover" xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
             <area xywh="215,140,7,7" splitx="L2,R2" splity="T2,B2" />
         </select>
-        <area name="monster-frame-tab-empty.default" xywh="338,33,28,30" inset="-10,0,10,0" splitx="L4,R4" splity="T4,B4" />
-        <area name="monster-frame-tab-empty.selected" xywh="367,33,28,30" inset="-10,0,10,0" splitx="L4,R4" splity="T4,B4" />
+        <area name="monster-frame-tab-empty.default" xywh="338,33,28,30" inset="-10,0,10,0" splitx="L5,R5" splity="T5,B5" />
+        <area name="monster-frame-tab-empty.selected" xywh="367,33,28,30" inset="-10,0,10,0" splitx="L5,R5" splity="T5,B5" />
         <select name="monster-frame-tab-empty.background">
             <alias ref="monster-frame-tab-empty.selected" if="selected | hover" />
             <alias ref="monster-frame-tab-empty.default" />
         </select>
-        <area name="icon-gm" xywh="116,123,26,13" center="true" inset="0,0,1,0" />
-        <area name="icon-jgm" xywh="143,123,26,13" center="true" inset="0,0,1,0" />
-        <area name="icon-sgm" xywh="170,123,30,13" center="true" inset="0,0,1,0" />
-        <area name="icon-cm" xywh="201,123,26,13" center="true" inset="0,0,1,0" />
-        <area name="icon-mod" xywh="228,123,31,13" center="true" inset="0,0,1,0" />
-        <area name="icon-admin" xywh="260,123,30,13" center="true" inset="0,0,1,0" />
-        <area name="icon-dev" xywh="291,123,29,13" center="true" inset="0,0,1,0" />
-        <area name="icon-hgm" xywh="321,123,30,13" center="true" inset="0,0,1,0" />
-        <area name="icon-sm" xywh="352,123,25,13" center="true" inset="0,0,1,0" />
-        <area name="icon-gd" xywh="378,123,25,13" center="true" inset="0,0,1,0" />
-        <area name="icon-system" xywh="404,123,29,13" center="true" inset="0,0,1,0" />
+        <area name="icon-gm" xywh="135,123,26,13" center="true" inset="0,0,1,0" />
+        <area name="icon-jgm" xywh="162,123,26,13" center="true" inset="0,0,1,0" />
+        <area name="icon-sgm" xywh="189,123,30,13" center="true" inset="0,0,1,0" />
+        <area name="icon-cm" xywh="220,123,26,13" center="true" inset="0,0,1,0" />
+        <area name="icon-mod" xywh="247,123,31,13" center="true" inset="0,0,1,0" />
+        <area name="icon-admin" xywh="279,123,30,13" center="true" inset="0,0,1,0" />
+        <area name="icon-dev" xywh="310,123,29,13" center="true" inset="0,0,1,0" />
+        <area name="icon-hgm" xywh="340,123,30,13" center="true" inset="0,0,1,0" />
+        <area name="icon-sm" xywh="371,123,25,13" center="true" inset="0,0,1,0" />
+        <area name="icon-gd" xywh="397,123,25,13" center="true" inset="0,0,1,0" />
+        <area name="icon-system" xywh="423,123,29,13" center="true" inset="0,0,1,0" />
         <area name="monstergear-pic" xywh="0,123,21,16" center="true" inset="0,0,1,0" splitx="L4,R4" splity="T4,B4" />
-        <area name="row.background" xywh="50,123,17,15" inset="0,1,2,2" splitx="L1,R1" splity="T1,B1" />
-        <area name="row-header.background" xywh="68,123,17,15" inset="0,-1,2,-1" splitx="L3,R3" splity="T3,B3" />
+        <area name="row.background" xywh="69,123,17,15" inset="0,1,2,2" splitx="L1,R1" splity="T1,B1" />
+        <area name="row-header.background" xywh="87,123,17,15" inset="0,-1,2,-1" splitx="L3,R3" splity="T3,B3" />
         <area name="inventory-slot.default" xywh="404,103,17,18" inset="0,-1,-1,-1" splitx="L4,R4" splity="T4,B4" />
-        <area name="inventory-slot.selected" xywh="422,78,19,20" inset="0,-1,-1,-1" splitx="L4,R4" splity="T4,B4" />
-        <area name="inventory-slot.multi" xywh="442,78,19,20" inset="0,-1,-1,-1" splitx="L4,R4" splity="T4,B4" />
-        <area name="inventory-slot.multiselected" xywh="462,78,19,20" inset="0,-1,-1,-1" splitx="L4,R4" splity="T4,B4" />
+        <area name="inventory-slot.selected" xywh="448,78,19,20" inset="0,-1,-1,-1" splitx="L4,R4" splity="T4,B4" />
+        <area name="inventory-slot.multi" xywh="468,78,19,20" inset="0,-1,-1,-1" splitx="L4,R4" splity="T4,B4" />
+        <area name="inventory-slot.multiselected" xywh="488,78,19,20" inset="0,-1,-1,-1" splitx="L4,R4" splity="T4,B4" />
         <select name="inventory-slot">
             <alias ref="inventory-slot.multiselected" if="hover | keyboardFocus" />
             <alias ref="inventory-slot.multi" if="selected" />

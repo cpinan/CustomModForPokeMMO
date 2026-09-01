@@ -73,6 +73,31 @@ WORLD_FACES = {"pb-dark", "mechabold", "main-border", "main-small",
                "mechabold-large", "listbox-display"}
 WORLD_OUTLINE = "#F8F0E8"
 
+# Faces whose colour FireRed itself sets, on a surface THIS theme paints and so
+# controls the contrast of. Only the trainer card so far: its header is a
+# #68A0D8 blue band and the game writes the name across it in gold. Stock's
+# #434343 on that blue reads as a placeholder, and the ordinary "darken anything
+# light" rule would undo the gold, so the exception has to be explicit.
+#
+# trainer-name is safe to redefine outright: main-widgets.xml uses the FACE in
+# exactly one place, the card header. Its other trainer-name THEME, on the
+# battle nameplate, points at the battle font instead.
+CARD_FACES = {"trainer-name": "#F0D088"}
+
+# Faces moved onto the client's OWN pixel font. battle.ttf ships with the
+# client, is already what the battle face uses, and maps 42,893 glyphs, so
+# accents and CJK all survive the swap. Nothing is downloaded and nothing new is
+# licensed: this is the same font directory the theme already references by
+# absolute path.
+#
+# Its pixel grid only lands on multiples of 8. At 12 to 20 it is mush and at 24
+# it is thin on navy; 32 is the first size that reads, and it happens to set the
+# same line width as the Noto 24 it replaces, so the dialogue box does not
+# reflow. That size floor is why this is the dialogue face and not the whole UI:
+# body text is 12pt and there is no version of 12pt that is crisp here.
+PIXEL_FACES = {"messagebox": 32}
+PIXEL_FONT = "battle.ttf"
+
 NAMED = {"white": "#FFFFFF", "black": "#000000", "red": "#FF0000"}
 
 
@@ -157,11 +182,21 @@ def main():
                 el.attrib.pop("default", None)
                 el.attrib.pop("unique_atlas", None)
 
+        if name in PIXEL_FACES and el.get("filename"):
+            el.set("filename", FONT_DIR + PIXEL_FONT)
+            el.set("size", str(PIXEL_FACES[name]))
+            # battle.ttf is a plain TTF, not the CJK collection, so the face
+            # selector that picks sc/tc/jp out of a .ttc has nothing to pick.
+            el.attrib.pop("size_cjk", None)
+            el.attrib.pop("faces", None)
         if el.get("filename"):
             el.set("filename", FONT_DIR + os.path.basename(el.get("filename")))
 
         colour = el.get("color")
-        if name in NAVY_TEXT:
+        if name in CARD_FACES:
+            el.set("color", CARD_FACES[name])
+            kept += 1
+        elif name in NAVY_TEXT:
             el.set("color", NAVY_GLYPH)
             kept += 1
         elif name in KEEP_LIGHT:

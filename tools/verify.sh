@@ -11,6 +11,10 @@ python3 tools/build_firered_splash.py
 python3 tools/build_firered_loginbg.py --scene
 
 echo
+echo "== theme paths resolve =="
+python3 tools/theme_lint.py --unreachable | tail -1
+
+echo
 echo "== invariants =="
 python3 tools/test_firered_theme.py 2>&1 | tail -3
 

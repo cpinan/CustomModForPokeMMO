@@ -393,6 +393,67 @@ class Art(unittest.TestCase):
             with self.subTest(xml=os.path.relpath(xml, MOD), file=ref):
                 self.assertTrue(os.path.exists(target), "referenced art is missing")
 
+    def test_no_override_names_a_path_the_stock_tree_never_declares(self):
+        # An override whose path does not exist is not an error to TWL: it is
+        # simply never consulted, and it looks exactly like a fix that did not
+        # work. Three separate hunts this session ended on dead paths --
+        # editfield-search scoped under inventory-tabbedframe, spritelabel under
+        # itemplate, label under battle-gui-enemy -- each costing a build, a
+        # client restart and a screenshot before the silence was understood.
+        #
+        # tools/theme_lint.py resolves the whole include chain and follows ref=
+        # inheritance, so it can answer statically what only the game could
+        # answer before.
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import theme_lint
+        decls, _images, ours, refs, _files = theme_lint.build()
+        # A probe from tools/probe_paths.py is DELIBERATELY speculative: its
+        # whole job is to try paths that may not exist and see which lights up
+        # in game. Exclude it, or a legitimate probe turns verify.sh red.
+        probing = "PROBE-BEGIN" in open(os.path.join(
+            MOD, "firered", "widgets-firered.xml")).read()
+        if probing:
+            self.skipTest("a path probe is installed; run probe_paths.py clear")
+        self.assertGreater(len(ours), 10, "the chain did not reach our overrides")
+        dead = [p for p in sorted(ours)
+                if not theme_lint.reachable(p, decls, refs)]
+        self.assertEqual(
+            [], [" > ".join(p) for p in dead],
+            "override names a path stock never declares, so it will be ignored")
+
+    def test_grid_cells_count_aliases_not_just_areas(self):
+        # A grid cell can be an <area> OR an <alias> reusing a slice declared
+        # elsewhere. Enumerating only the areas slides every cell after the
+        # alias one position back, and the builder then bands each from the
+        # wrong edges: the Summary frame painted its bottom-LEFT cell as if it
+        # were middle-right and shipped that corner with no left or bottom
+        # border at all, so the panel just ended against the world.
+        #
+        # Two stock grids do this -- mi-frame-grid and ui-checkbox.checked --
+        # and for those the positional count MUST exceed the area count, which
+        # is exactly what a revert to findall("area") would break. Every grid
+        # also has to come out a whole number of rows.
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import build_firered_atlas as builder
+        with_alias = 0
+        for spec in builder.ATLASES:
+            block = builder.load_block(
+                os.path.join(builder.STOCK, spec["source"]), spec["file"])
+            for g in block.findall("grid"):
+                cells = builder.grid_cells(g)
+                cols = len(g.get("weightsX", "0,1,0").split(","))
+                with self.subTest(atlas=spec["file"], grid=g.get("name")):
+                    self.assertEqual(len(cells) % cols, 0,
+                                     "grid does not divide into whole rows")
+                    areas = g.findall("area")
+                    if len(cells) != len(areas):
+                        with_alias += 1
+                        self.assertGreater(len(cells), len(areas),
+                                           "aliases dropped from the cell list")
+        self.assertGreaterEqual(with_alias, 2,
+                                "stock's alias-bearing grids went missing; "
+                                "this test no longer proves anything")
+
     def test_generated_tables_own_their_geometry_and_do_not_collide(self):
         # Once a mod ships its own slice table, stock dimensions stop being the
         # invariant. These two are: every rect inside the PNG, and no two rects

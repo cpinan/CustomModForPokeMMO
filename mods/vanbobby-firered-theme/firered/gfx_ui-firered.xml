@@ -653,16 +653,16 @@
                 <alias ref="icon.color-picker" inset="6" />
             </composed>
         </select>
-        <area name="ui-tab-vertical.active" xywh="430,162,34,17" splitx="L4,R4" inset="0,-18,0,0" splity="T4,B4" />
-        <area name="ui-tab-vertical.default" xywh="0,192,34,17" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
+        <area name="ui-tab-vertical.active" xywh="430,162,34,17" splitx="L5,R5" inset="0,-18,0,0" splity="T5,B5" />
+        <area name="ui-tab-vertical.default" xywh="0,192,34,17" splitx="L5,R5" inset="0,-18,0,0" splity="T5,B5" />
         <select name="ui-tab-vertical.background">
             <alias ref="ui-tab-vertical.active" if="selected" />
             <alias ref="ui-tab-vertical.default" />
         </select>
         <area name="ui-tab.active.color" xywh="96,162,40,26" splitx="L12,R12" inset="0,0,0,0" />
-        <area name="ui-tab.active" xywh="137,162,40,26" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
-        <area name="ui-tab.inactive" xywh="215,162,40,22" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
-        <area name="ui-tab.default" xywh="215,162,40,22" splitx="L4,R4" inset="0,0,0,0" splity="T4,B4" />
+        <area name="ui-tab.active" xywh="137,162,40,26" splitx="L5,R5" inset="0,0,0,0" splity="T5,B5" />
+        <area name="ui-tab.inactive" xywh="215,162,40,22" splitx="L5,R5" inset="0,0,0,0" splity="T5,B5" />
+        <area name="ui-tab.default" xywh="215,162,40,22" splitx="L5,R5" inset="0,0,0,0" splity="T5,B5" />
         <animation name="ui-tab.hover-animation" timeSource="hover" count="1">
             <frame duration="100" ref="ui-tab.inactive" tint="#C5C5C5" />
             <frame duration="100" ref="ui-tab.inactive" tint="#CFCFCF" />

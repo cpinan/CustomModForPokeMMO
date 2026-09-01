@@ -65,7 +65,7 @@
     <fontDef name="pb-dark-orange" ref="pb-dark" color="#5E5E5E" />
     <fontDef name="noto-8pt" filename="/data/themes/default/res/fonts/NotoSansCJK-Medium.ttc" faces="sc,tc,jp" color="#404040" size="8" incremental="false" characters="0123456789ABCDEF" shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FFD8D8C0" />
     <fontDef name="noto-bold-large-white" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#404040" hinting="Medium" kerning="false" size="16" shadow_color="#FFD8D8C0" shadow_offset_x="1" shadow_offset_y="1" />
-    <fontDef name="messagebox" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#F8F8F8" hinting="Medium" kerning="false" size="24" shadow_color="#FF283030" shadow_offset_x="1" shadow_offset_y="1" />
+    <fontDef name="messagebox" filename="/data/themes/default/res/fonts/battle.ttf" color="#F8F8F8" hinting="Medium" kerning="false" size="32" shadow_color="#FF283030" shadow_offset_x="1" shadow_offset_y="1" />
     <fontDef name="mechabold" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#404040" hinting="Medium" kerning="false" size="14" border_width="1" border_color="#F8F0E8" />
     <fontDef name="mechabold-red" ref="mechabold" color="#6B3636" />
     <fontDef name="mechabold-orange" ref="mechabold" color="#6B4000" />
@@ -76,7 +76,7 @@
     <fontDef name="mechabold-large" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#404040" hinting="Medium" kerning="false" size="18" border_width="1" border_color="#F8F0E8" />
     <fontDef name="title-font" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#404040" size="12" size_cjk="15" hinting="AutoMedium" hinting_cjk="Slight" shadow_color="#FFD8D8C0" shadow_offset_x="1" shadow_offset_y="1" />
     <fontDef name="title-font-black" filename="/data/themes/default/res/fonts/NotoSansCJK-Bold.ttc" faces="sc,tc,jp" color="#252525" size="12" size_cjk="15" hinting="AutoMedium" hinting_cjk="Slight" shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FFD8D8C0" />
-    <fontDef name="trainer-name" filename="/data/themes/default/res/fonts/NotoSans-SemiCondensedBlack.ttf" color="#434343" size="18" incremental="false" characters="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FFD8D8C0" />
+    <fontDef name="trainer-name" filename="/data/themes/default/res/fonts/NotoSans-SemiCondensedBlack.ttf" color="#F0D088" size="18" incremental="false" characters="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz" shadow_offset_x="1" shadow_offset_y="1" shadow_color="#FF283030" />
     <fontDef name="console-green" ref="main" color="#3F6B14" />
     <fontDef name="console-red" ref="main" color="#FF0000" />
     <fontDef name="console-blue" ref="main" color="#3A4F6B" />

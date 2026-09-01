@@ -160,7 +160,7 @@
         <area name="label1.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
         <area name="label2.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
         <area name="label3.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
-        <area name="label4.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
+        <area name="label4.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" tint="#B4FFFFFF" />
         <area name="label5.background" xywh="45,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
         <area name="label6.background" xywh="51,514,5,5" inset="0,0,0,0" splitx="L1,R1" splity="T1,B1" />
         <area name="label7.background" xywh="45,514,5,5" inset="7,0,0,0" splitx="L1,R1" splity="T1,B1" />

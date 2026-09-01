@@ -4,23 +4,470 @@
   files, because widget themes are last wins. That is the opposite of the art
   rule, where an atlas has to be declared BEFORE anything consumes it.
 
-  logingui is the login screen's root container. Stock gives it no background
-  param at all, which is why the client's 3D scene shows through, and why the
-  backdrop looked unreachable: the logo widget was the wrong place to look.
-  PARAGON does exactly this in its android.xml, which is the proof it works.
+  Re-declaring a theme MERGES into stock rather than replacing it (settled
+  2026-08-30), so every block below names only the params it changes and the
+  stock font, border, alignment and nested styling all survive.
 -->
 <themes>
+    <!-- logingui is the login screen's root container. Stock gives it no
+         background param at all, which is why the client's 3D scene shows
+         through, and why the backdrop looked unreachable: the logo widget was
+         the wrong place to look. PARAGON does exactly this in its android.xml,
+         which is the proof it works. -->
     <theme name="logingui">
+        <param name="background"><image>firered-login.background</image></param>
+        <!-- Stock draws these labels in main-border, and build_firered_fonts.py
+             lists main-border in WORLD_FACES: a dark glyph with a 1px #F8F0E8
+             ring, so overworld HUD text survives on ground we do not control.
+             Over the login backdrop that ring is the bright halo around
+             "Loaded ROMs". title-font-black is the same 12pt, bold, and at
+             #252525 the darkest face in the set, and being off the world list
+             it takes the theme's ordinary cream shadow instead of a full ring.
+             Same size on purpose: this theme also covers Username and Password
+             inside the dialog, and those should not reflow. -->
+        <theme name="label" ref="label">
+            <param name="font"><font>title-font-black</font></param>
+        </theme>
+    </theme>
+
+    <!-- Character select and the login queue are the SAME container one screen
+         later, and stock writes them as ref="logingui". A ref is resolved when
+         the stock file is parsed, which is long before this file layers a
+         background onto logingui, so both of them inherited the STOCK logingui:
+         no background, and the client's 3D scene still turning behind the
+         window after login. Naming them here is the whole fix. It is the same
+         one-param override applied twice more, not a second mechanism.
+
+         queuegui also backs the logout confirmation, which is why that screen
+         showed a bare white-and-peach gradient: the 3D scene with no map and no
+         model loaded. -->
+    <theme name="characterselectgui">
+        <param name="background"><image>firered-login.background</image></param>
+    </theme>
+    <theme name="queuegui">
         <param name="background"><image>firered-login.background</image></param>
     </theme>
 
-    <!-- Bag: the item square becomes the white FireRed box, which already
-         carries a selected state from the box/box-on roles. The list panel,
-         pocket tabs and open-pocket underline are art-level: the bag-list role
-         and the paint_bag_tab painter in build_firered_atlas.py. Re-declaring
-         a theme MERGES into stock (settled 2026-08-30), so the stock font,
-         border and alignment params survive this block. -->
+    <!-- ===== Bag ===== -->
+
+    <!-- The item square becomes the white FireRed box, which already carries a
+         selected state from the box/box-on roles. -->
     <theme name="inventory-button" ref="-defaults" allowWildcard="true">
         <param name="background"><image>ui-box.background</image></param>
+        <!-- Stock pads the item square by 1,1,1,0, so the icon runs to the
+             box's own ring on every side. The square has no min size in the
+             theme, so its size comes from icon plus border: widening the border
+             is what puts air around the icon, and it grows the box to suit.
+             Bottom stays tight because "x1" is BOTTOM aligned and lives in
+             that space. -->
+        <param name="border"><border>6,6,3,6</border></param>
+        <!-- The icon and the count were touching, and it is geometry, not
+             taste. The icon is a fixed sprite drawn CENTRED in the inner area
+             and the count is drawn BOTTOM in the same area, so with an icon of
+             16 and a count of 10 they stay clear only while the inner height is
+             at least 36: (H+16)/2 has to fall above H-10. Measured off the
+             screenshot the inner area was 33. 48 minus the 9 of border leaves
+             39, which clears it with room.
+             BOTTOMRIGHT is the other half, and it is what FireRed does: its bag
+             prints the name on the left of a row and the count hard right, so
+             the count belongs in a corner rather than under the icon. -->
+        <!-- No minHeight here, and that is a finding rather than an omission.
+             0.36 set 48 and 0.37 set 90; the square measured 41.5 design px
+             under both, so the client sizes this widget itself and the param is
+             dead. The icon/count overlap therefore cannot be fixed by making
+             the square taller, which is why BOTTOMRIGHT above is the whole
+             remedy: it moves the count off the icon's centre of mass rather
+             than trying to buy room that is not for sale. -->
+        <param name="textAlignment"><enum type="alignment">BOTTOMRIGHT</enum></param>
+    </theme>
+
+    <!-- Bag layout. The art half is the bag-list role (the panel), the tab and
+         tab-off roles (the closed pockets) and the paint_bag_tab painter (the
+         open one), all in tools/build_firered_atlas.py. This is the other half:
+         where those surfaces sit.
+
+         FireRed's bag stands its pocket tabs in a COLUMN down the left of the
+         list, not in a strip across the top, and that turned out to be one
+         param: tabPosition. Settings, matchmaking, chat and the dex all set it,
+         so it is a supported theme knob rather than a trick, and TWL lays the
+         tab box out on whichever side it names. Everything else here follows
+         from moving the tabs:
+
+           tabPosition TOP -> LEFT     the pocket column, which is the single
+                                       biggest thing standing between this and
+                                       FireRed's bag.
+           tabbox    0,0,15,0 -> 50,0,0,4
+                                       fifteen pixels of daylight BELOW the
+                                       tabs is meaningless once they are down
+                                       the side. Top 50 drops the column clear
+                                       of the "Bag - ITEMS" title; right 4 is
+                                       the gap to the list, FireRed's hairline.
+           container 20,0,0,0 -> 50,8,8,8
+                                       stock pads only the TOP, so item squares
+                                       run into the panel's left, right and
+                                       bottom border. FireRed insets its list on
+                                       all four sides, and the list has to start
+                                       level with the tab column.
+           frame     10,0,0,0 -> 10,6,6,6   same reason one level up.
+
+         Numbers, not the tabPosition, are the guesswork here: 50 and the gaps
+         are read off the current screenshot and want another look in game.
+         Settings' own block is the worked example to compare against, at
+         data/themes/default/ui/settings.xml. -->
+    <theme name="inventory-tabbedframe">
+        <param name="border"><border>10,14,14,14</border></param>
+        <theme name="dialoglayout" ref="-defaults">
+            <theme name="tabbedpane" ref="-defaults">
+                <param name="tabPosition"><enum type="tabposition">LEFT</enum></param>
+                <!-- 50 cleared the "Bag - ITEMS" title and nothing more, so
+                     the title sat straight on top of the pocket column and the
+                     first category header. 64 is the same clearance plus a
+                     line of air under the title. Both move together or the
+                     column and the list stop being level. -->
+                <theme name="tabbox" ref="-defaults">
+                    <param name="border"><border>64,0,0,4</border></param>
+                    <param name="spacing"><int>3</int></param>
+                </theme>
+                <theme name="container" ref="-defaults">
+                    <param name="border"><border>64,14,14,14</border></param>
+                </theme>
+
+            </theme>
+        </theme>
+    </theme>
+
+    <!-- ===== Overworld HUD ===== -->
+
+    <!-- The route / money / clock block in the top left reads blurry, and the
+         cause is a ring rather than the font. main-border is in WORLD_FACES in
+         build_firered_fonts.py, which gives it a 1px #F8F0E8 outline so a dark
+         glyph survives on ground the theme does not control. A light ring
+         around an antialiased dark glyph is a halo, and the halo is the blur.
+
+         The face cannot simply lose the ring: on a dark map the text would go
+         with it. So control the ground instead. A cream plate behind the block
+         makes the ring the same colour as what is behind it, which makes it
+         disappear, and the glyph reads crisp with no font change at all. Every
+         label in here keeps its own icon background, since those are separate
+         themes and this one only sits behind them.
+
+         label2.background is the theme's own plate: a 5x5 with a one pixel
+         gold hairline over cream, the same surface the login announcements
+         use. -->
+    <theme name="trainer-hud">
+        <!-- 0.40 put a cream plate behind this block, which DID kill the halo:
+             the ring is #F8F0E8 and so is the plate, so it stopped being
+             visible. It also drew a plate far bigger than the three lines,
+             because "content" reserves room for the labels that are hidden
+             most of the time: repel, position, uptime, mail, ram. Its size is
+             not the text's size and no border makes it so.
+
+             So drop the plate and change the face instead. title-font-black is
+             bold #252525 with the theme's ordinary hard shadow and no ring at
+             all, which is the crisp reading the plate was borrowing. Each label
+             is named because they carry their own icon backgrounds and so do
+             not inherit the wildcard block. -->
+        <!-- 0.41 changed the face and that was not enough: on a dark map a dark
+             glyph is unreadable however crisp it is. This block is the one
+             place in the theme that genuinely needs a plate, so clamp the frame
+             first. It is a resizableframe and was running ~215 design px tall
+             for three lines of text, which is why 0.40's plate came out far
+             bigger than its content. Clamped, the plate hugs.
+             The left border is separate: each label draws its icon as its own
+             background at the widget's left, and the text was starting on top
+             of it. 26 clears the icon. -->
+        <!-- No maxWidth/maxHeight: 0.42 set 240x120 and the frame did not
+             move, the same way inventory-button ignores minHeight. The client
+             sizes this frame, so the plate CANNOT be made to hug its three
+             lines, and saying otherwise would be guessing again.
+             What is left is to stop the oversize mattering: label4 is
+             referenced by no theme in the stock tree, so it is the one plate
+             that can be made translucent without touching anything else. Its
+             tint is restored by hand in GEOMETRY at 0xB4 with the colour
+             neutralised, so the world reads through it. -->
+        <theme name="content" ref="-defaults">
+            <param name="background"><image>label4.background</image></param>
+            <param name="border"><border>4,6,4,6</border></param>
+            <theme name="label" ref="-defaults" allowWildcard="true">
+                <param name="font"><font>title-font-black</font></param>
+                <param name="border"><border>2,26,2,4</border></param>
+            </theme>
+            <theme name="label-location" ref="-defaults" allowWildcard="true">
+                <param name="font"><font>title-font-black</font></param>
+                <param name="border"><border>2,26,2,4</border></param>
+            </theme>
+            <theme name="label-money" ref="-defaults" allowWildcard="true">
+                <param name="font"><font>title-font-black</font></param>
+                <param name="border"><border>2,26,2,4</border></param>
+            </theme>
+            <theme name="label-time" ref="-defaults" allowWildcard="true">
+                <param name="font"><font>title-font-black</font></param>
+                <param name="border"><border>2,26,2,4</border></param>
+            </theme>
+        </theme>
+    </theme>
+
+    <!-- ===== Battle ===== -->
+
+    <!-- The message box. battle-panel takes label1.background, which is CREAM,
+         and the text on it is drawn in the battle face, which is WHITE and has
+         to stay white: it is one of NAVY_FACES in build_firered_fonts.py, with
+         a test holding it there. White on cream is the "almost white text on
+         white background". The pairing was wrong, not the shade.
+
+         battle-area is the navy panel with the gold chamfer this theme already
+         builds for exactly this surface, and it is what FireRed uses: its
+         battle message and its FIGHT/BAG/POKeMON/RUN menu both sit on one navy
+         band across the foot of the screen. The cream buttons keep reading on
+         it, the way they do there.
+
+         battle-item-usage-panel refs battle-panel and would inherit the navy,
+         but it lists items in dark faces, so it is pinned back to cream. -->
+    <!-- The Pokemon names. battlegui's wildcard label draws them in mechabold,
+         which is a WORLD_FACE: dark glyph, light ring, meant to survive on
+         ground the theme does not control. A night battle is ground it cannot
+         survive, so the names came out dark on dark with a halo.
+
+         battle-gui-enemy and battle-gui-self already paint a plate, but only
+         behind the BAR: the name is a sibling above it with no background at
+         all. That is the case docs/STATUS.md records as unfixable by moving
+         widgets, and the remedy it names is exactly this: give the sibling a
+         plate of its own so the pair reads as one unit, which is where FireRed
+         puts the name to begin with. -->
+    <theme name="battlegui">
+        <theme name="label" ref="-defaults" allowWildcard="true">
+            <param name="background"><image>label2.background</image></param>
+            <param name="border"><border>3,7,3,7</border></param>
+        </theme>
+    </theme>
+    <!-- 0.42 named battlegui > label and the plate never appeared, so the name
+         is not on that path. This is the other place the client could be
+         hanging it on: battle-frame declares its own label in mechabold, and
+         the two gui blocks are the widgets that already paint the bar. One of
+         them is the name; the rest gain a plate on labels that mostly sit on
+         cream already, where it is invisible. -->
+    <!-- No background on redlabel any more, and that is the FireRed structure
+         rather than a retreat. 0.46 gave it its own plate and the plate came
+         out NARROWER than the text: the client sets this widget's width and no
+         border reaches it, so a plate of its own can never cover the name.
+
+         The bar's plate can, because it is much wider. GEOMETRY in
+         build_firered_atlas.py expands battle-ui-enemy and battle-ui-self up by
+         26 design px, over the name row, so one cream box holds name and bar
+         exactly as the reference draws it.
+
+         The risk is draw order, and it is worth naming: if redlabel is painted
+         BEFORE the bar, the expanded plate covers the name and it disappears.
+         That is one screenshot to find out and one line to revert, and the
+         alternative is a plate that is permanently too short. -->
+    <!-- The battle menu, in FireRed's arrangement: white text straight on the
+         navy band instead of four cream boxes floating on it.
+
+         The constraint that shaped this is the font set. A theme may only
+         redefine faces stock already declares, and after the repaint the only
+         LIGHT ones left are battle at 48, messagebox at 32 and trainer-name at
+         18. So the heading takes messagebox, which is the client's own pixel
+         font, and the second line takes trainer-name, the single light face
+         small enough to sit under it. trainer-name ships a letters-only
+         character list for vram, so build_firered_fonts.py drops that list
+         first or "Select your attack move." loses its spaces and full stop.
+
+         The box grows because the type did: 32 over 18 does not fit stock's 52,
+         and the longer descriptions do not fit 209 either. -->
+    <!-- The battle menu keeps its cream boxes. 0.48 and 0.49 tried to make it
+         FireRed's white-text-on-navy, and 0.49 actually landed: the headings
+         came out in the pixel font and the descriptions in gold. It looked
+         wrong and, worse, the description line overflowed its panel and ran off
+         the left of the screen.
+
+         The cause is the font set, and it is a hard limit rather than a tuning
+         problem. After the repaint the only LIGHT faces the theme has are
+         battle at 48, messagebox at 32 and trainer-name at 18, and a theme may
+         only redefine faces stock already declares. "Select your attack move."
+         needs roughly 14px to fit the button; 18 does not, and there is no
+         smaller light face to reach for. Removing the boxes forces light text,
+         light text forces one of those three sizes, and none of them fits.
+
+         So the boxes stay. They are cream on navy, which is a pairing FireRed
+         itself uses elsewhere, and they read. Reopening this needs a new light
+         face at ~14px, which means the pixel-font work, not more params. -->
+    <!-- No background on redlabel any more, and that is the FireRed structure
+         rather than a retreat. 0.46 gave it its own plate and the plate came
+         out NARROWER than the text: the client sets this widget's width and no
+         border reaches it, so a plate of its own can never cover the name.
+
+         The bar's plate can, because it is much wider. GEOMETRY in
+         build_firered_atlas.py expands battle-ui-enemy and battle-ui-self up by
+         26 design px, over the name row, so one cream box holds name and bar
+         exactly as the reference draws it.
+
+         The risk is draw order, and it is worth naming: if redlabel is painted
+         BEFORE the bar, the expanded plate covers the name and it disappears.
+         That is one screenshot to find out and one line to revert, and the
+         alternative is a plate that is permanently too short. -->
+    <!-- The battle menu, in FireRed's arrangement: white text straight on the
+         navy band instead of four cream boxes floating on it.
+
+         The constraint that shaped this is the font set. A theme may only
+         redefine faces stock already declares, and after the repaint the only
+         LIGHT ones left are battle at 48, messagebox at 32 and trainer-name at
+         18. So the heading takes messagebox, which is the client's own pixel
+         font, and the second line takes trainer-name, the single light face
+         small enough to sit under it. trainer-name ships a letters-only
+         character list for vram, so build_firered_fonts.py drops that list
+         first or "Select your attack move." loses its spaces and full stop.
+
+         The box grows because the type did: 32 over 18 does not fit stock's 52,
+         and the longer descriptions do not fit 209 either. -->
+    <!-- Named one by one, and that is the whole lesson of 0.48. It overrode
+         rbattle, the base every one of these refs, and NOTHING changed: a ref
+         captures its base at the moment the referring file is parsed, and
+         battle.xml is parsed long before this file. The same mechanism made
+         characterselectgui keep the stock logingui in 0.25. Overriding a base
+         never reaches the themes that already ref it; the leaves have to be
+         named. -->
+
+    <theme name="redlabel" ref="-defaults" allowWildcard="true">
+        <param name="border"><border>3,8,3,8</border></param>
+    </theme>
+    <theme name="redlabel-large" ref="-defaults" allowWildcard="true">
+        <param name="border"><border>3,8,3,8</border></param>
+    </theme>
+
+    <theme name="battle-panel" ref="-defaults" allowWildcard="true">
+        <param name="background"><image>battle-area</image></param>
+    </theme>
+    <theme name="battle-item-usage-panel" ref="battle-panel" allowWildcard="true">
+        <param name="background"><image>label1.background</image></param>
+    </theme>
+
+    <!-- ===== Summary ===== -->
+
+    <!-- itemplate keeps stock's background "none" on purpose. 0.26 gave it the
+         mi-skill plate to make the held item visible, and that was the wrong
+         layer: the client sizes and places this widget in code, so the plate
+         hung past the frame's bottom edge and still stopped short of its right.
+         The box it needs is the frame's own bottom band, which is art, not
+         layout: see GRID_EDGES in tools/build_firered_atlas.py, where the two
+         bottom cells of mi-frame-grid get a top band they do not earn from
+         their position. That rule spans the full width and cannot drift,
+         because it is drawn as part of the frame.
+
+         The held item needs a slot of its own so an EMPTY one still shows where
+         the item goes. 0.28 boxed both candidates under itemplate to find out
+         which is which; label2 took it and the spritelabel guess drew nothing,
+         so label2 is the item name and the probe is gone. Stock pads it
+         0,2,1,0, which put the name hard against its new box, hence 4,8,4,8. -->
+    <!-- Stock caps this frame at 340 tall, and several Summary tabs need more:
+         the EV tab's "What are EVs?" and the Moves tab's ability description
+         were both falling off the bottom edge. The cap is the only thing
+         stopping the frame growing to fit them. -->
+    <theme name="monster-frame">
+        <param name="maxHeight"><int>460</int></param>
+        <theme name="itemplate" ref="-defaults">
+            <theme name="label2" ref="-defaults">
+                <param name="background"><image>ui-box.background</image></param>
+                <param name="border"><border>4,8,4,8</border></param>
+            </theme>
+        </theme>
+    </theme>
+
+    <!-- ===== Confirmation prompts ===== -->
+
+    <!-- "Are you sure you want to leave PokeMMO?" and its logout twin are
+         confirm-widget, a full-screen container whose stock background is
+         label1.background at tint #95949494: a 58% grey sheet that dims the
+         game behind the question. label1 is a 5x5 slice shared with six other
+         label roles and the table rows, told apart by tint alone, and a painted
+         slice loses its tint here, so that sheet came out fully opaque and the
+         game vanished behind a cream wall.
+
+         Keeping the alpha in the atlas fixes the sheet and makes the login
+         announcements 58% transparent with it, since they are the same five
+         pixels. Naming the container costs nothing and touches nothing else. -->
+    <theme name="confirm-widget">
+        <param name="background"><image>none</image></param>
+    </theme>
+
+    <!-- ===== Pokedex ===== -->
+
+    <!-- base-tabbed-frame gives monsterdex-frame border 30,0,3,5, and 30 is
+         measured for stock's thin frame art. Ours is a 7px FireRed band, and
+         the inner panel, which starts where that border ends, was landing on
+         the lower half of the "Pokedex" title and cutting it in two. 44 clears
+         the title; the 5s replace a zero left border that had the inner panel
+         touching the red frame. -->
+    <theme name="monsterdex-frame">
+        <!-- The window itself was RED, and not by choice: base-tabbed-frame
+             sets ui-frame-red.background, and fifteen windows inherit it. The
+             dex is the only one of them the FireRed kit has an opinion about,
+             and that opinion is taupe, not red, so the fix is to override this
+             one window rather than repaint the other fourteen blind. Gold is
+             what every other window in the theme already is; the taupe lives
+             INSIDE, on ui-inner-frame-tabbed-dex, which is dex-only. -->
+        <param name="background"><image>ui-frame.background</image></param>
+        <!-- 44 was measured against a 12pt title. mechabold-large is 18pt and
+             centred now, so the band can come back in and give back some of
+             the empty space. -->
+        <param name="border"><border>36,5,5,5</border></param>
+        <!-- base-tabbed-frame stops the title area at 30 while the band above
+             the panel is 42 tall, so a vertically centred title centres inside
+             the top 30 of it and reads as pinned to the ceiling. Matching the
+             title area to the band is what lets textAlignment CENTER mean what
+             it says. Measured: the frame's own band ends at design row 10 and
+             the panel starts at 52, so the empty strip runs 10 to 51 and its
+             centre is 30.5. The title area starts at the frame's top, design 3,
+             so it has to reach 55 for its own centre to land there. 36 was the
+             border, not the band, and left the title reading high. -->
+        <param name="titleAreaBottom"><int>55</int></param>
+        <!-- The title band is 44px now and the stock title face is 12pt, which
+             left "Pokedex" small in a lot of air. mechabold-large is 18pt bold
+             in the theme's own dark, and it is already generated: the whole
+             font set comes out of tools/build_firered_fonts.py, so this costs
+             no new face. Shrinking the band is the other half of the answer
+             and is deferred with the rest of the dex layout. -->
+        <theme name="title" ref="-defaults">
+            <param name="font"><font>mechabold-large</font></param>
+            <param name="textAlignment"><enum type="alignment">CENTER</enum></param>
+        </theme>
+    </theme>
+
+    <!-- The dex entry card. alignment is a probe: monsterdex-box is a plain
+         -defaults container and the client places the sprite inside it, so if
+         the box is a box layout this centres the sprite in a panel that is far
+         taller than it, and if it is not, the param is inert. -->
+    <theme name="monsterdex-box" ref="-defaults">
+        <param name="alignment"><enum type="alignment">CENTER</enum></param>
+    </theme>
+
+    <!-- The sprite box, and the answer to a chase. "No. 001 Bulbasaur" was cut
+         by that box's top edge, and 0.32 and 0.33 both tried to fix it in the
+         ART: 0.32 pushed the panel down and left the name floating above it,
+         0.33 grew a panel upward with a transparent band for the name to show
+         through. Both aimed at inner-area, and inner-area is not this box.
+
+         monstergear-pic IS this box, and it is a LABEL: the name is its own
+         text, drawn over its own background. Nothing was ever being clipped;
+         the text simply sits at the widget's top edge, where the ring is. A
+         border moves it in, which is one param and no art at all. -->
+    <theme name="monstergear-pic" ref="label" allowWildcard="true">
+        <param name="border"><border>22,8,8,8</border></param>
+    </theme>
+
+    <!-- ===== Settings ===== -->
+
+    <!-- The tab column and the option rows had no air between them: stock pads
+         the container by 45 on top and nothing on the left, which is fine when
+         the tab art has no right edge, and ours does. 12 on the left is the
+         gap. Refs mirror settings.xml exactly so the merge changes nothing
+         else. -->
+    <theme name="settings-panel" ref="base-frame" allowWildcard="true">
+        <theme name="dialoglayout" ref="dialoglayout">
+            <theme name="tabbedpane" ref="base-tabbed-pane">
+                <theme name="container" ref="container">
+                    <param name="border"><border>45,12,0,0</border></param>
+                </theme>
+            </theme>
+        </theme>
     </theme>
 </themes>

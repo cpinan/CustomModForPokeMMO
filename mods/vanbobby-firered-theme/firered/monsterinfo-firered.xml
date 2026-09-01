@@ -31,24 +31,24 @@
             <area xywh="275,266,234,52" />
         </grid>
         <area name="mi-frame-type" xywh="235,636,229,231" splitx="L7,R7" splity="T7,B7" />
-        <area name="mi-tab1.default" xywh="142,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab1.selected" xywh="163,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab2.default" xywh="184,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab2.selected" xywh="205,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab3.default" xywh="226,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab3.selected" xywh="247,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab4.default" xywh="268,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab4.selected" xywh="289,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab5.selected" xywh="310,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab5.default" xywh="331,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab6.selected" xywh="352,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab6.default" xywh="373,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab7.selected" xywh="394,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab7.default" xywh="415,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab8.selected" xywh="436,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab8.default" xywh="457,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab9.selected" xywh="478,911,20,20" splitx="L4,R4" splity="T4,B4" />
-        <area name="mi-tab9.default" xywh="499,911,20,20" splitx="L4,R4" splity="T4,B4" />
+        <area name="mi-tab1.default" xywh="142,911,20,20" />
+        <area name="mi-tab1.selected" xywh="163,911,20,20" />
+        <area name="mi-tab2.default" xywh="184,911,20,20" />
+        <area name="mi-tab2.selected" xywh="205,911,20,20" />
+        <area name="mi-tab3.default" xywh="226,911,20,20" />
+        <area name="mi-tab3.selected" xywh="247,911,20,20" />
+        <area name="mi-tab4.default" xywh="268,911,20,20" />
+        <area name="mi-tab4.selected" xywh="289,911,20,20" />
+        <area name="mi-tab5.selected" xywh="310,911,20,20" />
+        <area name="mi-tab5.default" xywh="331,911,20,20" />
+        <area name="mi-tab6.selected" xywh="352,911,20,20" />
+        <area name="mi-tab6.default" xywh="373,911,20,20" />
+        <area name="mi-tab7.selected" xywh="394,911,20,20" />
+        <area name="mi-tab7.default" xywh="415,911,20,20" />
+        <area name="mi-tab8.selected" xywh="436,911,20,20" />
+        <area name="mi-tab8.default" xywh="457,911,20,20" />
+        <area name="mi-tab9.selected" xywh="478,911,20,20" />
+        <area name="mi-tab9.default" xywh="499,911,20,20" />
         <select name="mi-skill-use.background">
             <alias ref="mi-skill-use-selected" if="selected | hover" />
             <alias ref="mi-skill-use" />
