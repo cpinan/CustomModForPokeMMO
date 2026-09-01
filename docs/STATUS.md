@@ -36,6 +36,8 @@ blocked on the font.
   except the released one.
 - **110 tests**, stdlib only, no client and no device. They skip cleanly without
   the dumps.
+- **What changed when is in `CHANGELOG.md`**, grouped by date and named by mod. Record
+  releases there rather than starting a second history in a mod's own README.
 
 ## In flight
 
