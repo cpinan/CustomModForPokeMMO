@@ -23,9 +23,11 @@ previews/
 # generated from YOUR install's dumps so that nobody redistributes them -- that
 # is the whole design. Produce them with Settings > Utilities.
 strings-work/dumps/
+strings-work/dumps
 
 # Someone else's mods, kept locally as a reference to measure against
 MODEXAMPLES/
+MODEXAMPLES
 
 # A stray copy of a client install that lives beside the toolkit on one machine
 modkit/src/pmmod/log/

@@ -46,8 +46,6 @@
     move-learned: Move learned on level-up (not the forget prompt)
 -->
 <strings lang="en" lang_full="English" is_primary="0">
-  <string id="6060">{09}</string>
-  <string id="6087">{09}</string>
   <string id="200001">{09}</string>
   <string id="200002">{09}</string>
   <string id="200003">{09}</string>
@@ -230,6 +228,7 @@
   <string id="16780103">{09}</string>
   <string id="16780104">{09}</string>
   <string id="16780135">{09}</string>
+  <string id="16780155">{09}</string>
   <string id="16780170">{09}</string>
   <string id="16780171">{09}</string>
   <string id="16780174">{09}</string>
@@ -245,7 +244,6 @@
   <string id="16780421">{09}</string>
   <string id="16780503">{09}</string>
   <string id="16780714">{09}</string>
-  <string id="16804105">{09}</string>
   <string id="16804146">{09}</string>
   <string id="16804152">{09}</string>
   <string id="16807100">{09}</string>

@@ -221,8 +221,23 @@ DS_JOHTO_KEPT = {
 GBA_FIELD_MOVES = {
     "1826775": "{02} used {03}!  (Kanto/Johto overworld, every move)",
     "271124337": "{02} used {03}!  (Hoenn overworld, every move)",
-    "16804105": "{00} used {01}! (PP Remaining: ...)",
-    "6060": "You have used {00}.",
+}
+# The box a field move actually draws in the live client. PokeMMO summons the
+# Pokemon in the overworld and writes this line itself -- no ROM table carries
+# it, which is why silencing table 8 in every archive never removed it. The
+# reference silences this id and no other in the family.
+CLIENT_FIELD_MOVE = {
+    "16780155": "{00}'s summoned {02} used {03}!",
+}
+# The client's own one-line notices, not ROM message boxes. Silencing them cost
+# information and removed no box at all: 6060 is the only thing that reports a
+# Repel took effect, and it went quiet on hardware. SupersSpeedStrings leaves
+# all three alone, which is the behaviour this mod is measured against --
+# skip the box, keep the notice.
+CLIENT_NOTICES = {
+    "16804105": "{00} used {01}! (PP Remaining: ...)  (field-move toast)",
+    "6060": "You have used {00}.  (item toast -- Repel)",
+    "6087": "You have used {00} {01}(s).  (stacked item toast)",
 }
 GBA_BATTLE_END = {
     "200001": "gained EXP. Points",
@@ -503,6 +518,15 @@ class TestCorpus(unittest.TestCase):
     # -- the GBA tables ----------------------------------------------------
     def test_the_gba_field_move_entries_are_still_silenced(self):
         self.assert_silenced(GBA_FIELD_MOVES, "GBA field moves")
+
+    def test_the_field_move_box_is_silenced(self):
+        # Reported from hardware 2026-09-02: Teleport and Sweet Scent still drew
+        # a box after every ROM address matched the reference. This id is why.
+        self.assert_silenced(CLIENT_FIELD_MOVE, "client field-move box")
+
+    def test_the_clients_own_notices_are_left_alone(self):
+        # Reported from hardware 2026-09-02: using a Repel said nothing at all.
+        self.assert_visible(CLIENT_NOTICES, "client notices")
 
     def test_the_gba_battle_tables_are_still_silenced(self):
         self.assert_silenced(GBA_BATTLE_END, "GBA battle end")

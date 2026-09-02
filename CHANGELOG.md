@@ -10,6 +10,61 @@ version confirmed on hardware.
 
 ---
 
+## 2026-09-02
+
+### VanBobby Fast Strings 1.14 → 1.15
+
+**The box a field move draws is the client's own line, and it is one id.**
+Teleport and Sweet Scent still drew a full box under 1.14, and the wording
+reported from hardware named it: `{00}'s summoned {02} used {03}!` —
+plain id **`16780155`**. PokeMMO summons the Pokémon in the overworld and
+writes that line itself. No ROM table carries it, which is why silencing
+table 8 in every archive, matching every GBA `used` string and reaching
+address-for-address parity with the reference never removed it. The reference
+silences this id with `{09}` and nothing else in the family; that is what makes
+a field move look instant there. Silenced now. 702 entries → **703**.
+
+`test_the_field_move_box_is_silenced` pins it. 112 tests.
+
+The word `summoned` is the tell: no other entry in the 166,867-entry corpus
+reads `{00}'s summoned`, and no pattern rule would ever have found it — the
+line does not name a move, a region or an HM.
+
+### VanBobby Fast Strings 1.13 → 1.14
+
+**Three of the client's own notices come back.** Reported from play: using a Repel
+said nothing at all. The `field-moves` rule had been carrying three plain ids that
+are not ROM message boxes and never were —
+
+| id | text | what it is |
+|---|---|---|
+| `6060` | `You have used {00}.` | the item toast — the only report that a Repel took effect |
+| `6087` | `You have used {00} {01}(s).` | the same, stacked |
+| `16804105` | `{00} used {01}! (PP Remaining: {02}/{03})` | the field-move toast |
+
+They are one-line notices the client draws itself, not boxes you tap through, so
+silencing them removed information and saved nothing. SupersSpeedStrings leaves all
+three alone — it skips the box and keeps the notice — and that is the behaviour this
+mod is measured against. 705 entries → **702**.
+
+`test_the_clients_own_notices_are_left_alone` pins them visible, so a future rule
+cannot take them again. 111 tests.
+
+**The field-move boxes were never reverted.** The rest of the same report said Sweet
+Scent, Fly and Teleport had started drawing full boxes again. Unpacking 1.7, 1.9 and
+1.10 out of git and diffing every silenced address against 1.13 says otherwise:
+`ds_fasttext_0_2.xml` — the Unova archive that carries the generic `{00} used\n{01}!`
+at `8/52-53`, and the archive the live client reads — is **byte-identical from 1.10
+through 1.14**, and Johto `211/27`, the 1.12 Teleport fix, is still there. The only
+addresses ever dropped were the battle-flow blanks, `{00} learned {01}!` and
+evolution, all removed on purpose after hardware. Our Unova-0 coverage is a strict
+subset of the reference's, and the 1,320 addresses it silences there that we do not
+are Pokédex height and weight (tables 245/268) and trainer dialogue (189) — no field
+move among them. If a box still draws after 1.14, its exact wording is the next
+thing needed; nothing in the corpus explains it.
+
+---
+
 ## 2026-09-01
 
 ### VanBobby Fast Strings 1.10 → 1.13

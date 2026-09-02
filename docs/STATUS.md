@@ -1,14 +1,22 @@
 # STATUS — CustomModForPokeMMO
 
-_Last updated: 2026-09-01 · branch `main`, pushed · everything below is committed_
+_Last updated: 2026-09-02 · branch `main` · 1.15 is built, installed on the Retroid, NOT yet committed_
 
 ## Next action
 
-**Play with `vanbobby-fast-strings-1-13.mod` installed and report what still talks.**
-1.13 silences 705 entries, up from 572 at 1.10, and none of the 133 new ones has
-been seen in game. The two worth watching first are the Day Care lines in the
-Unova-1 archive (`426/17`, `426/26`) and the move tutors, because that archive is
-one of the two the live client actually reads.
+**`vanbobby-fast-strings-1-15.mod` is installed and enabled on the Retroid.
+Log in and use Sweet Scent, Fly, Teleport and a Repel.**
+1. Field moves must fire with no box at all. 1.15 silences `16780155`,
+   `{00}'s summoned {02} used {03}!` — the client's own line, the actual box.
+2. A Repel must say `You have used Repel.` again (1.14 gave `6060`/`6087` back).
+
+Install on this device goes through the **SD card**: the Import picker browses
+`/storage/EAFF-F713/Download`, not `/sdcard/Download`. Pushing to internal
+storage puts the file somewhere the picker never shows.
+
+Behind that: 1.13's 133 new entries have still never been seen in game — the Day
+Care lines in the Unova-1 archive (`426/17`, `426/26`) and the move tutors are the
+ones worth watching, that archive being one of the two the live client reads.
 
 Behind that: the FireRed theme is at 0.50 and its bag, trainer card, dex and
 summary read like FireRed's. The battle menu is the next screen and it is
@@ -16,7 +24,7 @@ blocked on the font.
 
 ## State
 
-- **`vanbobby-fast-strings` is 1.13.** 705 entries across 34 rules, covering
+- **`vanbobby-fast-strings` is 1.15.** 703 entries across 34 rules, covering
   Kanto, Hoenn, Sinnoh, Johto and both Unova archives. `dist/` holds one artifact
   per mod and nothing else; recover an older one from git, e.g.
   `git show eeebf9a:dist/vanbobby-fast-strings-1-10.mod > 1-10.mod` for the last
@@ -36,7 +44,16 @@ blocked on the font.
 - **The FireRed theme is 0.50 and shipped.** Its 26 intermediate builds stay on
   disk and out of git; `.gitignore` keeps `dist/vanbobby-firered-theme-0-*.mod`
   except the released one.
-- **110 tests**, stdlib only, no client and no device. They skip cleanly without
+- **A field move's box is `16780155`, not a ROM address.** PokeMMO writes
+  `{00}'s summoned {02} used {03}!` itself. Three releases of archive-level work
+  could not remove it because no archive holds it; the reference silences exactly
+  this id. When a message survives full parity with the reference, look in the
+  plain ids for a line PokeMMO wrote.
+- **The three ids 1.14 gave back are the client's own toasts**, not ROM boxes:
+  `You have used {00}.`, its stacked twin, and `{00} used {01}! (PP Remaining…)`.
+  SupersSpeedStrings silences none of them. `test_the_clients_own_notices_are_left_alone`
+  keeps them visible.
+- **112 tests**, stdlib only, no client and no device. They skip cleanly without
   the dumps.
 - **What changed when is in `CHANGELOG.md`**, grouped by date and named by mod. Record
   releases there rather than starting a second history in a mod's own README.
