@@ -41,12 +41,20 @@ behaviour people rely on, or keep chat fonts light, which splits the font rule.
 FireRed puts FIGHT / BAG / POKeMON / RUN bottom **right**, beside the message
 box. PokeMMO's client puts them bottom left and the theme has no documented
 handle for it: PARAGON and both Emerald themes restyle the battle screen and
-neither moves a widget. 0.51 ships a probe rather than a guess - `battlegui`,
-`battle-panel` and `battle-fight` each get a deliberately lopsided border, with
-four different numbers on the button so one screenshot says both which handle
-moves what and which side each slot of `<border>` addresses.
+neither moves a widget. 0.51 probed it and got half an answer immediately: with `300,10,10,10` on
+`battlegui`, `battle-panel` and `battle-fight`, the menu **disappeared entirely**
+and the navy band rendered empty.
 
-Remove the probe in 0.52 whatever the answer, and write the answer here.
+**Settled: TWL's `<border>` is `(top, left, bottom, right)`.** Slot one is TOP,
+so 300 pushed the menu's content down and out of a band about 160 tall. The rest
+of this file already assumed that order - `36,5,5,5` on the dex title, `22,8,8,8`
+on the summary - and now it is proven rather than inherited.
+
+0.52 asks the real question on the correct slot: `battle-panel` alone gets
+`10,300,10,10`, and `battlegui` and `battle-fight` go back to even values so only
+one handle is under test. If the menu walks right, its position is themeable and
+0.53 tunes the number; if it does not move, the menu is not `battle-panel`'s
+child and `battlegui` is next.
 
 ## 5. Smaller things
 

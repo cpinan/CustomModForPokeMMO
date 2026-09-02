@@ -4,17 +4,21 @@ _Last updated: 2026-09-02 · branch `main`, pushed · 0 uncommitted files_
 
 ## Next action
 
-**Open a battle in the desktop client and send one screenshot of the command menu** — it
-answers the FireRed 0.51 layout probe and unblocks 0.52.
+**Open a battle in the desktop client and send one screenshot of the command menu** — 0.52
+asks whether `battle-panel`'s LEFT border moves the menu, which is the last unknown before
+the FireRed battle screen is done.
 
 ## State
 
 - **`vanbobby-fast-strings` is 1.16**, confirmed on the Retroid on 2026-09-02: every HM acts
   with no box, Sweet Scent / Fly / Teleport are silent, a Repel reports itself again. 709
   entries, 35 rules, five archives.
-- **FireRed theme is 0.51**, installed and enabled on the **desktop** client (`client.ui.theme=FireRed`,
-  0.50 disabled). The battle command menu is now a white box with black text on the navy band.
-  Bag, trainer card, dex and summary already read like FireRed's.
+- **FireRed theme is 0.52**, installed and enabled on the **desktop** client (`client.ui.theme=FireRed`;
+  0.50 and 0.51 disabled). The battle command menu is a white box with black text on the navy
+  band. Bag, trainer card, dex and summary already read like FireRed's.
+- **TWL's `<border>` is `(top, left, bottom, right)`.** Proven by 0.51, which put 300 in slot one
+  on three battle widgets and made the menu vanish: the content went down and out of a band about
+  160px tall. An empty panel is what a too-large TOP border looks like.
 - **Client-written text is its own address space, and `{STRING_nnnnnn}` is how you find it.**
   No dumped ROM line carries that slot, so any entry that does is one PokeMMO wrote — the
   field-move box `16780155`, the Secret Power obstacles, the horde lines. Grep for it before
@@ -30,10 +34,11 @@ answers the FireRed 0.51 layout probe and unblocks 0.52.
 
 ## In flight
 
-- `mods/vanbobby-firered-theme/firered/widgets-firered.xml:337` — **layout probe, remove in
-  0.52 whatever the answer.** `battlegui` and `battle-panel` carry `300,10,10,10`; `battle-fight`
-  carries `120,10,30,60` while its siblings keep an even `8,8,8,8`. One battle screenshot says
-  which handle moves the menu and which slot of `<border>` is which side. Record the answer in
+- `mods/vanbobby-firered-theme/firered/widgets-firered.xml:337` — **layout probe, one handle at
+  a time.** `battle-panel` alone carries `10,300,10,10`; `battlegui` is back to stock `65,64,64,65`
+  and `battle-fight` to an even `8,8,8,8`. If the menu walks right in the next screenshot its
+  position is themeable and 0.53 tunes the number; if it does not move, the menu is not
+  `battle-panel`'s child and `battlegui` is the next handle. Record either answer in
   `docs/BACKLOG-firered.md` item 4.
 - `/storage/EAFF-F713/Download/vanbobby-fast-strings-1-17-probe2.mod` on the Retroid's SD card —
   **staged, not installed.** 1.16 plus eight blanked end-of-battle addresses (Unova-0 `15/44-50`,

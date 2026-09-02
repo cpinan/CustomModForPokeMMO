@@ -336,11 +336,16 @@
 
     <theme name="battle-panel" ref="-defaults" allowWildcard="true">
         <param name="background"><image>battle-area</image></param>
-        <!-- PROBE 0.51, remove in 0.52. The navy band is this widget. If the
-             menu is ITS child, 300 on the first slot walks the menu across the
-             screen and the position is themeable after all; if only the navy
-             art insets, the children hang off a different parent. -->
-        <param name="border"><border>300,10,10,10</border></param>
+        <!-- PROBE 0.52, remove when answered. 0.51 put 300 in slot ONE and the
+             whole menu vanished: slot one is TOP, so the content went 300px
+             down and out the bottom of a band about 160 tall. TWL's Border is
+             (top, left, bottom, right), which is now settled and costs nobody
+             another round.
+             This is the same question asked on the correct slot: 300 of LEFT
+             padding. If the menu walks right, its position is themeable and
+             0.53 tunes the number to put it where FireRed does. If it does not
+             move, the menu is not this widget's child and battlegui is next. -->
+        <param name="border"><border>10,300,10,10</border></param>
     </theme>
     <theme name="battle-item-usage-panel" ref="battle-panel" allowWildcard="true">
         <param name="background"><image>label1.background</image></param>
@@ -349,10 +354,11 @@
         <param name="border"><border>10,10,10,10</border></param>
     </theme>
 
-    <!-- PROBE 0.51, remove in 0.52. battlegui is the battle root. Same shape of
-         question one level up: if the whole band shifts, the handle is here. -->
+    <!-- battlegui is back to stock. 0.51 probed it and battle-panel at once,
+         and with both pushing content off the panel neither answer was legible.
+         One handle at a time from here. Stock is 65,64,64,65. -->
     <theme name="battlegui">
-        <param name="border"><border>300,10,10,10</border></param>
+        <param name="border"><border>65,64,64,65</border></param>
     </theme>
 
     <!-- ===== The battle command menu, 0.51 =====
@@ -386,11 +392,11 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <!-- PROBE 0.51, remove in 0.52. Four DIFFERENT numbers, on the one
-             button whose siblings keep an even border, so a single screenshot
-             says both which side each slot addresses and whether a button's own
-             border moves the button or only the text inside it. -->
-        <param name="border"><border>120,10,30,60</border></param>
+        <!-- Answered: 0.51 set 120,10,30,60 here and the label went with the
+             rest of the menu, off the bottom. Slot one is TOP. A button's own
+             border pads the text inside the button, so it is the wrong tool for
+             moving the menu; it is set even, with the siblings, and left alone. -->
+        <param name="border"><border>8,8,8,8</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
