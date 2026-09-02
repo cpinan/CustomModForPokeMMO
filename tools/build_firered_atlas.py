@@ -153,6 +153,17 @@ ROLES = {
     "box-on":     ([(OUTER, 2), (BLUE, 2), (BEVEL_G, 1)], (ICE, WHITE),     False),
     "box-red":    ([(OUTER, 2), (RED, 2), (BEVEL_G, 1)],  (CREAM, WHITE),   False),
     "label":      ([(OUTER, 1), (GREY, 1)],               (WHITE, WHITE),   False),
+    # The battle command menu -- FIGHT / BAG / POKeMON / RUN. FireRed draws it
+    # as a WHITE window with black text, sitting on the navy band beside the
+    # message box, and that pairing is the whole reason this can ship: 0.48 and
+    # 0.49 tried the other one, white text straight on the navy, and it died on
+    # the font set. There is no light face under 18pt and the description line
+    # needs about 14. Black on white needs no light face at all.
+    # Flat white rather than a scanline pair, like `label` above: the reference
+    # window is one flat field, and a stripe at this size reads as dirt.
+    "command":    ([(OUTER, 2), (GREY, 1), (BEVEL_G, 1)], (WHITE, WHITE),   False),
+    "command-hi": ([(OUTER, 2), (BLUE, 2), (BEVEL_G, 1)], (WHITE, ICE),     False),
+    "command-off":([(OUTER, 2), (DISABLED, 2)],           (WHITE, PALE),    False),
     "close":      ([(OUTER, 2), (RED, 2), (BEVEL_W, 1)],  (CREAM, WHITE),   False),
     "header":     ([(OUTER, 2), (GOLD, 3), (BEVEL_W, 1)], (GOLD_LT, GOLD_LT), False),
     # list rows: a hairline so rows read as rows, and a light scanlined ground
@@ -446,6 +457,17 @@ def role_ingame(name):
         return "box"
     if "tab" in n:
         return "tab-off" if ".default" in n or "empty" in n else "tab"
+    # The battle command menu. These four 209x52 slices are the only battle-hud
+    # art the FIGHT / BAG / POKeMON / RUN buttons can take -- stock points them
+    # at the GLOBAL `button.*` family, which is every button in the client, so
+    # painting the menu there would repaint the whole UI. Named before the
+    # generic `button` rule below, which would otherwise claim them for cream.
+    if n.startswith("battle-button-switch"):
+        if ".disabled" in n:
+            return "command-off"
+        if ".hover" in n or ".selected" in n:
+            return "command-hi"
+        return "command"
     if "button" in n:
         if ".disabled" in n:
             return "button-off"

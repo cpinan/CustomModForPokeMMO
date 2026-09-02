@@ -1,6 +1,6 @@
 # STATUS — CustomModForPokeMMO
 
-_Last updated: 2026-09-02 · branch `main`, pushed · 1.16 confirmed on the Retroid_
+_Last updated: 2026-09-02 · branch `main` · fast-strings 1.16 confirmed; FireRed 0.51 built and installed on the DESKTOP client_
 
 ## Next action
 
@@ -43,7 +43,22 @@ Behind that: 1.13's 133 new entries have still never been seen in game — the D
 Care lines in the Unova-1 archive (`426/17`, `426/26`) and the move tutors are the
 ones worth watching, that archive being one of the two the live client reads.
 
-Behind that: the FireRed theme is at 0.50 and its bag, trainer card, dex and
+**FireRed 0.51 is installed and enabled on the desktop client** (0.50 disabled).
+It needs one battle screenshot. The command menu should now be a WHITE box with
+black text on the navy band, and three widgets carry a deliberately lopsided
+border so the shot answers whether the menu's POSITION is themeable at all:
+
+| widget | border | what a shift means |
+|---|---|---|
+| `battlegui` | `300,10,10,10` | the whole band moves: handle is the root |
+| `battle-panel` | `300,10,10,10` | only its children move: handle is the navy panel |
+| `battle-fight` | `120,10,30,60` | only FIGHT moves, and the four values say which slot is which side |
+
+FIGHT's siblings keep an even `8,8,8,8`, so anything asymmetric in the shot is
+the probe talking. Remove all three in 0.52, whatever the answer, and record it
+in `docs/BACKLOG-firered.md` item 4.
+
+Behind that: the FireRed theme is at 0.51 and its bag, trainer card, dex and
 summary read like FireRed's. The battle menu is the next screen and it is
 blocked on the font.
 

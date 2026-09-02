@@ -336,10 +336,77 @@
 
     <theme name="battle-panel" ref="-defaults" allowWildcard="true">
         <param name="background"><image>battle-area</image></param>
+        <!-- PROBE 0.51, remove in 0.52. The navy band is this widget. If the
+             menu is ITS child, 300 on the first slot walks the menu across the
+             screen and the position is themeable after all; if only the navy
+             art insets, the children hang off a different parent. -->
+        <param name="border"><border>300,10,10,10</border></param>
     </theme>
     <theme name="battle-item-usage-panel" ref="battle-panel" allowWildcard="true">
         <param name="background"><image>label1.background</image></param>
+        <!-- Not part of the probe: this is the item-use panel, and it should
+             keep stock spacing whatever the probe answers. -->
+        <param name="border"><border>10,10,10,10</border></param>
     </theme>
+
+    <!-- PROBE 0.51, remove in 0.52. battlegui is the battle root. Same shape of
+         question one level up: if the whole band shifts, the handle is here. -->
+    <theme name="battlegui">
+        <param name="border"><border>300,10,10,10</border></param>
+    </theme>
+
+    <!-- ===== The battle command menu, 0.51 =====
+
+         FireRed puts FIGHT / BAG / POKeMON / RUN in a WHITE window with black
+         text, on the same navy band as the message. This theme spent 0.48 and
+         0.49 trying the other pairing , white text straight on the navy, and
+         both failed on the same wall: a theme may only redefine faces stock
+         already declares, after the repaint the only LIGHT ones left are battle
+         at 48, messagebox at 32 and trainer-name at 18, and "Select your attack
+         move." needs about 14 to fit the button. Black on white needs no light
+         face, so every dark face in the set is available and the wall is gone.
+
+         Each button is named ONE BY ONE on purpose. Stock writes them as
+         ref="rbattle-big" (desktop) and ref="mobile-battle" (handheld), and a
+         ref captures its base when the REFERRING file is parsed , long before
+         this one. Overriding either base changes nothing. That is the same
+         mechanism that made characterselectgui keep the stock logingui in 0.25
+         and that wasted 0.48; it is written down here so it is not learned a
+         third time.
+
+         The image is battle-button-switch.*, which build_firered_atlas.py now
+         paints white through the `command` role. Stock points these buttons at
+         the GLOBAL `button.*` family instead, which is every button in the
+         client, so repainting there would turn the whole UI white.
+
+         The border is set rather than inherited because the handheld theme pads
+         these 40px at the top to make room for an icon, and there is no icon
+         here any more. -->
+    <theme name="battle-fight" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <!-- PROBE 0.51, remove in 0.52. Four DIFFERENT numbers, on the one
+             button whose siblings keep an even border, so a single screenshot
+             says both which side each slot addresses and whether a button's own
+             border moves the button or only the text inside it. -->
+        <param name="border"><border>120,10,30,60</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-switch" ref="battle-fight" allowWildcard="true">
+        <param name="border"><border>8,8,8,8</border></param>
+    </theme>
+    <theme name="battle-bag" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-run" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-win" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-shift" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-rotate" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-sheet" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-carving" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-ball" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-bait" ref="battle-switch" allowWildcard="true"/>
+    <theme name="battle-rock" ref="battle-switch" allowWildcard="true"/>
 
     <!-- ===== Summary ===== -->
 

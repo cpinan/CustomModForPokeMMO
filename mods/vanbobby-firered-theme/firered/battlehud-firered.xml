@@ -80,7 +80,7 @@
         <area name="battle-button-confirm.default" xywh="291,253,96,30" splitx="L5,R5" splity="T5,B5" />
         <area name="battle-button-confirm.hover" xywh="388,253,96,30" splitx="L5,R5" splity="T5,B5" />
         <area name="battle-button-confirm.disabled" xywh="485,253,96,30" splitx="L4,R4" splity="T4,B4" />
-        <area name="battle-button-switch.default" xywh="0,166,209,52" splitx="L5,R5" splity="T5,B5" />
+        <area name="battle-button-switch.default" xywh="0,166,209,52" splitx="L4,R4" splity="T4,B4" />
         <area name="battle-button-switch.hover" xywh="210,166,209,52" splitx="L5,R5" splity="T5,B5" />
         <area name="battle-button-switch.disabled" xywh="420,166,209,52" splitx="L4,R4" splity="T4,B4" />
         <area name="battle-button-switch.disabledhover" xywh="630,166,209,52" splitx="L4,R4" splity="T4,B4" />

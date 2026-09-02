@@ -36,7 +36,19 @@ By design in the stock client, and its text is dark now. Needs a decision rather
 than a fix: lighten the chat frame, which breaks the see-through-to-world
 behaviour people rely on, or keep chat fonts light, which splits the font rule.
 
-## 4. Smaller things
+## 4. The battle menu's POSITION is not known to be reachable
+
+FireRed puts FIGHT / BAG / POKeMON / RUN bottom **right**, beside the message
+box. PokeMMO's client puts them bottom left and the theme has no documented
+handle for it: PARAGON and both Emerald themes restyle the battle screen and
+neither moves a widget. 0.51 ships a probe rather than a guess - `battlegui`,
+`battle-panel` and `battle-fight` each get a deliberately lopsided border, with
+four different numbers on the button so one screenshot says both which handle
+moves what and which side each slot of `<border>` addresses.
+
+Remove the probe in 0.52 whatever the answer, and write the answer here.
+
+## 5. Smaller things
 
 - Settings checkmarks are faint; the glyph recolour maps them too light.
 - Username and Password fields use different slice families and do not match.
