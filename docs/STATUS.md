@@ -1,18 +1,39 @@
 # STATUS — CustomModForPokeMMO
 
-_Last updated: 2026-09-02 · branch `main`, pushed · 1.16 is installed on the Retroid_
+_Last updated: 2026-09-02 · branch `main`, pushed · 1.16 confirmed on the Retroid_
 
 ## Next action
 
-**`vanbobby-fast-strings-1-16.mod` is installed and enabled on the Retroid.
-Log in and walk into the obstacles.**
-1. Strength on a boulder, Rock Smash on a rock, Cut on a tree, Flash in a cave,
-   Rock Climb, Whirlpool, Defog, Headbutt, Surf, Waterfall, Dive — each should
-   act with no box. Sweet Scent, Fly and Teleport were confirmed silent at 1.15.
-2. Secret Power obstacles — the crevice, the imposing tree, the clump of grass —
-   are new in 1.16 and have never been seen in game.
-3. Anything that still draws: copy the wording. That is what found `16780155`,
-   and it is faster than any diff.
+**Install the staged battle probe and answer one question: does a blank line
+work at the end of a battle?**
+
+`vanbobby-fast-strings-1-17-probe.mod` is already on the SD card at
+`/storage/EAFF-F713/Download/`. It is 1.16 plus eight blanked addresses in
+Unova-0 table 15 — `44-50`, the battle-result lines, and `65`, `Gotcha! {00}
+was caught!`. Same table, same call site and same token as `15/42-43`, the EXP
+lines that already work, which is the whole argument for trying it.
+
+Import it, delete the 1.16 entry, save, restart, then:
+1. Win a trainer battle — no `Player defeated X!` box.
+2. Catch something — no `Gotcha!` box.
+3. **The battle still loads.** That is the failure mode that matters: blanking
+   table 15's *start* entries hung a wild encounter on 2026-08-30 and cost the
+   session.
+
+If it holds, the probe becomes 1.17: move the rule into `rules.json` and add the
+eight addresses to `DS_PROVEN_IN_ENGINE` in `test_corpus.py` with hardware as the
+reason. If it hangs, reinstall `vanbobby-fast-strings-1-16.mod` from the same
+folder and record the answer in `docs/OPEN-WORK.md` — a no is worth as much as a
+yes here, and nobody has to ask again.
+
+Table 14 — the per-turn faint and status chatter — stays unknown either way, and
+`probe-faint-ds` in `rules.json` is the one-address experiment that would answer
+it. It is the riskier of the two: table 14 is the in-battle state machine.
+
+**Confirmed on hardware 2026-09-02, nothing left to check here:** every HM acts
+with no box (Strength, Rock Smash, Cut, Flash, Rock Climb, Whirlpool, Defog,
+Headbutt, Surf, Waterfall, Dive), Sweet Scent, Fly and Teleport are silent, a
+Repel reports itself, and the Secret Power obstacles are quiet.
 
 Install on this device goes through the **SD card**: the Import picker browses
 `/storage/EAFF-F713/Download`, not `/sdcard/Download`. Pushing to internal
