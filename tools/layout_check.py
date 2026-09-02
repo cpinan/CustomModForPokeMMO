@@ -32,6 +32,15 @@ Whether the client anchors the block left or centres it in the content box, and
 whether the band's height is fixed or grows. Both are assumptions here, marked
 ANCHOR and BAND_H, and both are falsifiable from one screenshot each. It reports
 what it assumed rather than hiding it.
+
+KNOWN WRONG, 2026-09-02: the VERTICAL text model. This says a 52px row clears a
+14px heading over a 12px description with room to spare, and on 0.54 the two
+lines still overlap in game. So the second line is not being placed where this
+assumes -- textAlignment2 BOTTOM is measured against something other than the
+inner box, or the heading's own line box is taller than its point size. Until
+that is understood the width checks are trustworthy and the height check is not.
+The fix is to render the block rather than to add another rule: see the plan in
+docs/BACKLOG-firered.md item 5.
 """
 import argparse
 import os

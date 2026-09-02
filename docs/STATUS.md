@@ -4,8 +4,9 @@ _Last updated: 2026-09-02 · branch `main`, pushed · 0 uncommitted files_
 
 ## Next action
 
-**Restart the desktop client, open a battle, and send one screenshot** — 0.54's numbers came
-from `tools/layout_check.py` rather than from eyeballing, so this should be the last round.
+**Build `tools/preview_screen.py`: composite the battle band offline — art, geometry and real
+text — so the menu can be judged without opening the game.** The plan is `docs/BACKLOG-firered.md`
+item 5.
 
 ## State
 
@@ -17,9 +18,12 @@ from `tools/layout_check.py` rather than from eyeballing, so this should be the 
   dex and summary already read like FireRed's.
 - **`tools/verify.sh` now checks the battle menu's geometry with no client and no battle.**
   `tools/layout_check.py` reads the real TTFs, the theme's own borders and the client's window
-  size, and reproduces both 0.53 failures exactly: 19px off the right edge, and a second row
-  clipped because a button's top/bottom border grows a band the client sized. Run it before
-  shipping a layout number, not after.
+  size, and reproduced both 0.53 failures exactly: 19px off the right edge, and a second row
+  clipped because a button's top/bottom border grows a band the client sized.
+- **Its width checks are trustworthy; its height check is not.** On 0.54 it returns OK and the
+  heading still overlaps the description in game, so `textAlignment2 BOTTOM` is not measured
+  against the inner box the way the model assumes. Do not add another rule to paper over this —
+  render the block instead.
 - **A battle widget's position IS themeable: LEFT padding on `battle-panel` moves the command
   menu.** 300 walked it from the left edge to mid-band, 860 puts it at the right. This is the
   first widget in the theme moved by layout rather than art.
@@ -43,6 +47,9 @@ from `tools/layout_check.py` rather than from eyeballing, so this should be the 
 
 ## In flight
 
+- **The command menu's two lines still overlap on 0.54.** Width and position are right; the
+  vertical placement is not. This is the last defect on the battle screen and the reason for
+  the preview tool above.
 - `tools/layout_check.py:55` — **`OFFSET = 95` is solved from two screenshots, not measured.**
   It is the client's own message column, the space our padding adds to. Anything from 70 to 120
   fits both observations. One shot of 0.54 pins it: if the menu sits short of the right edge by

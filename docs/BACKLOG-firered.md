@@ -69,7 +69,31 @@ box. A ref inside the *same file* did not carry the params either, so all twelve
 are now written out in full. That is the "name the leaves" rule one level deeper
 than 0.48 found it.
 
-## 5. Smaller things
+## 5. Render the screen offline, do not just measure it
+
+`tools/layout_check.py` measures the command block and `tools/preview_firered.py`
+renders the art, and the gap between them is exactly where 0.54's remaining bug
+lives: the numbers say a 52px row clears a 14px heading over a 12px description,
+and in game the two lines still overlap. A checker that returns OK on a broken
+screen is worse than no checker.
+
+**The plan: one tool that composites a screen mock.** It already has every
+input on disk.
+
+- the 9-sliced art, from `preview_firered.py`'s renderer
+- the resolved geometry, from `layout_check.py`'s model
+- the real TTF at the real size, drawn with PIL at the alignment the theme sets
+
+Output a PNG of the battle band at the client's window size, with each widget's
+box outlined and each text baseline marked. Overlap becomes visible instead of
+inferred, and the vertical model gets calibrated against one screenshot instead
+of guessed at.
+
+Worth building beyond battle: the same compositor answers the bag, the summary
+and the dex, which are the other screens this theme keeps reopening the game to
+check. Scope it to one screen first and see whether the mock and the game agree.
+
+## 6. Smaller things
 
 - Settings checkmarks are faint; the glyph recolour maps them too light.
 - Username and Password fields use different slice families and do not match.
