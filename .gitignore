@@ -38,4 +38,4 @@ modkit/src/pmmod/config/
 # the released version is committed, and dist/ is pruned to one artifact per mod.
 # BUMP THE EXCEPTION BELOW when the theme ships a new version.
 dist/vanbobby-firered-theme-0-*.mod
-!dist/vanbobby-firered-theme-0-52.mod
+!dist/vanbobby-firered-theme-0-53.mod

@@ -336,16 +336,16 @@
 
     <theme name="battle-panel" ref="-defaults" allowWildcard="true">
         <param name="background"><image>battle-area</image></param>
-        <!-- PROBE 0.52, remove when answered. 0.51 put 300 in slot ONE and the
-             whole menu vanished: slot one is TOP, so the content went 300px
-             down and out the bottom of a band about 160 tall. TWL's Border is
-             (top, left, bottom, right), which is now settled and costs nobody
-             another round.
-             This is the same question asked on the correct slot: 300 of LEFT
-             padding. If the menu walks right, its position is themeable and
-             0.53 tunes the number to put it where FireRed does. If it does not
-             move, the menu is not this widget's child and battlegui is next. -->
-        <param name="border"><border>10,300,10,10</border></param>
+        <!-- ANSWERED, 0.52 -> 0.53. The menu's position IS themeable, and this
+             is the handle: LEFT padding on battle-panel walks the whole command
+             block across the band. 300 moved it from the left edge to roughly
+             the middle, which measured 560px short of the right edge, so 860
+             is 300 plus that gap. The message column keeps whatever is left,
+             which is the FireRed arrangement: message left, menu right.
+             Top and bottom come down from 10 to 4 because the second row was
+             being clipped by the bottom of the screen; the band's height is the
+             client's, not ours, so the room has to come out of the padding. -->
+        <param name="border"><border>4,860,4,10</border></param>
     </theme>
     <theme name="battle-item-usage-panel" ref="battle-panel" allowWildcard="true">
         <param name="background"><image>label1.background</image></param>
@@ -389,31 +389,106 @@
          these 40px at the top to make room for an icon, and there is no icon
          here any more. -->
     <theme name="battle-fight" ref="-defaults" allowWildcard="true">
+        <!-- Every one of these is written out in full rather than ref-ing its
+             neighbour. 0.52 pointed the other eleven at battle-fight and only
+             FIGHT changed: BAG, POKeMON and RUN kept the stock cream button.
+             A ref inside this same file did not carry the params, so the leaves
+             get their own copies. Verbose, and it is what actually applies. -->
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <!-- Answered: 0.51 set 120,10,30,60 here and the label went with the
-             rest of the menu, off the bottom. Slot one is TOP. A button's own
-             border pads the text inside the button, so it is the wrong tool for
-             moving the menu; it is set even, with the siblings, and left alone. -->
-        <param name="border"><border>8,8,8,8</border></param>
+        <param name="border"><border>4,10,4,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
-    <theme name="battle-switch" ref="battle-fight" allowWildcard="true">
-        <param name="border"><border>8,8,8,8</border></param>
+    <theme name="battle-switch" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
-    <theme name="battle-bag" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-run" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-win" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-shift" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-rotate" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-sheet" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-carving" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-ball" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-bait" ref="battle-switch" allowWildcard="true"/>
-    <theme name="battle-rock" ref="battle-switch" allowWildcard="true"/>
-
+    <theme name="battle-bag" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-run" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-win" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-shift" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-rotate" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-sheet" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-carving" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-ball" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-bait" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
+    <theme name="battle-rock" ref="-defaults" allowWildcard="true">
+        <param name=""><image>battle-button-switch.*</image></param>
+        <param name="font"><font>mechabold</font></param>
+        <param name="font2"><font>main-small</font></param>
+        <param name="border"><border>4,10,4,10</border></param>
+        <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
+        <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
+    </theme>
     <!-- ===== Summary ===== -->
 
     <!-- itemplate keeps stock's background "none" on purpose. 0.26 gave it the

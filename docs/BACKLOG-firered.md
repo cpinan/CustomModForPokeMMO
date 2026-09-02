@@ -50,11 +50,19 @@ so 300 pushed the menu's content down and out of a band about 160 tall. The rest
 of this file already assumed that order - `36,5,5,5` on the dex title, `22,8,8,8`
 on the summary - and now it is proven rather than inherited.
 
-0.52 asks the real question on the correct slot: `battle-panel` alone gets
-`10,300,10,10`, and `battlegui` and `battle-fight` go back to even values so only
-one handle is under test. If the menu walks right, its position is themeable and
-0.53 tunes the number; if it does not move, the menu is not `battle-panel`'s
-child and `battlegui` is next.
+**Answered on 2026-09-02: the position IS themeable, and the handle is LEFT
+padding on `battle-panel`.** `10,300,10,10` walked the whole command block from
+the left edge to about the middle of the band, message column and all. 0.53 uses
+860, which is that 300 plus the 560 the menu was still short of the right edge,
+and takes top and bottom down to 4 because the second row was clipping off the
+bottom of the screen. The band's height belongs to the client, so the room has
+to come out of padding.
+
+One more finding from the same shot: pointing the other eleven buttons at
+`battle-fight` with `ref=` reached **none** of them - only FIGHT took the white
+box. A ref inside the *same file* did not carry the params either, so all twelve
+are now written out in full. That is the "name the leaves" rule one level deeper
+than 0.48 found it.
 
 ## 5. Smaller things
 

@@ -4,18 +4,23 @@ _Last updated: 2026-09-02 · branch `main`, pushed · 0 uncommitted files_
 
 ## Next action
 
-**Open a battle in the desktop client and send one screenshot of the command menu** — 0.52
-asks whether `battle-panel`'s LEFT border moves the menu, which is the last unknown before
-the FireRed battle screen is done.
+**Restart the desktop client, open a battle, and send one screenshot** — 0.53 should have all
+four options in white boxes at the bottom right, with nothing clipped.
 
 ## State
 
 - **`vanbobby-fast-strings` is 1.16**, confirmed on the Retroid on 2026-09-02: every HM acts
   with no box, Sweet Scent / Fly / Teleport are silent, a Repel reports itself again. 709
   entries, 35 rules, five archives.
-- **FireRed theme is 0.52**, installed and enabled on the **desktop** client (`client.ui.theme=FireRed`;
-  0.50 and 0.51 disabled). The battle command menu is a white box with black text on the navy
-  band. Bag, trainer card, dex and summary already read like FireRed's.
+- **FireRed theme is 0.53**, installed and enabled on the **desktop** client (`client.ui.theme=FireRed`;
+  0.50 to 0.52 disabled). The battle command menu is white boxes with black text, moved to the
+  bottom right the way FireRed draws it. Bag, trainer card, dex and summary already read like
+  FireRed's.
+- **A battle widget's position IS themeable: LEFT padding on `battle-panel` moves the command
+  menu.** 300 walked it from the left edge to mid-band, 860 puts it at the right. This is the
+  first widget in the theme moved by layout rather than art.
+- **A `ref=` does not carry params even inside the same file.** 0.52 pointed eleven battle
+  buttons at `battle-fight` and only FIGHT changed. Write leaves out in full.
 - **TWL's `<border>` is `(top, left, bottom, right)`.** Proven by 0.51, which put 300 in slot one
   on three battle widgets and made the menu vanish: the content went down and out of a band about
   160px tall. An empty panel is what a too-large TOP border looks like.
@@ -34,12 +39,10 @@ the FireRed battle screen is done.
 
 ## In flight
 
-- `mods/vanbobby-firered-theme/firered/widgets-firered.xml:337` — **layout probe, one handle at
-  a time.** `battle-panel` alone carries `10,300,10,10`; `battlegui` is back to stock `65,64,64,65`
-  and `battle-fight` to an even `8,8,8,8`. If the menu walks right in the next screenshot its
-  position is themeable and 0.53 tunes the number; if it does not move, the menu is not
-  `battle-panel`'s child and `battlegui` is the next handle. Record either answer in
-  `docs/BACKLOG-firered.md` item 4.
+- `mods/vanbobby-firered-theme/firered/widgets-firered.xml:337` — **0.53's numbers are measured
+  off one screenshot, not verified.** `battle-panel` carries `4,860,4,10`; 860 is where the menu
+  should land against the right edge and 4 is what stops the second row clipping. If the next
+  shot overshoots or still clips, they are the only two numbers to touch.
 - `/storage/EAFF-F713/Download/vanbobby-fast-strings-1-17-probe2.mod` on the Retroid's SD card —
   **staged, not installed.** 1.16 plus eight blanked end-of-battle addresses (Unova-0 `15/44-50`,
   `15/65`) and the two horde ids (`5021`, `5023`). Import it, delete the 1.16 entry, save,
@@ -91,3 +94,5 @@ tools/verify.sh           # the FireRed theme's generators and invariants
   white, shipped in 0.51, is the pairing that fits.
 - **Do not put `--` inside an XML comment.** It is not well formed, and the theme loads half
   built with nothing useful in the log.
+- **Do not use `ref=` to share params between sibling themes.** It reaches nothing, even within
+  one file. Twelve near-identical blocks is the working shape.
