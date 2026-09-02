@@ -1,14 +1,18 @@
 # STATUS — CustomModForPokeMMO
 
-_Last updated: 2026-09-02 · branch `main` · 1.15 is built, installed on the Retroid, NOT yet committed_
+_Last updated: 2026-09-02 · branch `main`, pushed · 1.16 is installed on the Retroid_
 
 ## Next action
 
-**`vanbobby-fast-strings-1-15.mod` is installed and enabled on the Retroid.
-Log in and use Sweet Scent, Fly, Teleport and a Repel.**
-1. Field moves must fire with no box at all. 1.15 silences `16780155`,
-   `{00}'s summoned {02} used {03}!` — the client's own line, the actual box.
-2. A Repel must say `You have used Repel.` again (1.14 gave `6060`/`6087` back).
+**`vanbobby-fast-strings-1-16.mod` is installed and enabled on the Retroid.
+Log in and walk into the obstacles.**
+1. Strength on a boulder, Rock Smash on a rock, Cut on a tree, Flash in a cave,
+   Rock Climb, Whirlpool, Defog, Headbutt, Surf, Waterfall, Dive — each should
+   act with no box. Sweet Scent, Fly and Teleport were confirmed silent at 1.15.
+2. Secret Power obstacles — the crevice, the imposing tree, the clump of grass —
+   are new in 1.16 and have never been seen in game.
+3. Anything that still draws: copy the wording. That is what found `16780155`,
+   and it is faster than any diff.
 
 Install on this device goes through the **SD card**: the Import picker browses
 `/storage/EAFF-F713/Download`, not `/sdcard/Download`. Pushing to internal
@@ -24,7 +28,7 @@ blocked on the font.
 
 ## State
 
-- **`vanbobby-fast-strings` is 1.15.** 703 entries across 34 rules, covering
+- **`vanbobby-fast-strings` is 1.16.** 709 entries across 35 rules, covering
   Kanto, Hoenn, Sinnoh, Johto and both Unova archives. `dist/` holds one artifact
   per mod and nothing else; recover an older one from git, e.g.
   `git show eeebf9a:dist/vanbobby-fast-strings-1-10.mod > 1-10.mod` for the last
@@ -44,6 +48,10 @@ blocked on the font.
 - **The FireRed theme is 0.50 and shipped.** Its 26 intermediate builds stay on
   disk and out of git; `.gitignore` keeps `dist/vanbobby-firered-theme-0-*.mod`
   except the released one.
+- **Client-written text is its own address space, and `{STRING_nnnnnn}` is how you
+  find it.** No dumped ROM line carries that slot, so every entry that does is one
+  PokeMMO wrote — the field-move box, the Secret Power obstacles, the breakable
+  rock. Grep for it before reaching for another archive rule.
 - **A field move's box is `16780155`, not a ROM address.** PokeMMO writes
   `{00}'s summoned {02} used {03}!` itself. Three releases of archive-level work
   could not remove it because no archive holds it; the reference silences exactly
@@ -53,7 +61,7 @@ blocked on the font.
   `You have used {00}.`, its stacked twin, and `{00} used {01}! (PP Remaining…)`.
   SupersSpeedStrings silences none of them. `test_the_clients_own_notices_are_left_alone`
   keeps them visible.
-- **112 tests**, stdlib only, no client and no device. They skip cleanly without
+- **113 tests**, stdlib only, no client and no device. They skip cleanly without
   the dumps.
 - **What changed when is in `CHANGELOG.md`**, grouped by date and named by mod. Record
   releases there rather than starting a second history in a mod's own README.

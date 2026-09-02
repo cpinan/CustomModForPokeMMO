@@ -12,6 +12,36 @@ version confirmed on hardware.
 
 ## 2026-09-02
 
+### VanBobby Fast Strings 1.15 → 1.16
+
+**The rest of the HMs, and the same lesson applied on purpose.** 1.15 proved the
+box in front of a field move is text PokeMMO writes rather than text it reads, so
+the other HMs were audited the same way instead of through the archives.
+
+The archives turned out to be finished already: Cut, Strength, Surf, Waterfall,
+Flash, Teleport, Dig and Dive are silenced in Unova-1 `280`, and Rock Smash, Rock
+Climb, Defog, Whirlpool and Headbutt in the Sinnoh and Johto copies of the same
+script. What was left is six client-written lines, none of which any archive rule
+could ever have reached — a `{STRING_nnnnnn}` slot is the tell, since no dumped
+ROM line contains one:
+
+| id | line |
+|---|---|
+| `16780420` | `This rock looks like it could be broken open by a {STRING_0}'s attack.` |
+| `270776032` | `A small crevice is seen on the wall… A Secret Power may allow you to break it open.` |
+| `271009606` | `An imposing tree stands in your way… may allow you to climb it.` |
+| `271009657` | `If some vines drop down, this tree can be climbed. Use the SECRET POWER?` |
+| `271009730` | `A thick vine dropped down!` |
+| `271009757` | `A large clump of grass blocks the path… may allow you to move it.` |
+
+`16780420` is the statement in front of `16780421`, the breakable-rock question
+silenced since 1.2; the pair was split because one names Rock Smash through a slot
+and the other says `a {STRING_0}'s attack`. Only `270776032` is silenced by the
+reference. New rule `obstacles-client`, 703 entries → **709**, 113 tests.
+
+One line was looked at and left: Sinnoh `366/40-43`, `Used Rock Smash at {00}.`
+That is the adventure journal, which you open to read.
+
 ### VanBobby Fast Strings 1.14 → 1.15
 
 **The box a field move draws is the client's own line, and it is one id.**

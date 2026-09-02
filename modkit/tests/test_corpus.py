@@ -229,6 +229,16 @@ GBA_FIELD_MOVES = {
 CLIENT_FIELD_MOVE = {
     "16780155": "{00}'s summoned {02} used {03}!",
 }
+# The obstacle lines PokeMMO writes itself. A `{STRING_nnnnnn}` slot is the tell:
+# no dumped ROM line can contain one, so no archive rule reaches these.
+CLIENT_OBSTACLES = {
+    "16780420": "This rock looks like it could be broken open ...",
+    "270776032": "A small crevice is seen on the wall ... Secret Power",
+    "271009606": "An imposing tree stands in your way ... Secret Power",
+    "271009657": "If some vines drop down, this tree can be climbed. Use the SECRET POWER?",
+    "271009730": "A thick vine dropped down!",
+    "271009757": "A large clump of grass blocks the path ... Secret Power",
+}
 # The client's own one-line notices, not ROM message boxes. Silencing them cost
 # information and removed no box at all: 6060 is the only thing that reports a
 # Repel took effect, and it went quiet on hardware. SupersSpeedStrings leaves
@@ -523,6 +533,9 @@ class TestCorpus(unittest.TestCase):
         # Reported from hardware 2026-09-02: Teleport and Sweet Scent still drew
         # a box after every ROM address matched the reference. This id is why.
         self.assert_silenced(CLIENT_FIELD_MOVE, "client field-move box")
+
+    def test_the_client_written_obstacle_lines_are_silenced(self):
+        self.assert_silenced(CLIENT_OBSTACLES, "client obstacles")
 
     def test_the_clients_own_notices_are_left_alone(self):
         # Reported from hardware 2026-09-02: using a Repel said nothing at all.

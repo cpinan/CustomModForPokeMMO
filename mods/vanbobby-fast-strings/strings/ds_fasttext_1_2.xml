@@ -22,6 +22,7 @@
     field-moves: Overworld move use - Teleport, Sweet Scent, Cut, Fly, Dig, Flash, Headbutt, all of them
     field-move-prompts: Cut / Rock Smash / Surf / Dive confirmations before the move fires
     hm-field-prompts: Every HM obstacle prompt: tree, boulder, rock, waterfall, dive, surf
+    obstacles-client: The obstacle lines PokeMMO wrote itself: Secret Power crevices, trees and grass, and the breakable rock
     fossil-reviver: Fossil revival counter, used in every region
     move-tutor: Move Master, Move Maniac and the Special Move Tutor
     move-tutor-ds-unova1: Unova1 archive: move tutor, deleter and TM results

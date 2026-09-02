@@ -1354,6 +1354,21 @@
       "max_len": 140
     },
     {
+      "name": "obstacles-client",
+      "note": "The obstacle lines PokeMMO wrote itself: Secret Power crevices, trees and grass, and the breakable rock",
+      "_note2": "Found the same way as 16780155, and they are the same kind of thing: text the client authors rather than text it reads out of a ROM archive. The tell is a `{STRING_nnnnnn}` slot -- 110290 is Secret Power, 110249 is Rock Smash -- which no dumped ROM line can contain, so every archive-level rule in this file walks straight past them. Every HM's own script is silenced in the archives already; these are what is left in front of an obstacle.",
+      "_note3": "16780421, the breakable-rock question, has been silenced since 1.2 while 16780420, the statement that precedes it, was not: the pair was split because one names Rock Smash through a slot and the other says `a {STRING_0}'s attack`. 270776032 is the only one of the six the reference silences too.",
+      "_note4": "271009657 asks `Use the SECRET POWER?` and silencing it leaves a bare Yes/No, which this file avoids for a choice that costs something. It costs PP and nothing else -- the same trade as the Waterfall, Dive and Surf prompts silenced since 1.2 -- so it goes with them.",
+      "ids": [
+        16780420,
+        270776032,
+        271009606,
+        271009657,
+        271009730,
+        271009757
+      ]
+    },
+    {
       "name": "fossil-reviver",
       "note": "Fossil revival counter, used in every region",
       "match": "researching \\{STRING_0\\} Fossils|I can revive them|bring it back to life|was revived from the|Which Fossil should I revive|revive another fossil|Alright\\.\\\\nGive me one moment|Please take good care of it|was sent to PC Box|Come back if you change your mind",

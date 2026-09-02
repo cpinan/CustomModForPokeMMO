@@ -22,6 +22,7 @@
     field-moves: Overworld move use - Teleport, Sweet Scent, Cut, Fly, Dig, Flash, Headbutt, all of them
     field-move-prompts: Cut / Rock Smash / Surf / Dive confirmations before the move fires
     hm-field-prompts: Every HM obstacle prompt: tree, boulder, rock, waterfall, dive, surf
+    obstacles-client: The obstacle lines PokeMMO wrote itself: Secret Power crevices, trees and grass, and the breakable rock
     fossil-reviver: Fossil revival counter, used in every region
     move-tutor: Move Master, Move Maniac and the Special Move Tutor
     move-tutor-ds-unova1: Unova1 archive: move tutor, deleter and TM results
@@ -241,6 +242,7 @@
   <string id="16780323">{09}</string>
   <string id="16780326">{09}</string>
   <string id="16780329">{09}</string>
+  <string id="16780420">{09}</string>
   <string id="16780421">{09}</string>
   <string id="16780503">{09}</string>
   <string id="16780714">{09}</string>
@@ -271,6 +273,7 @@
   <string id="270692404">{09}</string>
   <string id="270702312">{09}</string>
   <string id="270702575">{09}</string>
+  <string id="270776032">{09}</string>
   <string id="270784843">{09}</string>
   <string id="270793991">{09}</string>
   <string id="270794043">{09}</string>
@@ -332,6 +335,10 @@
   <string id="271002175">{09}</string>
   <string id="271003606">{09}</string>
   <string id="271003661">{09}</string>
+  <string id="271009606">{09}</string>
+  <string id="271009657">{09}</string>
+  <string id="271009730">{09}</string>
+  <string id="271009757">{09}</string>
   <string id="271012271">{09}</string>
   <string id="271036072">{09}</string>
   <string id="271124270">{09}</string>
