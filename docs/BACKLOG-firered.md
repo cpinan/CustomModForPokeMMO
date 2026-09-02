@@ -58,6 +58,11 @@ and takes top and bottom down to 4 because the second row was clipping off the
 bottom of the screen. The band's height belongs to the client, so the room has
 to come out of padding.
 
+0.53 then overshot at 860 and clipped its second row, which is what prompted
+`tools/layout_check.py`: the geometry is arithmetic over the theme's own borders
+and the real TTF metrics, so a wrong number is now caught before a build instead
+of after a restart, a login and an encounter. 0.54 ships its answer, `0,831,0,10`.
+
 One more finding from the same shot: pointing the other eleven buttons at
 `battle-fight` with `ref=` reached **none** of them - only FIGHT took the white
 box. A ref inside the *same file* did not carry the params either, so all twelve

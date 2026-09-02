@@ -4,18 +4,22 @@ _Last updated: 2026-09-02 · branch `main`, pushed · 0 uncommitted files_
 
 ## Next action
 
-**Restart the desktop client, open a battle, and send one screenshot** — 0.53 should have all
-four options in white boxes at the bottom right, with nothing clipped.
+**Restart the desktop client, open a battle, and send one screenshot** — 0.54's numbers came
+from `tools/layout_check.py` rather than from eyeballing, so this should be the last round.
 
 ## State
 
 - **`vanbobby-fast-strings` is 1.16**, confirmed on the Retroid on 2026-09-02: every HM acts
   with no box, Sweet Scent / Fly / Teleport are silent, a Repel reports itself again. 709
   entries, 35 rules, five archives.
-- **FireRed theme is 0.53**, installed and enabled on the **desktop** client (`client.ui.theme=FireRed`;
-  0.50 to 0.52 disabled). The battle command menu is white boxes with black text, moved to the
-  bottom right the way FireRed draws it. Bag, trainer card, dex and summary already read like
-  FireRed's.
+- **FireRed theme is 0.54**, installed and enabled on the **desktop** client (`client.ui.theme=FireRed`).
+  The battle command menu is white boxes with black text at the bottom right. Bag, trainer card,
+  dex and summary already read like FireRed's.
+- **`tools/verify.sh` now checks the battle menu's geometry with no client and no battle.**
+  `tools/layout_check.py` reads the real TTFs, the theme's own borders and the client's window
+  size, and reproduces both 0.53 failures exactly: 19px off the right edge, and a second row
+  clipped because a button's top/bottom border grows a band the client sized. Run it before
+  shipping a layout number, not after.
 - **A battle widget's position IS themeable: LEFT padding on `battle-panel` moves the command
   menu.** 300 walked it from the left edge to mid-band, 860 puts it at the right. This is the
   first widget in the theme moved by layout rather than art.
@@ -39,10 +43,13 @@ four options in white boxes at the bottom right, with nothing clipped.
 
 ## In flight
 
-- `mods/vanbobby-firered-theme/firered/widgets-firered.xml:337` — **0.53's numbers are measured
-  off one screenshot, not verified.** `battle-panel` carries `4,860,4,10`; 860 is where the menu
-  should land against the right edge and 4 is what stops the second row clipping. If the next
-  shot overshoots or still clips, they are the only two numbers to touch.
+- `tools/layout_check.py:55` — **`OFFSET = 95` is solved from two screenshots, not measured.**
+  It is the client's own message column, the space our padding adds to. Anything from 70 to 120
+  fits both observations. One shot of 0.54 pins it: if the menu sits short of the right edge by
+  N, OFFSET is 95 minus N; if it overhangs, plus.
+- A fixed left padding right-aligns at **one** window size. `layout_check.py` warns rather than
+  fails on a wider window, because the menu drifts left there, which is the safe direction. A
+  resolution-independent answer would need a different handle than padding.
 - `/storage/EAFF-F713/Download/vanbobby-fast-strings-1-17-probe2.mod` on the Retroid's SD card —
   **staged, not installed.** 1.16 plus eight blanked end-of-battle addresses (Unova-0 `15/44-50`,
   `15/65`) and the two horde ids (`5021`, `5023`). Import it, delete the 1.16 entry, save,

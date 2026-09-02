@@ -19,6 +19,10 @@ echo "== invariants =="
 python3 tools/test_firered_theme.py 2>&1 | tail -3
 
 echo
+echo "== the battle command block fits, with no client and no battle =="
+python3 tools/layout_check.py | tail -4
+
+echo
 echo "== nothing drifted =="
 git diff --stat -- mods/vanbobby-firered-theme || true
 echo "(a non-empty diff above means a generator no longer reproduces what is committed)"

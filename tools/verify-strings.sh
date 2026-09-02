@@ -37,6 +37,10 @@ else
 fi
 
 echo
+echo "== the battle command block fits, with no client and no battle =="
+python3 tools/layout_check.py | tail -4
+
+echo
 echo "== theme lint (contradictory min/max bounds) =="
 "$PMMOD" theme lint mods/vanbobby-android-layout-fix/theme
 

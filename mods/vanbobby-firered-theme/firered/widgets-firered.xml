@@ -342,10 +342,13 @@
              the middle, which measured 560px short of the right edge, so 860
              is 300 plus that gap. The message column keeps whatever is left,
              which is the FireRed arrangement: message left, menu right.
-             Top and bottom come down from 10 to 4 because the second row was
-             being clipped by the bottom of the screen; the band's height is the
-             client's, not ours, so the room has to come out of the padding. -->
-        <param name="border"><border>4,860,4,10</border></param>
+             860 overshot by 19 and 4 of vertical padding per button grew the
+             band past what the client budgeted, clipping the second row. Both
+             numbers now come from tools/layout_check.py, which measures the
+             text in the real TTF and does this arithmetic without the game:
+             831 = window 1356 - right 10 - block 420 - the client's own message
+             column, 95. Top and bottom are 0 because the band does not grow. -->
+        <param name="border"><border>0,831,0,10</border></param>
     </theme>
     <theme name="battle-item-usage-panel" ref="battle-panel" allowWildcard="true">
         <param name="background"><image>label1.background</image></param>
@@ -397,7 +400,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -405,7 +408,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -413,7 +416,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -421,7 +424,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -429,7 +432,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -437,7 +440,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -445,7 +448,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -453,7 +456,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -461,7 +464,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -469,7 +472,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -477,7 +480,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
@@ -485,7 +488,7 @@
         <param name=""><image>battle-button-switch.*</image></param>
         <param name="font"><font>mechabold</font></param>
         <param name="font2"><font>main-small</font></param>
-        <param name="border"><border>4,10,4,10</border></param>
+        <param name="border"><border>0,10,0,10</border></param>
         <param name="textAlignment"><enum type="alignment">TOPLEFT</enum></param>
         <param name="textAlignment2"><enum type="alignment">BOTTOM</enum></param>
     </theme>
