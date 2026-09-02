@@ -111,15 +111,25 @@ source is not here and its provenance is unknown.
 with `mods/vanbobby-android-layout-fix/`, and either bump this to 3.0 or explain
 the split. Until then the repo does not describe what is actually running.
 
-### 3. Hordes still print their encounter message
+### 3. Hordes still print their encounter message — located 2026-09-02
 Reported in Johto on 1.10. Hordes are a PokeMMO invention, not in the original
-ROM, so the string is not at the Unova `15/2` coordinate the vanilla horde line
-uses. It has not been located.
+ROM, so the string was never at the Unova `15/2` coordinate the vanilla horde
+line uses.
 
-**Fix:** search `dump_strings_en.xml` (the plain-id container) for horde wording;
-PokeMMO's own additions live there rather than in the NDS archives. Then treat it
-like any battle-adjacent address — see ground rules — and get hardware evidence
-before shipping.
+**Found**, by the method that cracked `16780155`: they are plain ids the client
+wrote, in `dump_strings_en.xml`.
+
+    5021  A wild horde appeared!
+    5023  You're surrounded!
+
+Two boxes at the start of the encounter Sweet Scent exists to farm. `5020` and
+`1799` are the word `Horde` alone — menu labels, left alone.
+
+**Not shipped yet.** They are battle-start text, and the ground rules ask for
+hardware before an address near a battle goes in. Staged on the SD card as
+`vanbobby-fast-strings-1-17-probe2.mod`, alongside the eight end-of-battle
+addresses. One horde answers it; if it holds, both rules move into
+`rules.json` as 1.17.
 
 ---
 
